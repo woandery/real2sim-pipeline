@@ -1,0 +1,4074 @@
+{
+  "scene_id": "ego_fridge",
+  "compiler_version": 5,
+  "units": "meters",
+  "up_axis": "Z",
+  "scale_assumptions": [
+    "绝对尺度未经标定；以苹果状物体直径约0.085–0.095 m、单颗葡萄直径约0.022–0.030 m、葡萄串长约0.14 m作为不确定尺度先验。",
+    "按小型玩具厨房估计左柜宽0.31 m、高0.66 m、深0.30 m；右侧烤箱式单元宽0.30 m。柜顶和背面不完整可见，尺寸允许约25%误差。",
+    "黄色支撑面高度假定为0.72 m，厚0.04 m；仅重建裁切范围内的静态支撑板，不推定桌腿或其他家具。",
+    "隔板顶面估计为z=1.087 m，柜门观察开启角近似为绕Z轴-100度。",
+    "所有asset.position使用世界坐标，part.position使用所属资产局部坐标；水果资产原点位于其近似底部支撑平面，门原点位于左侧铰轴下端。",
+    "前底横梁厚度无法从图像精确确定；修订为高0.0155 m，保持原底面z=0.7345 m、宽度、深度和前后位置，顶面降至z=0.7500 m，与门板底面z=0.7550 m形成0.0050 m净空。"
+  ],
+  "geometry_limitations": [
+    "综合全部四张时间线及给定视频理解；相机存在运动，单一相机仅近似初始观察视角。",
+    "柜内隔板及内腔从初始即存在；初始关闭的门遮挡它们。首次显露未发现可辨认的预存松散物体，不据暗部虚构额外物件。",
+    "完整柜顶、背板、侧板厚度和深度不可直接测量，使用满足开门和放置水果所需的简化薄板结构。",
+    "本轮仅修改fridge_body.front_base_rail的高度及局部Z位置以消除已测得的闭门穿透；门板、门轴、关节锚点、其他碰撞几何以及水果初始和诊断姿态保持原规格。",
+    "修订横梁世界范围为x=[-0.31,0]、y=[-0.008,0.018]、z=[0.7345,0.7500]；door_core世界Z范围始终为[0.7550,1.4050]。绕竖直Z轴旋转不改变这些Z范围，因而门芯与横梁在整个[-110,0]度范围内解析几何净空为至少5 mm，包括近闭合区间。该结论仅涉及这两个几何体，不等同于完整原生物理扫掠验证。",
+    "版本3已实际完成原生相邻碰撞端点复验，旧的4 mm闭门干涉消除；另有600步满载关门诊断从约-100度到-0.052度，全场最大穿透约0.0174 mm。此版本4保持零件几何、质量、姿态与锚点不变，将驱动参数和相邻碰撞显式写入规格；版本4本身仍需独立原生复验与连续扫掠，不把版本3证据冒充版本4测试结果。",
+    "葡萄使用单个刚体内的24个椭球颗粒与分段茎近似，颗粒数量、内部连接及柔性均未恢复。",
+    "苹果使用带顶部凹陷的实体旋转体及短茎近似；碰撞可对实体旋转体作凸近似，顶部小凹陷不参与任务接触。",
+    "两件水果保持动态、重力和实体碰撞，不添加固定约束、隐藏支撑或稳定器。既有原生接触证据支持其在台面和隔板上的留置；苹果沉降约有9.18度转动，不能把诊断姿态理解为完全静止的实际落姿。",
+    "红色物体最终底部接触和姿态被遮挡；采用隔板承托的近似，右后方相对位置有证据，但不假定其与葡萄接触。",
+    "柜门铰接关系明确，金属连接件的精确数量和构造不明；用两个示意铰链及四个示意螺钉表达，未增加锁扣、磁吸或隐藏支撑。",
+    "下腔横向结构作为固定浅条纹重建；右侧窗内无法辨认的暗影不提升为独立物体。",
+    "烤箱门全程关闭，其面板作为静态组件；窗口有真实薄壁碰撞，箱体保留内部空腔。数字图样、圆角和表面纹理采用简化几何。",
+    "诊断状态仅用于脚本可视化和检查，不代表精确恢复的运动轨迹、控制策略或本修订已经通过动态验证；没有在本规格阶段生成原生检查录像。",
+    "铰链驱动为未标定的模拟保持替代：force模式，250 N*m/degree刚度、40 N*m*s/degree阻尼、1000 N*m上限；角度目标由各诊断状态指定。不是从视频测得的真实门轴扭矩、阻尼或机械锁扣。USD单位据OpenUSD UsdPhysicsDriveAPI官方说明核实。"
+  ],
+  "camera": {
+    "position": [
+      0.32,
+      -0.87,
+      1.44
+    ],
+    "target": [
+      -0.035,
+      0.035,
+      1.045
+    ],
+    "vertical_fov_deg": 61.0
+  },
+  "orbit": {
+    "target": [
+      0.0,
+      0.08,
+      1.055
+    ],
+    "radius": 1.15,
+    "height": 0.55
+  },
+  "ground": {
+    "size": [
+      3.0,
+      3.0,
+      0.05
+    ],
+    "position": [
+      0.0,
+      0.0,
+      -0.025
+    ],
+    "color": [
+      0.55,
+      0.52,
+      0.46
+    ]
+  },
+  "assets": [
+    {
+      "id": "yellow_surface",
+      "label_zh": "黄色支撑台面",
+      "source_object_id": "yellow_surface",
+      "evidence_frames": [
+        0,
+        62,
+        85,
+        147,
+        209,
+        265
+      ],
+      "body_type": "static",
+      "mass_kg": 20.0,
+      "position": [
+        0.0,
+        -0.12,
+        0.7
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parts": [
+        {
+          "id": "support_slab",
+          "shape": "box",
+          "size": [
+            1.5,
+            1.25,
+            0.04
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.76,
+            0.56,
+            0.23
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        }
+      ],
+      "reconstruction_note": "顶面z=0.72 m，承托柜体和初始水果。台面边界属裁切近似，未加入无证据的桌腿。"
+    },
+    {
+      "id": "background_panels",
+      "label_zh": "米白背景板及左侧墙角",
+      "source_object_id": "background_panels",
+      "evidence_frames": [
+        0,
+        85,
+        180,
+        209,
+        220,
+        265
+      ],
+      "body_type": "static",
+      "mass_kg": 25.0,
+      "position": [
+        0.0,
+        0.0,
+        0.72
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parts": [
+        {
+          "id": "back_left_panel",
+          "shape": "box",
+          "size": [
+            0.43,
+            0.018,
+            1.05
+          ],
+          "position": [
+            -0.535,
+            0.365,
+            0.525
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.79,
+            0.73,
+            0.59
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "back_right_panel",
+          "shape": "box",
+          "size": [
+            1.065,
+            0.018,
+            1.05
+          ],
+          "position": [
+            0.2175,
+            0.365,
+            0.525
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.81,
+            0.75,
+            0.62
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "left_return_panel",
+          "shape": "box",
+          "size": [
+            0.018,
+            0.78,
+            1.05
+          ],
+          "position": [
+            -0.75,
+            -0.016,
+            0.525
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.77,
+            0.7,
+            0.56
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        }
+      ],
+      "reconstruction_note": "两块后板之间保留约5 mm接缝；左侧板构成可见转角。仅表达附近竖直背景，不补造房间家具。"
+    },
+    {
+      "id": "fridge_body",
+      "label_zh": "左侧冰箱式空腔柜体",
+      "source_object_id": "fridge_body",
+      "evidence_frames": [
+        0,
+        68,
+        85,
+        147,
+        180,
+        209,
+        265
+      ],
+      "body_type": "static",
+      "mass_kg": 7.0,
+      "position": [
+        -0.155,
+        0.15,
+        1.08
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parts": [
+        {
+          "id": "left_wall",
+          "shape": "box",
+          "size": [
+            0.014,
+            0.3,
+            0.66
+          ],
+          "position": [
+            -0.148,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.2,
+            0.16,
+            0.12
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "right_wall",
+          "shape": "box",
+          "size": [
+            0.014,
+            0.3,
+            0.66
+          ],
+          "position": [
+            0.148,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.18,
+            0.14,
+            0.11
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rear_wall",
+          "shape": "box",
+          "size": [
+            0.282,
+            0.012,
+            0.632
+          ],
+          "position": [
+            0.0,
+            0.144,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.16,
+            0.13,
+            0.11
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "bottom_panel",
+          "shape": "box",
+          "size": [
+            0.282,
+            0.288,
+            0.014
+          ],
+          "position": [
+            0.0,
+            -0.006,
+            -0.323
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.22,
+            0.17,
+            0.12
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "top_panel",
+          "shape": "box",
+          "size": [
+            0.282,
+            0.288,
+            0.014
+          ],
+          "position": [
+            0.0,
+            -0.006,
+            0.323
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.28,
+            0.24,
+            0.19
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "front_base_rail",
+          "shape": "box",
+          "size": [
+            0.31,
+            0.026,
+            0.0155
+          ],
+          "position": [
+            0.0,
+            -0.145,
+            -0.33775
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.22,
+            0.16,
+            0.105
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "left_front_foot",
+          "shape": "box",
+          "size": [
+            0.028,
+            0.035,
+            0.03
+          ],
+          "position": [
+            -0.135,
+            -0.124,
+            -0.345
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.19,
+            0.14,
+            0.1
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "right_front_foot",
+          "shape": "box",
+          "size": [
+            0.028,
+            0.035,
+            0.03
+          ],
+          "position": [
+            0.135,
+            -0.124,
+            -0.345
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.19,
+            0.14,
+            0.1
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "lower_rib_01",
+          "shape": "box",
+          "size": [
+            0.266,
+            0.007,
+            0.002
+          ],
+          "position": [
+            0.0,
+            -0.116,
+            -0.315
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.31,
+            0.25,
+            0.16
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "lower_rib_02",
+          "shape": "box",
+          "size": [
+            0.266,
+            0.007,
+            0.002
+          ],
+          "position": [
+            0.0,
+            -0.083,
+            -0.315
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.31,
+            0.25,
+            0.16
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "lower_rib_03",
+          "shape": "box",
+          "size": [
+            0.266,
+            0.007,
+            0.002
+          ],
+          "position": [
+            0.0,
+            -0.05,
+            -0.315
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.31,
+            0.25,
+            0.16
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "lower_rib_04",
+          "shape": "box",
+          "size": [
+            0.266,
+            0.007,
+            0.002
+          ],
+          "position": [
+            0.0,
+            -0.017,
+            -0.315
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.31,
+            0.25,
+            0.16
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "lower_rib_05",
+          "shape": "box",
+          "size": [
+            0.266,
+            0.007,
+            0.002
+          ],
+          "position": [
+            0.0,
+            0.016,
+            -0.315
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.31,
+            0.25,
+            0.16
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "lower_rib_06",
+          "shape": "box",
+          "size": [
+            0.266,
+            0.007,
+            0.002
+          ],
+          "position": [
+            0.0,
+            0.049,
+            -0.315
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.31,
+            0.25,
+            0.16
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "lower_rib_07",
+          "shape": "box",
+          "size": [
+            0.266,
+            0.007,
+            0.002
+          ],
+          "position": [
+            0.0,
+            0.082,
+            -0.315
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.31,
+            0.25,
+            0.16
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "lower_rib_08",
+          "shape": "box",
+          "size": [
+            0.266,
+            0.007,
+            0.002
+          ],
+          "position": [
+            0.0,
+            0.115,
+            -0.315
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.31,
+            0.25,
+            0.16
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "hinge_lower_barrel",
+          "shape": "cylinder",
+          "size": [
+            0.009,
+            0.009,
+            0.026
+          ],
+          "position": [
+            -0.15,
+            -0.162,
+            -0.265
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.56,
+            0.55,
+            0.5
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "hinge_upper_barrel",
+          "shape": "cylinder",
+          "size": [
+            0.009,
+            0.009,
+            0.026
+          ],
+          "position": [
+            -0.15,
+            -0.162,
+            0.255
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.56,
+            0.55,
+            0.5
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        }
+      ],
+      "reconstruction_note": "薄板构成真实开放内腔，八条固定横向浅肋近似下腔条纹；两个铰链轴筒仅为视觉结构。本轮前底横梁局部Z中心从-0.333改为-0.33775 m，高度从0.025改为0.0155 m，底面保持z=0.7345 m，顶面与柜底板下表面齐于z=0.7500 m。门芯底面z=0.7550 m，横梁全程在门下方留5 mm净空；横梁仍有可见几何和碰撞，不依赖禁用门/柜碰撞。"
+    },
+    {
+      "id": "interior_shelf",
+      "label_zh": "柜内固定深色隔板",
+      "source_object_id": "interior_shelf",
+      "evidence_frames": [
+        68,
+        73,
+        85,
+        130,
+        147,
+        180,
+        199,
+        209
+      ],
+      "body_type": "static",
+      "mass_kg": 0.6,
+      "position": [
+        -0.155,
+        0.152,
+        1.08
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parts": [
+        {
+          "id": "shelf_board",
+          "shape": "box",
+          "size": [
+            0.282,
+            0.272,
+            0.014
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.19,
+            0.145,
+            0.11
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "shelf_front_edge",
+          "shape": "box",
+          "size": [
+            0.282,
+            0.004,
+            0.014
+          ],
+          "position": [
+            0.0,
+            -0.134,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.3,
+            0.25,
+            0.19
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        }
+      ],
+      "reconstruction_note": "初始即固定存在于闭门后方，顶面z=1.087 m；前缘y=0.016 m。未添加不可见的托架。"
+    },
+    {
+      "id": "fridge_door",
+      "label_zh": "左铰链灰色柜门及竖向把手",
+      "source_object_id": "fridge_door",
+      "evidence_frames": [
+        0,
+        34,
+        51,
+        68,
+        85,
+        209,
+        220,
+        242,
+        254,
+        265
+      ],
+      "body_type": "dynamic",
+      "mass_kg": 0.9,
+      "position": [
+        -0.305,
+        -0.012,
+        0.755
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parts": [
+        {
+          "id": "door_core",
+          "shape": "box",
+          "size": [
+            0.296,
+            0.016,
+            0.65
+          ],
+          "position": [
+            0.148,
+            0.0,
+            0.325
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.46,
+            0.45,
+            0.4
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "door_inner_skin",
+          "shape": "box",
+          "size": [
+            0.286,
+            0.003,
+            0.638
+          ],
+          "position": [
+            0.148,
+            0.0095,
+            0.325
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.49,
+            0.48,
+            0.42
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "recess_left_rim",
+          "shape": "box",
+          "size": [
+            0.012,
+            0.021,
+            0.128
+          ],
+          "position": [
+            0.087,
+            -0.0185,
+            0.528
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.4,
+            0.39,
+            0.35
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "recess_right_rim",
+          "shape": "box",
+          "size": [
+            0.012,
+            0.021,
+            0.128
+          ],
+          "position": [
+            0.165,
+            -0.0185,
+            0.528
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.4,
+            0.39,
+            0.35
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "recess_top_rim",
+          "shape": "box",
+          "size": [
+            0.066,
+            0.021,
+            0.012
+          ],
+          "position": [
+            0.126,
+            -0.0185,
+            0.586
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.43,
+            0.42,
+            0.38
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "recess_bottom_rim",
+          "shape": "box",
+          "size": [
+            0.066,
+            0.025,
+            0.012
+          ],
+          "position": [
+            0.126,
+            -0.0205,
+            0.47
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.43,
+            0.42,
+            0.38
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "recess_dark_back",
+          "shape": "box",
+          "size": [
+            0.066,
+            0.002,
+            0.104
+          ],
+          "position": [
+            0.126,
+            -0.009,
+            0.528
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.18,
+            0.175,
+            0.165
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "recess_small_paddle",
+          "shape": "box",
+          "size": [
+            0.023,
+            0.011,
+            0.04
+          ],
+          "position": [
+            0.126,
+            -0.016,
+            0.546
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.56,
+            0.55,
+            0.51
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "handle_lower_mount",
+          "shape": "box",
+          "size": [
+            0.019,
+            0.03,
+            0.023
+          ],
+          "position": [
+            0.267,
+            -0.023,
+            0.365
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.49,
+            0.48,
+            0.43
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "handle_upper_mount",
+          "shape": "box",
+          "size": [
+            0.019,
+            0.03,
+            0.023
+          ],
+          "position": [
+            0.267,
+            -0.023,
+            0.601
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.49,
+            0.48,
+            0.43
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "handle_vertical_grip",
+          "shape": "capsule",
+          "size": [
+            0.019,
+            0.019,
+            0.258
+          ],
+          "position": [
+            0.267,
+            -0.041,
+            0.483
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.57,
+            0.56,
+            0.51
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "inner_hinge_plate_lower",
+          "shape": "box",
+          "size": [
+            0.03,
+            0.003,
+            0.035
+          ],
+          "position": [
+            0.019,
+            0.0125,
+            0.06
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.56,
+            0.55,
+            0.49
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "inner_hinge_plate_upper",
+          "shape": "box",
+          "size": [
+            0.03,
+            0.003,
+            0.035
+          ],
+          "position": [
+            0.019,
+            0.0125,
+            0.58
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.56,
+            0.55,
+            0.49
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "hinge_screw_01",
+          "shape": "cylinder",
+          "size": [
+            0.004,
+            0.004,
+            0.002
+          ],
+          "position": [
+            0.023,
+            0.015,
+            0.051
+          ],
+          "rotation_deg": [
+            90.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.68,
+            0.67,
+            0.61
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "hinge_screw_02",
+          "shape": "cylinder",
+          "size": [
+            0.004,
+            0.004,
+            0.002
+          ],
+          "position": [
+            0.023,
+            0.015,
+            0.069
+          ],
+          "rotation_deg": [
+            90.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.68,
+            0.67,
+            0.61
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "hinge_screw_03",
+          "shape": "cylinder",
+          "size": [
+            0.004,
+            0.004,
+            0.002
+          ],
+          "position": [
+            0.023,
+            0.015,
+            0.571
+          ],
+          "rotation_deg": [
+            90.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.68,
+            0.67,
+            0.61
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "hinge_screw_04",
+          "shape": "cylinder",
+          "size": [
+            0.004,
+            0.004,
+            0.002
+          ],
+          "position": [
+            0.023,
+            0.015,
+            0.589
+          ],
+          "rotation_deg": [
+            90.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.68,
+            0.67,
+            0.61
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        }
+      ],
+      "reconstruction_note": "闭门时面向-Y，门板向+X延伸；负Z旋转使门向观察者打开。把手有真实指间空隙，装饰凹区有背壁及四侧边框。四枚螺钉为数量不确定的视觉简化，不是松散物。门保持动态、重力及实体碰撞，门体和铰轴位置未因本轮修复而改变；父子锚点在世界坐标[-0.305,-0.012,0.755]重合。"
+    },
+    {
+      "id": "green_grapes",
+      "label_zh": "绿色葡萄串",
+      "source_object_id": "green_grapes",
+      "evidence_frames": [
+        0,
+        79,
+        96,
+        118,
+        130,
+        141,
+        147,
+        180,
+        199,
+        209
+      ],
+      "body_type": "dynamic",
+      "mass_kg": 0.12,
+      "position": [
+        0.055,
+        -0.155,
+        0.72
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        25.0
+      ],
+      "parts": [
+        {
+          "id": "grape_01",
+          "shape": "sphere",
+          "size": [
+            0.029,
+            0.03,
+            0.028
+          ],
+          "position": [
+            -0.023,
+            -0.041,
+            0.014
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.4,
+            0.66,
+            0.045
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "grape_02",
+          "shape": "sphere",
+          "size": [
+            0.03,
+            0.029,
+            0.029
+          ],
+          "position": [
+            0.002,
+            -0.044,
+            0.0145
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.47,
+            0.72,
+            0.055
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "grape_03",
+          "shape": "sphere",
+          "size": [
+            0.028,
+            0.03,
+            0.027
+          ],
+          "position": [
+            0.025,
+            -0.035,
+            0.014
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.43,
+            0.69,
+            0.04
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "grape_04",
+          "shape": "sphere",
+          "size": [
+            0.029,
+            0.029,
+            0.029
+          ],
+          "position": [
+            -0.034,
+            -0.016,
+            0.0145
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.48,
+            0.73,
+            0.065
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "grape_05",
+          "shape": "sphere",
+          "size": [
+            0.03,
+            0.029,
+            0.03
+          ],
+          "position": [
+            -0.01,
+            -0.019,
+            0.015
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.4,
+            0.66,
+            0.045
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "grape_06",
+          "shape": "sphere",
+          "size": [
+            0.03,
+            0.03,
+            0.029
+          ],
+          "position": [
+            0.015,
+            -0.012,
+            0.0145
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.5,
+            0.75,
+            0.065
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "grape_07",
+          "shape": "sphere",
+          "size": [
+            0.025,
+            0.029,
+            0.028
+          ],
+          "position": [
+            0.036,
+            -0.005,
+            0.014
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.43,
+            0.68,
+            0.035
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "grape_08",
+          "shape": "sphere",
+          "size": [
+            0.028,
+            0.03,
+            0.028
+          ],
+          "position": [
+            -0.026,
+            0.01,
+            0.014
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.43,
+            0.7,
+            0.045
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "grape_09",
+          "shape": "sphere",
+          "size": [
+            0.029,
+            0.029,
+            0.03
+          ],
+          "position": [
+            -0.002,
+            0.01,
+            0.015
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.48,
+            0.74,
+            0.06
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "grape_10",
+          "shape": "sphere",
+          "size": [
+            0.027,
+            0.03,
+            0.028
+          ],
+          "position": [
+            0.021,
+            0.018,
+            0.014
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.39,
+            0.66,
+            0.035
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "grape_11",
+          "shape": "sphere",
+          "size": [
+            0.027,
+            0.029,
+            0.028
+          ],
+          "position": [
+            -0.016,
+            0.035,
+            0.014
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.47,
+            0.72,
+            0.04
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "grape_12",
+          "shape": "sphere",
+          "size": [
+            0.027,
+            0.03,
+            0.028
+          ],
+          "position": [
+            0.008,
+            0.039,
+            0.014
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.46,
+            0.71,
+            0.045
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "grape_13",
+          "shape": "sphere",
+          "size": [
+            0.024,
+            0.027,
+            0.025
+          ],
+          "position": [
+            -0.002,
+            0.062,
+            0.0125
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.5,
+            0.74,
+            0.06
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "grape_14",
+          "shape": "sphere",
+          "size": [
+            0.028,
+            0.029,
+            0.028
+          ],
+          "position": [
+            -0.012,
+            -0.034,
+            0.036
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.51,
+            0.77,
+            0.07
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "grape_15",
+          "shape": "sphere",
+          "size": [
+            0.028,
+            0.029,
+            0.029
+          ],
+          "position": [
+            0.013,
+            -0.031,
+            0.036
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.43,
+            0.71,
+            0.035
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "grape_16",
+          "shape": "sphere",
+          "size": [
+            0.027,
+            0.03,
+            0.027
+          ],
+          "position": [
+            -0.023,
+            -0.01,
+            0.036
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.45,
+            0.72,
+            0.055
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "grape_17",
+          "shape": "sphere",
+          "size": [
+            0.029,
+            0.028,
+            0.028
+          ],
+          "position": [
+            0.001,
+            -0.008,
+            0.038
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.53,
+            0.78,
+            0.08
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "grape_18",
+          "shape": "sphere",
+          "size": [
+            0.026,
+            0.029,
+            0.027
+          ],
+          "position": [
+            0.024,
+            0.0,
+            0.034
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.47,
+            0.73,
+            0.045
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "grape_19",
+          "shape": "sphere",
+          "size": [
+            0.027,
+            0.029,
+            0.027
+          ],
+          "position": [
+            -0.013,
+            0.017,
+            0.036
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.5,
+            0.76,
+            0.07
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "grape_20",
+          "shape": "sphere",
+          "size": [
+            0.027,
+            0.027,
+            0.026
+          ],
+          "position": [
+            0.011,
+            0.024,
+            0.035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.42,
+            0.69,
+            0.035
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "grape_21",
+          "shape": "sphere",
+          "size": [
+            0.025,
+            0.028,
+            0.025
+          ],
+          "position": [
+            -0.003,
+            0.045,
+            0.032
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.47,
+            0.74,
+            0.05
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "grape_22",
+          "shape": "sphere",
+          "size": [
+            0.025,
+            0.027,
+            0.026
+          ],
+          "position": [
+            -0.006,
+            -0.021,
+            0.054
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.46,
+            0.73,
+            0.06
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "grape_23",
+          "shape": "sphere",
+          "size": [
+            0.024,
+            0.026,
+            0.025
+          ],
+          "position": [
+            0.01,
+            0.002,
+            0.053
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.52,
+            0.77,
+            0.075
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "grape_24",
+          "shape": "sphere",
+          "size": [
+            0.022,
+            0.025,
+            0.024
+          ],
+          "position": [
+            -0.008,
+            0.025,
+            0.05
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.44,
+            0.72,
+            0.045
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "stem_inner",
+          "shape": "capsule",
+          "size": [
+            0.0035,
+            0.0035,
+            0.031
+          ],
+          "position": [
+            0.02,
+            -0.032,
+            0.041
+          ],
+          "rotation_deg": [
+            0.0,
+            65.0,
+            -25.0
+          ],
+          "color": [
+            0.32,
+            0.48,
+            0.07
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "stem_curve_01",
+          "shape": "capsule",
+          "size": [
+            0.0035,
+            0.0035,
+            0.025
+          ],
+          "position": [
+            0.041,
+            -0.041,
+            0.045
+          ],
+          "rotation_deg": [
+            0.0,
+            85.0,
+            -15.0
+          ],
+          "color": [
+            0.37,
+            0.53,
+            0.08
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "stem_curve_02",
+          "shape": "capsule",
+          "size": [
+            0.003,
+            0.003,
+            0.019
+          ],
+          "position": [
+            0.057,
+            -0.039,
+            0.048
+          ],
+          "rotation_deg": [
+            0.0,
+            70.0,
+            45.0
+          ],
+          "color": [
+            0.4,
+            0.55,
+            0.09
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        }
+      ],
+      "reconstruction_note": "初始位于苹果左侧台面。24个不等径颗粒构成上宽下窄不规则长串，所有颗粒共同属于一个动态刚体；三段细茎表达右侧伸出弯曲结构，不添加水果之间的约束。保持重力及24个颗粒碰撞；本轮未修改已有支撑接触证据对应的形状、质量或姿态。"
+    },
+    {
+      "id": "red_apple",
+      "label_zh": "暗红色苹果状物体",
+      "source_object_id": "red_apple",
+      "evidence_frames": [
+        0,
+        147,
+        158,
+        169,
+        180,
+        190,
+        199,
+        203,
+        209
+      ],
+      "body_type": "dynamic",
+      "mass_kg": 0.1,
+      "position": [
+        0.205,
+        -0.139,
+        0.72
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        -12.0
+      ],
+      "parts": [
+        {
+          "id": "apple_body",
+          "shape": "lathe",
+          "size": [
+            0.092,
+            0.092,
+            0.076
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.36,
+            0.035,
+            0.055
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": [
+            [
+              0.0,
+              0.0
+            ],
+            [
+              0.012,
+              0.0
+            ],
+            [
+              0.024,
+              0.004
+            ],
+            [
+              0.035,
+              0.012
+            ],
+            [
+              0.043,
+              0.025
+            ],
+            [
+              0.046,
+              0.04
+            ],
+            [
+              0.044,
+              0.054
+            ],
+            [
+              0.038,
+              0.067
+            ],
+            [
+              0.027,
+              0.075
+            ],
+            [
+              0.016,
+              0.076
+            ],
+            [
+              0.008,
+              0.069
+            ],
+            [
+              0.0,
+              0.067
+            ]
+          ],
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "apple_stem",
+          "shape": "capsule",
+          "size": [
+            0.004,
+            0.004,
+            0.012
+          ],
+          "position": [
+            0.001,
+            0.0,
+            0.074
+          ],
+          "rotation_deg": [
+            0.0,
+            12.0,
+            0.0
+          ],
+          "color": [
+            0.23,
+            0.15,
+            0.075
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        }
+      ],
+      "reconstruction_note": "单个略扁且顶部凹陷的实体旋转体；细茎为苹果形状先验，图像证据较弱。底面z=0，避免初始或最终落入支撑面；最终采用近直立近似，不声称恢复真实落姿。保持动态、重力和主体碰撞，允许自然沉降转动；本轮未修改已有支撑接触证据对应的形状、质量或姿态。"
+    },
+    {
+      "id": "adjacent_oven",
+      "label_zh": "右侧关闭的烤箱式单元",
+      "source_object_id": "adjacent_oven",
+      "evidence_frames": [
+        0,
+        85,
+        147,
+        180,
+        199,
+        209,
+        265
+      ],
+      "body_type": "static",
+      "mass_kg": 6.0,
+      "position": [
+        0.15,
+        0.15,
+        1.08
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parts": [
+        {
+          "id": "oven_left_wall",
+          "shape": "box",
+          "size": [
+            0.012,
+            0.3,
+            0.66
+          ],
+          "position": [
+            -0.144,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.22,
+            0.17,
+            0.13
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "oven_right_wall",
+          "shape": "box",
+          "size": [
+            0.012,
+            0.3,
+            0.66
+          ],
+          "position": [
+            0.144,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.24,
+            0.19,
+            0.15
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "oven_back",
+          "shape": "box",
+          "size": [
+            0.276,
+            0.012,
+            0.636
+          ],
+          "position": [
+            0.0,
+            0.144,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.18,
+            0.15,
+            0.12
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "oven_bottom",
+          "shape": "box",
+          "size": [
+            0.276,
+            0.288,
+            0.012
+          ],
+          "position": [
+            0.0,
+            -0.006,
+            -0.324
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.26,
+            0.21,
+            0.16
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "oven_top",
+          "shape": "box",
+          "size": [
+            0.276,
+            0.288,
+            0.012
+          ],
+          "position": [
+            0.0,
+            -0.006,
+            0.324
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.38,
+            0.34,
+            0.28
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "oven_control_divider",
+          "shape": "box",
+          "size": [
+            0.276,
+            0.288,
+            0.012
+          ],
+          "position": [
+            0.0,
+            -0.006,
+            0.17
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.23,
+            0.19,
+            0.15
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "oven_base_rail",
+          "shape": "box",
+          "size": [
+            0.3,
+            0.027,
+            0.025
+          ],
+          "position": [
+            0.0,
+            -0.145,
+            -0.333
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.23,
+            0.17,
+            0.11
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "oven_front_right_foot",
+          "shape": "box",
+          "size": [
+            0.028,
+            0.035,
+            0.03
+          ],
+          "position": [
+            0.132,
+            -0.124,
+            -0.345
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.2,
+            0.15,
+            0.1
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "oven_front_left_foot",
+          "shape": "box",
+          "size": [
+            0.028,
+            0.035,
+            0.03
+          ],
+          "position": [
+            -0.132,
+            -0.124,
+            -0.345
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.2,
+            0.15,
+            0.1
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "door_left_frame",
+          "shape": "box",
+          "size": [
+            0.047,
+            0.018,
+            0.48
+          ],
+          "position": [
+            -0.1185,
+            -0.158,
+            -0.066
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.51,
+            0.5,
+            0.44
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "door_right_frame",
+          "shape": "box",
+          "size": [
+            0.047,
+            0.018,
+            0.48
+          ],
+          "position": [
+            0.1185,
+            -0.158,
+            -0.066
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.51,
+            0.5,
+            0.44
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "door_top_frame",
+          "shape": "box",
+          "size": [
+            0.19,
+            0.018,
+            0.108
+          ],
+          "position": [
+            0.0,
+            -0.158,
+            0.12
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.53,
+            0.52,
+            0.46
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "door_bottom_frame",
+          "shape": "box",
+          "size": [
+            0.19,
+            0.018,
+            0.048
+          ],
+          "position": [
+            0.0,
+            -0.158,
+            -0.282
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.51,
+            0.5,
+            0.44
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "window_glazing",
+          "shape": "box",
+          "size": [
+            0.19,
+            0.005,
+            0.324
+          ],
+          "position": [
+            0.0,
+            -0.156,
+            -0.096
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.29,
+            0.27,
+            0.22
+          ],
+          "collision": true,
+          "opacity": 0.32,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "window_corner_upper_left",
+          "shape": "cylinder",
+          "size": [
+            0.026,
+            0.026,
+            0.018
+          ],
+          "position": [
+            -0.094,
+            -0.158,
+            0.065
+          ],
+          "rotation_deg": [
+            90.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.51,
+            0.5,
+            0.44
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "window_corner_upper_right",
+          "shape": "cylinder",
+          "size": [
+            0.026,
+            0.026,
+            0.018
+          ],
+          "position": [
+            0.094,
+            -0.158,
+            0.065
+          ],
+          "rotation_deg": [
+            90.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.51,
+            0.5,
+            0.44
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "window_corner_lower_left",
+          "shape": "cylinder",
+          "size": [
+            0.026,
+            0.026,
+            0.018
+          ],
+          "position": [
+            -0.094,
+            -0.158,
+            -0.257
+          ],
+          "rotation_deg": [
+            90.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.51,
+            0.5,
+            0.44
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "window_corner_lower_right",
+          "shape": "cylinder",
+          "size": [
+            0.026,
+            0.026,
+            0.018
+          ],
+          "position": [
+            0.094,
+            -0.158,
+            -0.257
+          ],
+          "rotation_deg": [
+            90.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.51,
+            0.5,
+            0.44
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "handle_left_mount",
+          "shape": "box",
+          "size": [
+            0.019,
+            0.03,
+            0.018
+          ],
+          "position": [
+            -0.086,
+            -0.182,
+            0.126
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.49,
+            0.48,
+            0.43
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "handle_right_mount",
+          "shape": "box",
+          "size": [
+            0.019,
+            0.03,
+            0.018
+          ],
+          "position": [
+            0.086,
+            -0.182,
+            0.126
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.49,
+            0.48,
+            0.43
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "handle_horizontal_grip",
+          "shape": "capsule",
+          "size": [
+            0.018,
+            0.018,
+            0.205
+          ],
+          "position": [
+            0.0,
+            -0.201,
+            0.126
+          ],
+          "rotation_deg": [
+            0.0,
+            90.0,
+            0.0
+          ],
+          "color": [
+            0.59,
+            0.58,
+            0.52
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "control_brown_panel",
+          "shape": "box",
+          "size": [
+            0.284,
+            0.018,
+            0.094
+          ],
+          "position": [
+            0.0,
+            -0.158,
+            0.224
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.31,
+            0.21,
+            0.16
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "control_upper_trim",
+          "shape": "box",
+          "size": [
+            0.284,
+            0.019,
+            0.011
+          ],
+          "position": [
+            0.0,
+            -0.158,
+            0.277
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.71,
+            0.67,
+            0.56
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "control_button_01",
+          "shape": "cylinder",
+          "size": [
+            0.016,
+            0.016,
+            0.002
+          ],
+          "position": [
+            -0.113,
+            -0.168,
+            0.223
+          ],
+          "rotation_deg": [
+            90.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.76,
+            0.55,
+            0.43
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "control_button_02",
+          "shape": "cylinder",
+          "size": [
+            0.017,
+            0.017,
+            0.002
+          ],
+          "position": [
+            -0.081,
+            -0.168,
+            0.223
+          ],
+          "rotation_deg": [
+            90.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.79,
+            0.74,
+            0.61
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "control_button_03",
+          "shape": "cylinder",
+          "size": [
+            0.017,
+            0.017,
+            0.002
+          ],
+          "position": [
+            -0.049,
+            -0.168,
+            0.223
+          ],
+          "rotation_deg": [
+            90.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.79,
+            0.74,
+            0.61
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "control_button_04",
+          "shape": "cylinder",
+          "size": [
+            0.016,
+            0.016,
+            0.002
+          ],
+          "position": [
+            0.125,
+            -0.168,
+            0.223
+          ],
+          "rotation_deg": [
+            90.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.77,
+            0.72,
+            0.59
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "display_disc",
+          "shape": "cylinder",
+          "size": [
+            0.074,
+            0.074,
+            0.002
+          ],
+          "position": [
+            0.053,
+            -0.169,
+            0.227
+          ],
+          "rotation_deg": [
+            90.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.26,
+            0.23,
+            0.18
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "display_outline",
+          "shape": "lathe",
+          "size": [
+            0.083,
+            0.083,
+            0.002
+          ],
+          "position": [
+            0.053,
+            -0.171,
+            0.227
+          ],
+          "rotation_deg": [
+            90.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.77,
+            0.73,
+            0.6
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": [
+            [
+              0.0385,
+              -0.001
+            ],
+            [
+              0.0415,
+              -0.001
+            ],
+            [
+              0.0415,
+              0.001
+            ],
+            [
+              0.0385,
+              0.001
+            ],
+            [
+              0.0385,
+              -0.001
+            ]
+          ],
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "display_digit_01",
+          "shape": "lathe",
+          "size": [
+            0.012,
+            0.022,
+            0.001
+          ],
+          "position": [
+            0.029,
+            -0.173,
+            0.227
+          ],
+          "rotation_deg": [
+            90.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.76,
+            0.72,
+            0.6
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": [
+            [
+              0.0045,
+              -0.0005
+            ],
+            [
+              0.006,
+              -0.0005
+            ],
+            [
+              0.006,
+              0.0005
+            ],
+            [
+              0.0045,
+              0.0005
+            ],
+            [
+              0.0045,
+              -0.0005
+            ]
+          ],
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "display_digit_02",
+          "shape": "lathe",
+          "size": [
+            0.012,
+            0.022,
+            0.001
+          ],
+          "position": [
+            0.045,
+            -0.173,
+            0.227
+          ],
+          "rotation_deg": [
+            90.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.76,
+            0.72,
+            0.6
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": [
+            [
+              0.0045,
+              -0.0005
+            ],
+            [
+              0.006,
+              -0.0005
+            ],
+            [
+              0.006,
+              0.0005
+            ],
+            [
+              0.0045,
+              0.0005
+            ],
+            [
+              0.0045,
+              -0.0005
+            ]
+          ],
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "display_digit_03",
+          "shape": "lathe",
+          "size": [
+            0.012,
+            0.022,
+            0.001
+          ],
+          "position": [
+            0.061,
+            -0.173,
+            0.227
+          ],
+          "rotation_deg": [
+            90.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.76,
+            0.72,
+            0.6
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": [
+            [
+              0.0045,
+              -0.0005
+            ],
+            [
+              0.006,
+              -0.0005
+            ],
+            [
+              0.006,
+              0.0005
+            ],
+            [
+              0.0045,
+              0.0005
+            ],
+            [
+              0.0045,
+              -0.0005
+            ]
+          ],
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "display_digit_04",
+          "shape": "lathe",
+          "size": [
+            0.012,
+            0.022,
+            0.001
+          ],
+          "position": [
+            0.077,
+            -0.173,
+            0.227
+          ],
+          "rotation_deg": [
+            90.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.76,
+            0.72,
+            0.6
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": [
+            [
+              0.0045,
+              -0.0005
+            ],
+            [
+              0.006,
+              -0.0005
+            ],
+            [
+              0.006,
+              0.0005
+            ],
+            [
+              0.0045,
+              0.0005
+            ],
+            [
+              0.0045,
+              -0.0005
+            ]
+          ],
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "upper_visible_panel",
+          "shape": "box",
+          "size": [
+            0.284,
+            0.014,
+            0.042
+          ],
+          "position": [
+            0.0,
+            -0.156,
+            0.303
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.49,
+            0.47,
+            0.4
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        }
+      ],
+      "reconstruction_note": "与左柜紧邻，外壳保留空腔，关闭门由框架及透明薄窗构成。四个圆形按钮和圆形显示区是简化印刷装饰；四个字符以环形轮廓表示，环形lathe可按size作非均匀缩放。顶部仅延续可见面板，不添加炉灶。"
+    }
+  ],
+  "joints": [
+    {
+      "id": "fridge_door_hinge",
+      "type": "revolute",
+      "parent": "fridge_body",
+      "child": "fridge_door",
+      "axis": "Z",
+      "lower": -110.0,
+      "upper": 0.0,
+      "parent_anchor": [
+        -0.15,
+        -0.162,
+        -0.325
+      ],
+      "child_anchor": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "initial_position": 0.0,
+      "drive": {
+        "stiffness": 250.0,
+        "damping": 40.0,
+        "max_force": 1000.0
+      },
+      "collision_enabled": true
+    }
+  ],
+  "attachments": [],
+  "diagnostic_states": [
+    {
+      "name_zh": "初始闭门且两件水果在台面",
+      "kind": "initial",
+      "evidence_frames": [
+        0,
+        6,
+        11
+      ],
+      "poses": [],
+      "joint_positions": [],
+      "enabled_attachments": [],
+      "note": "S00。固定隔板和内腔已存在，只是被门遮挡；水果均由黄色台面承托。修订后门底与前底横梁顶面有5 mm几何净空；仍需启用相邻关节体碰撞重测闭门状态，不能沿用修订前物理结果作为本修订通过证据。"
+    },
+    {
+      "name_zh": "开门显露固定隔板和下部空腔",
+      "kind": "reveal",
+      "evidence_frames": [
+        68,
+        73,
+        79,
+        85
+      ],
+      "poses": [
+        {
+          "asset_id": "fridge_door",
+          "position": [
+            -0.305,
+            -0.012,
+            0.755
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -100.0
+          ]
+        },
+        {
+          "asset_id": "green_grapes",
+          "position": [
+            0.055,
+            -0.155,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            25.0
+          ]
+        },
+        {
+          "asset_id": "red_apple",
+          "position": [
+            0.205,
+            -0.139,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -12.0
+          ]
+        }
+      ],
+      "joint_positions": [
+        {
+          "joint_id": "fridge_door_hinge",
+          "value": -100.0
+        }
+      ],
+      "enabled_attachments": [],
+      "note": "S01。示意开门后的几何可达状态；约-100度仅为未标定角度估计，未发现可识别的预存松散物体。单独端点姿态不能证明完整开门扫掠无碰撞。"
+    },
+    {
+      "name_zh": "葡萄已释放在隔板上",
+      "kind": "reveal",
+      "evidence_frames": [
+        135,
+        141,
+        147
+      ],
+      "poses": [
+        {
+          "asset_id": "fridge_door",
+          "position": [
+            -0.305,
+            -0.012,
+            0.755
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -100.0
+          ]
+        },
+        {
+          "asset_id": "green_grapes",
+          "position": [
+            -0.172,
+            0.088,
+            1.087
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            82.0
+          ]
+        },
+        {
+          "asset_id": "red_apple",
+          "position": [
+            0.205,
+            -0.139,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -12.0
+          ]
+        }
+      ],
+      "joint_positions": [
+        {
+          "joint_id": "fridge_door_hinge",
+          "value": -100.0
+        }
+      ],
+      "enabled_attachments": [],
+      "note": "S02。葡萄底部位于隔板顶面，苹果仍在台面；葡萄姿态仅近似可见较横向的放置轮廓。两件水果保持动态且无抓持约束。"
+    },
+    {
+      "name_zh": "两件水果已在同一隔板上释放",
+      "kind": "reveal",
+      "evidence_frames": [
+        199,
+        203,
+        209
+      ],
+      "poses": [
+        {
+          "asset_id": "fridge_door",
+          "position": [
+            -0.305,
+            -0.012,
+            0.755
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -100.0
+          ]
+        },
+        {
+          "asset_id": "green_grapes",
+          "position": [
+            -0.172,
+            0.088,
+            1.087
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            82.0
+          ]
+        },
+        {
+          "asset_id": "red_apple",
+          "position": [
+            -0.094,
+            0.168,
+            1.087
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -12.0
+          ]
+        }
+      ],
+      "joint_positions": [
+        {
+          "joint_id": "fridge_door_hinge",
+          "value": -100.0
+        }
+      ],
+      "enabled_attachments": [],
+      "note": "S03。苹果位于葡萄右后方并由同一隔板承托；采用无相互穿透的近似间距，不以图像轮廓重叠推定接触。未加入葡萄二次调整动作。姿态用于诊断起始设置，允许水果在重力下自然沉降。"
+    },
+    {
+      "name_zh": "最终闭门且水果保留于柜内",
+      "kind": "final",
+      "evidence_frames": [
+        237,
+        248,
+        254,
+        259,
+        265
+      ],
+      "poses": [
+        {
+          "asset_id": "fridge_door",
+          "position": [
+            -0.305,
+            -0.012,
+            0.755
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "green_grapes",
+          "position": [
+            -0.172,
+            0.088,
+            1.087
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            82.0
+          ]
+        },
+        {
+          "asset_id": "red_apple",
+          "position": [
+            -0.094,
+            0.168,
+            1.087
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -12.0
+          ]
+        }
+      ],
+      "joint_positions": [
+        {
+          "joint_id": "fridge_door_hinge",
+          "value": 0.0
+        }
+      ],
+      "enabled_attachments": [],
+      "note": "S04。柜门覆盖开口，水果原台面位置清空；柜内水果位置沿用关门前最后可见状态及动作连续性，未假定锁扣啮合。门底与修订横梁有5 mm几何净空；需启用相邻碰撞复测本状态及从S03到S04的连续关门扫掠，特别检查近闭合穿透和关节约束位移。"
+    }
+  ],
+  "action_summary_zh": "柜门从关闭状态绕左侧竖直铰轴向外打开，显露原已存在的固定隔板和下部空腔。绿色葡萄从黄色台面被提起并释放在隔板上，随后红色苹果状物体被放在同一隔板、葡萄右后方并释放；最后柜门推回关闭。重建排除人体和手，保留两件独立动态水果及柜门关节。本轮通过降低前底横梁顶面消除已识别的门底交叠，保留门板轮廓和对齐的铰轴锚点。",
+  "final_state_description": "左侧灰色柜门恢复视觉关闭状态；绿色葡萄与暗红色苹果状物体均留在柜内同一隔板上，苹果位于葡萄右后方，其精确底部姿态和两物间距不确定。黄色台面原水果区域已清空，右侧烤箱式单元、柜体、隔板及背景保持原状。闭门后的水果保留基于连续性推断，无取出、拆卸或再次开门的证据。修订横梁与门芯的解析几何净空为5 mm；修订后的原生闭门碰撞、关节约束和完整开关门扫掠仍待验证。"
+}

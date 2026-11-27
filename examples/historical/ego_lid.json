@@ -1,0 +1,7262 @@
+{
+  "scene_id": "ego_lid",
+  "compiler_version": 5,
+  "units": "meters",
+  "up_axis": "Z",
+  "scale_assumptions": [
+    "单目尺度未经标定；采用常见小纸杯口径约0.070m、高0.090m作为先验，整体尺寸不确定性约±20%。",
+    "四杯高度从左至右为0.090、0.120、0.100、0.105m，最大杯沿直径为0.070、0.075、0.083、0.104m；第二杯最高，第四杯最宽。",
+    "四盖最大直径从左至右为0.074、0.079、0.087、0.108m，高0.012m；配合间隙和截面未经实测。",
+    "桌面高度假定0.720m，局部支撑板1.10m×0.80m、厚0.035m；不添加未见桌腿。",
+    "杯壁约0.0015m、杯底0.003m，质量采用轻质一次性容器先验。杯盖中央为厚0.005m的刚性等效截面，真实薄壳、材料、摩擦和柔性压扣未经标定。",
+    "杯和盖的资产原点均为底部中心，局部Z向上；环境资产原点为指定几何中心。所有part.position均为资产局部平移；lathe.profile直接给出部件局部径向截面，不依据size再次居中或缩放。",
+    "杯盖装配原点按桌高加杯高减0.007m计算，从左至右为z=0.803、0.833、0.813、0.818m；盖顶接触下表面为局部z=0.007m。",
+    "相机、物体平面位置及杯盖开口朝向为近似；不把第一人称相机运动解释为所有杯子同步移动。",
+    "revision7仅更换四盖两层上方按压碰撞体的角向表示：compiler_version4将convex_sectors=48解释为48个独立闭合凸扇区，与原可见壳体的48段角向网格对齐。每层保留原径向profile；hull_vertex_limit=64、min_thickness=0.0001m均为建模先验。"
+  ],
+  "geometry_limitations": [
+    "综合全部timeline-00至timeline-03及提供的视频理解，覆盖第0至265帧；保留四杯四盖、第三杯→第二杯→第一杯→第四杯的完整操作顺序，排除人体和手。",
+    "杯内深处未知，保留杯腔和内底；没有证据确立隐藏独立物体，不虚构液体、食物或帘后结构，也不宣称杯子为空。",
+    "相对于提供的revision6，revision7仅修复upper_pressing_cap_lower和upper_pressing_cap_upper的碰撞表示。全部源可见部件、杯体碰撞、roof_collision、裙边、下方盖腔、环境、源状态位姿、质量及动态重力属性保持不变。",
+    "四杯各保留可见旋转薄壳及25个碰撞部件：底板、12块倾斜杯壁、12块杯沿片。杯口开放；分段碰撞存在间隙及多边形误差，不适用于流体密封。",
+    "每盖保留2个逻辑上帽part，各通过convex_sectors=48生成48个独立烹制的闭合凸角楔。当前每个截锥角楔有6个唯一顶点；两层共96个实际碰撞体，加roof_collision和12个裙边片，每盖预期109个实际碰撞体。禁止将这些角楔合并烹制为整圆凸包。",
+    "上帽下层保留局部z=0.009至0.011m、上层保留z=0.011至0.012m的原截面；两层仅在z=0.011平面相接。48扇区替换原整圆32段凸体表示，不改变源可见壳体或径向轮廓，不假定已查明旧烹制误差根因。",
+    "hollow_shell及stepped_shell仍为collision=false的凹旋转体；不得用整体凸包填满杯腔或盖腔。opacity=0且collision=true的部件仅代表对应实体材料的碰撞代理，不是额外支撑或稳定器。",
+    "每盖一个深色椭圆表面标记近似小开口；未建立贯通孔道、内部流道或额外微孔，不能据此验证饮用、流体或密封。后帘为静态薄板、折片及下摆近似，未模拟织物形变。地面仅为未出镜的坐标参考。",
+    "八个任务物体始终为独立动态刚体，重力和碰撞启用；无运动学冻结、固定附件、吸附、关节、驱动或伪标定按压力。源中按压可能包含柔性变形，本刚性模型只表达对准、覆盖和接触支撑，不表达卡扣锁紧或气密。",
+    "用户提供的exact6原生证据属于spec SHA256 ff2112eac55234513877292b1916e0bf508e977849747d8fdbdcf4b689f6a479及USD SHA256 e706ff6012ca018ee9cf443a3e4a1d0db69585bcd9ef4a544a26aff50b74f54d。Isaac Sim 5.0.0.0确认八个任务刚体非运动学、重力启用，各杯25个、各盖15个碰撞体，关节与驱动均为空；不得把这些哈希或计数归给revision7。",
+    "exact6的S00至S04各独立演化180步，报告预期桌面支撑和已加盖杯盖接触。最大报告盖平移约0.227893mm，最负接触分离约-0.0215724mm，最高末段盖线速度约0.0152412m/s；支持有限时段内保持覆盖，不代表完全静止、无限期稳定或执行了装配。原始接触记录达到300000条上限，应与各状态聚合统计区分。",
+    "exact6提供25张180步后原生PathTracing图像的文件名及哈希，报告捕获错误为空；本轮未读取这些图像，不将清单等同于已完成视觉复核。",
+    "exact6独立原生已烹制碰撞体射线查询32例有9例失败，最大相对可见面偏差0.557079934mm；1ms首次冲量检查确实采样全部24个请求斜面，仅17例通过。较早1/120s接触检查可能滑至平肩，其通过点不能证明请求斜面合格。revision6不合格，不能因短时支撑证据而予以验收。",
+    "保留历史失败：v5斜面最大接触点误差约0.467941mm；仅把凸包顶点上限64改192的诊断没有改善；old4在1ms负对照中检出3.483mm接触相对可见面间隙。48扇区是新修复假设，不是已有通过结果。",
+    "revision7须记录新spec与编译USD哈希，核实compiler4的扇区生成和每盖109个实际碰撞体。可见面参考必须来自实际编译可见USD三角面，不得从碰撞profile推导。保持误差目标0.00025m和法向角差目标15度，不得放宽或隐藏失败点。",
+    "上方检查保留8个平面回归点及24个斜面点。每盖中央取r=0；沿局部+X的外围平肩半径从左至右为0.03471998380523631、0.03726012713291424、0.041247166168260505、0.05173434940378062m。各盖内、外斜面半径分别为[0.0295,0.032]、[0.0315,0.03425]、[0.0345,0.03775]、[0.0445,0.048]m，两斜面均取15、135、255度；名义局部高度分别0.0115和0.010m，实际高度及法向读取可见三角面。",
+    "revision7须分别执行原生已烹制碰撞体查询及1ms首次冲量采样，验证首次接触确在请求斜面而非滑至平肩。记录局部采样位置、命中扇区、真实球面与可见三角面间隙、接触位置及分离、法向角差、冲量、杯盖位姿变化和边界接触歧义；同时评估接触点误差与实际球面间隙，不能比较球心高度代替球面。",
+    "控制器可临时创建半径0.001m、质量0.00004kg且重力启用的球形接触器沿-Z接近；它不属于源场景资产。每点独立重置，杯和盖保持自由动态，记录接触及静止偏移、初始间隙、接近速度、时间步、子步和求解器参数。",
+    "revision7须另行对S00至S04各独立执行无探头180步支撑回归，报告支撑对、实际位姿、穿透及末段速度，与exact6比较；探头检查与无探头支撑检查分别重置。需要正常可见壳体、实际原生碰撞线框及局部剖面复核，保留完整失败记录。",
+    "诊断姿态均为脚本可视化与检查输入，不是恢复的精确运动、连续装配执行或机器人策略。本次仅输出revision7几何规划，未执行其编译、原生验证、最终录像、完整解码或逐帧视觉复核，不宣称revision7通过。"
+  ],
+  "camera": {
+    "position": [
+      0.0,
+      -0.6,
+      1.2
+    ],
+    "target": [
+      0.0,
+      0.09,
+      0.76
+    ],
+    "vertical_fov_deg": 57.0
+  },
+  "orbit": {
+    "target": [
+      0.0,
+      0.1,
+      0.79
+    ],
+    "radius": 0.85,
+    "height": 0.52
+  },
+  "ground": {
+    "size": [
+      3.0,
+      3.0,
+      0.05
+    ],
+    "position": [
+      0.0,
+      0.0,
+      -0.025
+    ],
+    "color": [
+      0.48,
+      0.45,
+      0.4
+    ]
+  },
+  "assets": [
+    {
+      "id": "table",
+      "label_zh": "黄褐色局部桌板",
+      "source_object_id": "table",
+      "evidence_frames": [
+        0,
+        85,
+        141,
+        197,
+        265
+      ],
+      "body_type": "static",
+      "mass_kg": 12.0,
+      "position": [
+        0.0,
+        0.1,
+        0.7025
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parts": [
+        {
+          "id": "slab",
+          "shape": "box",
+          "size": [
+            1.1,
+            0.8,
+            0.035
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.65,
+            0.46,
+            0.2
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        }
+      ],
+      "reconstruction_note": "顶面z=0.720m；有限静态支撑板，不推断未见桌腿。保持exact6几何。"
+    },
+    {
+      "id": "left_wall",
+      "label_zh": "左侧浅米色墙面",
+      "source_object_id": "left_wall",
+      "evidence_frames": [
+        0,
+        141,
+        265
+      ],
+      "body_type": "static",
+      "mass_kg": 100.0,
+      "position": [
+        -0.575,
+        0.15,
+        1.1
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parts": [
+        {
+          "id": "wall_panel",
+          "shape": "box",
+          "size": [
+            0.05,
+            1.1,
+            2.2
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.7,
+            0.64,
+            0.5
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        }
+      ],
+      "reconstruction_note": "墙内表面x=-0.55m，与桌板左边界相接；保持exact6几何。"
+    },
+    {
+      "id": "back_curtain",
+      "label_zh": "后方棕色帘布及折叠",
+      "source_object_id": "back_curtain",
+      "evidence_frames": [
+        0,
+        85,
+        141,
+        197,
+        265
+      ],
+      "body_type": "static",
+      "mass_kg": 1.2,
+      "position": [
+        0.0,
+        0.465,
+        1.22
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parts": [
+        {
+          "id": "main_cloth",
+          "shape": "box",
+          "size": [
+            1.08,
+            0.006,
+            1.0
+          ],
+          "position": [
+            0.0,
+            0.012,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.39,
+            0.25,
+            0.12
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "left_fold_outer",
+          "shape": "box",
+          "size": [
+            0.065,
+            0.008,
+            0.96
+          ],
+          "position": [
+            -0.475,
+            -0.01,
+            0.02
+          ],
+          "rotation_deg": [
+            0.0,
+            -3.0,
+            -28.0
+          ],
+          "color": [
+            0.34,
+            0.21,
+            0.1
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "left_fold_inner",
+          "shape": "box",
+          "size": [
+            0.05,
+            0.008,
+            0.91
+          ],
+          "position": [
+            -0.425,
+            -0.017,
+            0.045
+          ],
+          "rotation_deg": [
+            0.0,
+            3.0,
+            24.0
+          ],
+          "color": [
+            0.43,
+            0.28,
+            0.14
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "central_fold",
+          "shape": "box",
+          "size": [
+            0.07,
+            0.006,
+            0.96
+          ],
+          "position": [
+            0.08,
+            -0.004,
+            0.02
+          ],
+          "rotation_deg": [
+            0.0,
+            1.0,
+            12.0
+          ],
+          "color": [
+            0.37,
+            0.23,
+            0.11
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "left_lower_hem",
+          "shape": "box",
+          "size": [
+            0.32,
+            0.045,
+            0.012
+          ],
+          "position": [
+            -0.34,
+            -0.012,
+            -0.492
+          ],
+          "rotation_deg": [
+            0.0,
+            1.0,
+            -4.0
+          ],
+          "color": [
+            0.36,
+            0.23,
+            0.11
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "middle_lower_hem",
+          "shape": "box",
+          "size": [
+            0.38,
+            0.035,
+            0.012
+          ],
+          "position": [
+            0.005,
+            -0.008,
+            -0.486
+          ],
+          "rotation_deg": [
+            0.0,
+            -2.0,
+            3.0
+          ],
+          "color": [
+            0.4,
+            0.26,
+            0.13
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "right_lower_hem",
+          "shape": "box",
+          "size": [
+            0.34,
+            0.04,
+            0.012
+          ],
+          "position": [
+            0.36,
+            -0.01,
+            -0.483
+          ],
+          "rotation_deg": [
+            0.0,
+            2.0,
+            -3.0
+          ],
+          "color": [
+            0.36,
+            0.23,
+            0.11
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        }
+      ],
+      "reconstruction_note": "保留exact6左侧折叠及接近桌面的不规则下缘；刚性近似布面，不添加帘后物体。"
+    },
+    {
+      "id": "cup_left_small",
+      "label_zh": "最左侧小杯",
+      "source_object_id": "cup_left_small",
+      "evidence_frames": [
+        0,
+        11,
+        141,
+        164,
+        180,
+        186,
+        192,
+        197,
+        265
+      ],
+      "body_type": "dynamic",
+      "mass_kg": 0.009,
+      "position": [
+        -0.22,
+        0.12,
+        0.72
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parts": [
+        {
+          "id": "hollow_shell",
+          "shape": "lathe",
+          "size": [
+            0.07,
+            0.07,
+            0.09
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": [
+            [
+              0.0,
+              0.0
+            ],
+            [
+              0.024,
+              0.0
+            ],
+            [
+              0.0335,
+              0.086
+            ],
+            [
+              0.035,
+              0.087
+            ],
+            [
+              0.035,
+              0.089
+            ],
+            [
+              0.0348,
+              0.09
+            ],
+            [
+              0.0322,
+              0.09
+            ],
+            [
+              0.032,
+              0.089
+            ],
+            [
+              0.032,
+              0.086
+            ],
+            [
+              0.0225,
+              0.003
+            ],
+            [
+              0.0,
+              0.003
+            ],
+            [
+              0.0,
+              0.0
+            ]
+          ],
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "base",
+          "shape": "cylinder",
+          "size": [
+            0.048,
+            0.048,
+            0.003
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.0015
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "wall_00",
+          "shape": "box",
+          "size": [
+            0.0015,
+            0.0154,
+            0.086
+          ],
+          "position": [
+            0.028,
+            0.0,
+            0.0445
+          ],
+          "rotation_deg": [
+            0.0,
+            6.5,
+            0.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "wall_01",
+          "shape": "box",
+          "size": [
+            0.0015,
+            0.0154,
+            0.086
+          ],
+          "position": [
+            0.02425,
+            0.014,
+            0.0445
+          ],
+          "rotation_deg": [
+            0.0,
+            6.5,
+            30.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "wall_02",
+          "shape": "box",
+          "size": [
+            0.0015,
+            0.0154,
+            0.086
+          ],
+          "position": [
+            0.014,
+            0.02425,
+            0.0445
+          ],
+          "rotation_deg": [
+            0.0,
+            6.5,
+            60.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "wall_03",
+          "shape": "box",
+          "size": [
+            0.0015,
+            0.0154,
+            0.086
+          ],
+          "position": [
+            0.0,
+            0.028,
+            0.0445
+          ],
+          "rotation_deg": [
+            0.0,
+            6.5,
+            90.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "wall_04",
+          "shape": "box",
+          "size": [
+            0.0015,
+            0.0154,
+            0.086
+          ],
+          "position": [
+            -0.014,
+            0.02425,
+            0.0445
+          ],
+          "rotation_deg": [
+            0.0,
+            6.5,
+            120.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "wall_05",
+          "shape": "box",
+          "size": [
+            0.0015,
+            0.0154,
+            0.086
+          ],
+          "position": [
+            -0.02425,
+            0.014,
+            0.0445
+          ],
+          "rotation_deg": [
+            0.0,
+            6.5,
+            150.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "wall_06",
+          "shape": "box",
+          "size": [
+            0.0015,
+            0.0154,
+            0.086
+          ],
+          "position": [
+            -0.028,
+            0.0,
+            0.0445
+          ],
+          "rotation_deg": [
+            0.0,
+            6.5,
+            180.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "wall_07",
+          "shape": "box",
+          "size": [
+            0.0015,
+            0.0154,
+            0.086
+          ],
+          "position": [
+            -0.02425,
+            -0.014,
+            0.0445
+          ],
+          "rotation_deg": [
+            0.0,
+            6.5,
+            210.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "wall_08",
+          "shape": "box",
+          "size": [
+            0.0015,
+            0.0154,
+            0.086
+          ],
+          "position": [
+            -0.014,
+            -0.02425,
+            0.0445
+          ],
+          "rotation_deg": [
+            0.0,
+            6.5,
+            240.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "wall_09",
+          "shape": "box",
+          "size": [
+            0.0015,
+            0.0154,
+            0.086
+          ],
+          "position": [
+            0.0,
+            -0.028,
+            0.0445
+          ],
+          "rotation_deg": [
+            0.0,
+            6.5,
+            270.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "wall_10",
+          "shape": "box",
+          "size": [
+            0.0015,
+            0.0154,
+            0.086
+          ],
+          "position": [
+            0.014,
+            -0.02425,
+            0.0445
+          ],
+          "rotation_deg": [
+            0.0,
+            6.5,
+            300.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "wall_11",
+          "shape": "box",
+          "size": [
+            0.0015,
+            0.0154,
+            0.086
+          ],
+          "position": [
+            0.02425,
+            -0.014,
+            0.0445
+          ],
+          "rotation_deg": [
+            0.0,
+            6.5,
+            330.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rim_00",
+          "shape": "box",
+          "size": [
+            0.001,
+            0.0144,
+            0.003
+          ],
+          "position": [
+            0.0335,
+            0.0,
+            0.0885
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rim_01",
+          "shape": "box",
+          "size": [
+            0.001,
+            0.0144,
+            0.003
+          ],
+          "position": [
+            0.029012,
+            0.01675,
+            0.0885
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            30.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rim_02",
+          "shape": "box",
+          "size": [
+            0.001,
+            0.0144,
+            0.003
+          ],
+          "position": [
+            0.01675,
+            0.029012,
+            0.0885
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            60.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rim_03",
+          "shape": "box",
+          "size": [
+            0.001,
+            0.0144,
+            0.003
+          ],
+          "position": [
+            0.0,
+            0.0335,
+            0.0885
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            90.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rim_04",
+          "shape": "box",
+          "size": [
+            0.001,
+            0.0144,
+            0.003
+          ],
+          "position": [
+            -0.01675,
+            0.029012,
+            0.0885
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            120.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rim_05",
+          "shape": "box",
+          "size": [
+            0.001,
+            0.0144,
+            0.003
+          ],
+          "position": [
+            -0.029012,
+            0.01675,
+            0.0885
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            150.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rim_06",
+          "shape": "box",
+          "size": [
+            0.001,
+            0.0144,
+            0.003
+          ],
+          "position": [
+            -0.0335,
+            0.0,
+            0.0885
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            180.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rim_07",
+          "shape": "box",
+          "size": [
+            0.001,
+            0.0144,
+            0.003
+          ],
+          "position": [
+            -0.029012,
+            -0.01675,
+            0.0885
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            210.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rim_08",
+          "shape": "box",
+          "size": [
+            0.001,
+            0.0144,
+            0.003
+          ],
+          "position": [
+            -0.01675,
+            -0.029012,
+            0.0885
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            240.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rim_09",
+          "shape": "box",
+          "size": [
+            0.001,
+            0.0144,
+            0.003
+          ],
+          "position": [
+            0.0,
+            -0.0335,
+            0.0885
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            270.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rim_10",
+          "shape": "box",
+          "size": [
+            0.001,
+            0.0144,
+            0.003
+          ],
+          "position": [
+            0.01675,
+            -0.029012,
+            0.0885
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            300.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rim_11",
+          "shape": "box",
+          "size": [
+            0.001,
+            0.0144,
+            0.003
+          ],
+          "position": [
+            0.029012,
+            -0.01675,
+            0.0885
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            330.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        }
+      ],
+      "reconstruction_note": "exact6杯体及25个碰撞部件全部保留。底部原点，初始略靠前；杯沿碰撞顶面局部z=0.090m，杯腔开放，重力和碰撞启用。"
+    },
+    {
+      "id": "cup_center_left_tall",
+      "label_zh": "左起第二只高杯",
+      "source_object_id": "cup_center_left_tall",
+      "evidence_frames": [
+        0,
+        11,
+        85,
+        107,
+        130,
+        135,
+        141,
+        265
+      ],
+      "body_type": "dynamic",
+      "mass_kg": 0.012,
+      "position": [
+        -0.105,
+        0.16,
+        0.72
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parts": [
+        {
+          "id": "hollow_shell",
+          "shape": "lathe",
+          "size": [
+            0.075,
+            0.075,
+            0.12
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": [
+            [
+              0.0,
+              0.0
+            ],
+            [
+              0.025,
+              0.0
+            ],
+            [
+              0.036,
+              0.116
+            ],
+            [
+              0.0375,
+              0.117
+            ],
+            [
+              0.0375,
+              0.119
+            ],
+            [
+              0.0373,
+              0.12
+            ],
+            [
+              0.0347,
+              0.12
+            ],
+            [
+              0.0345,
+              0.119
+            ],
+            [
+              0.0345,
+              0.116
+            ],
+            [
+              0.0235,
+              0.003
+            ],
+            [
+              0.0,
+              0.003
+            ],
+            [
+              0.0,
+              0.0
+            ]
+          ],
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "base",
+          "shape": "cylinder",
+          "size": [
+            0.05,
+            0.05,
+            0.003
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.0015
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "wall_00",
+          "shape": "box",
+          "size": [
+            0.0015,
+            0.0165,
+            0.116
+          ],
+          "position": [
+            0.02975,
+            0.0,
+            0.0595
+          ],
+          "rotation_deg": [
+            0.0,
+            5.6,
+            0.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "wall_01",
+          "shape": "box",
+          "size": [
+            0.0015,
+            0.0165,
+            0.116
+          ],
+          "position": [
+            0.02576,
+            0.01488,
+            0.0595
+          ],
+          "rotation_deg": [
+            0.0,
+            5.6,
+            30.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "wall_02",
+          "shape": "box",
+          "size": [
+            0.0015,
+            0.0165,
+            0.116
+          ],
+          "position": [
+            0.01488,
+            0.02576,
+            0.0595
+          ],
+          "rotation_deg": [
+            0.0,
+            5.6,
+            60.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "wall_03",
+          "shape": "box",
+          "size": [
+            0.0015,
+            0.0165,
+            0.116
+          ],
+          "position": [
+            0.0,
+            0.02975,
+            0.0595
+          ],
+          "rotation_deg": [
+            0.0,
+            5.6,
+            90.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "wall_04",
+          "shape": "box",
+          "size": [
+            0.0015,
+            0.0165,
+            0.116
+          ],
+          "position": [
+            -0.01488,
+            0.02576,
+            0.0595
+          ],
+          "rotation_deg": [
+            0.0,
+            5.6,
+            120.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "wall_05",
+          "shape": "box",
+          "size": [
+            0.0015,
+            0.0165,
+            0.116
+          ],
+          "position": [
+            -0.02576,
+            0.01488,
+            0.0595
+          ],
+          "rotation_deg": [
+            0.0,
+            5.6,
+            150.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "wall_06",
+          "shape": "box",
+          "size": [
+            0.0015,
+            0.0165,
+            0.116
+          ],
+          "position": [
+            -0.02975,
+            0.0,
+            0.0595
+          ],
+          "rotation_deg": [
+            0.0,
+            5.6,
+            180.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "wall_07",
+          "shape": "box",
+          "size": [
+            0.0015,
+            0.0165,
+            0.116
+          ],
+          "position": [
+            -0.02576,
+            -0.01488,
+            0.0595
+          ],
+          "rotation_deg": [
+            0.0,
+            5.6,
+            210.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "wall_08",
+          "shape": "box",
+          "size": [
+            0.0015,
+            0.0165,
+            0.116
+          ],
+          "position": [
+            -0.01488,
+            -0.02576,
+            0.0595
+          ],
+          "rotation_deg": [
+            0.0,
+            5.6,
+            240.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "wall_09",
+          "shape": "box",
+          "size": [
+            0.0015,
+            0.0165,
+            0.116
+          ],
+          "position": [
+            0.0,
+            -0.02975,
+            0.0595
+          ],
+          "rotation_deg": [
+            0.0,
+            5.6,
+            270.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "wall_10",
+          "shape": "box",
+          "size": [
+            0.0015,
+            0.0165,
+            0.116
+          ],
+          "position": [
+            0.01488,
+            -0.02576,
+            0.0595
+          ],
+          "rotation_deg": [
+            0.0,
+            5.6,
+            300.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "wall_11",
+          "shape": "box",
+          "size": [
+            0.0015,
+            0.0165,
+            0.116
+          ],
+          "position": [
+            0.02576,
+            -0.01488,
+            0.0595
+          ],
+          "rotation_deg": [
+            0.0,
+            5.6,
+            330.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rim_00",
+          "shape": "box",
+          "size": [
+            0.001,
+            0.0152,
+            0.003
+          ],
+          "position": [
+            0.036,
+            0.0,
+            0.1185
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rim_01",
+          "shape": "box",
+          "size": [
+            0.001,
+            0.0152,
+            0.003
+          ],
+          "position": [
+            0.031177,
+            0.018,
+            0.1185
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            30.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rim_02",
+          "shape": "box",
+          "size": [
+            0.001,
+            0.0152,
+            0.003
+          ],
+          "position": [
+            0.018,
+            0.031177,
+            0.1185
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            60.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rim_03",
+          "shape": "box",
+          "size": [
+            0.001,
+            0.0152,
+            0.003
+          ],
+          "position": [
+            0.0,
+            0.036,
+            0.1185
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            90.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rim_04",
+          "shape": "box",
+          "size": [
+            0.001,
+            0.0152,
+            0.003
+          ],
+          "position": [
+            -0.018,
+            0.031177,
+            0.1185
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            120.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rim_05",
+          "shape": "box",
+          "size": [
+            0.001,
+            0.0152,
+            0.003
+          ],
+          "position": [
+            -0.031177,
+            0.018,
+            0.1185
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            150.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rim_06",
+          "shape": "box",
+          "size": [
+            0.001,
+            0.0152,
+            0.003
+          ],
+          "position": [
+            -0.036,
+            0.0,
+            0.1185
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            180.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rim_07",
+          "shape": "box",
+          "size": [
+            0.001,
+            0.0152,
+            0.003
+          ],
+          "position": [
+            -0.031177,
+            -0.018,
+            0.1185
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            210.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rim_08",
+          "shape": "box",
+          "size": [
+            0.001,
+            0.0152,
+            0.003
+          ],
+          "position": [
+            -0.018,
+            -0.031177,
+            0.1185
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            240.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rim_09",
+          "shape": "box",
+          "size": [
+            0.001,
+            0.0152,
+            0.003
+          ],
+          "position": [
+            0.0,
+            -0.036,
+            0.1185
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            270.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rim_10",
+          "shape": "box",
+          "size": [
+            0.001,
+            0.0152,
+            0.003
+          ],
+          "position": [
+            0.018,
+            -0.031177,
+            0.1185
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            300.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rim_11",
+          "shape": "box",
+          "size": [
+            0.001,
+            0.0152,
+            0.003
+          ],
+          "position": [
+            0.031177,
+            -0.018,
+            0.1185
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            330.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        }
+      ],
+      "reconstruction_note": "四杯中最高；exact6几何及25个碰撞部件不变。杯沿碰撞顶面局部z=0.120m，杯腔开放，保持自由动态。"
+    },
+    {
+      "id": "cup_center_right",
+      "label_zh": "左起第三只中等杯",
+      "source_object_id": "cup_center_right",
+      "evidence_frames": [
+        0,
+        11,
+        34,
+        45,
+        73,
+        85,
+        265
+      ],
+      "body_type": "dynamic",
+      "mass_kg": 0.011,
+      "position": [
+        0.035,
+        0.15,
+        0.72
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parts": [
+        {
+          "id": "hollow_shell",
+          "shape": "lathe",
+          "size": [
+            0.083,
+            0.083,
+            0.1
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": [
+            [
+              0.0,
+              0.0
+            ],
+            [
+              0.027,
+              0.0
+            ],
+            [
+              0.04,
+              0.096
+            ],
+            [
+              0.0415,
+              0.097
+            ],
+            [
+              0.0415,
+              0.099
+            ],
+            [
+              0.0413,
+              0.1
+            ],
+            [
+              0.0387,
+              0.1
+            ],
+            [
+              0.0385,
+              0.099
+            ],
+            [
+              0.0385,
+              0.096
+            ],
+            [
+              0.0255,
+              0.003
+            ],
+            [
+              0.0,
+              0.003
+            ],
+            [
+              0.0,
+              0.0
+            ]
+          ],
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "base",
+          "shape": "cylinder",
+          "size": [
+            0.054,
+            0.054,
+            0.003
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.0015
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "wall_00",
+          "shape": "box",
+          "size": [
+            0.0015,
+            0.0181,
+            0.097
+          ],
+          "position": [
+            0.03275,
+            0.0,
+            0.0495
+          ],
+          "rotation_deg": [
+            0.0,
+            7.9,
+            0.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "wall_01",
+          "shape": "box",
+          "size": [
+            0.0015,
+            0.0181,
+            0.097
+          ],
+          "position": [
+            0.02836,
+            0.01638,
+            0.0495
+          ],
+          "rotation_deg": [
+            0.0,
+            7.9,
+            30.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "wall_02",
+          "shape": "box",
+          "size": [
+            0.0015,
+            0.0181,
+            0.097
+          ],
+          "position": [
+            0.01638,
+            0.02836,
+            0.0495
+          ],
+          "rotation_deg": [
+            0.0,
+            7.9,
+            60.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "wall_03",
+          "shape": "box",
+          "size": [
+            0.0015,
+            0.0181,
+            0.097
+          ],
+          "position": [
+            0.0,
+            0.03275,
+            0.0495
+          ],
+          "rotation_deg": [
+            0.0,
+            7.9,
+            90.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "wall_04",
+          "shape": "box",
+          "size": [
+            0.0015,
+            0.0181,
+            0.097
+          ],
+          "position": [
+            -0.01638,
+            0.02836,
+            0.0495
+          ],
+          "rotation_deg": [
+            0.0,
+            7.9,
+            120.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "wall_05",
+          "shape": "box",
+          "size": [
+            0.0015,
+            0.0181,
+            0.097
+          ],
+          "position": [
+            -0.02836,
+            0.01638,
+            0.0495
+          ],
+          "rotation_deg": [
+            0.0,
+            7.9,
+            150.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "wall_06",
+          "shape": "box",
+          "size": [
+            0.0015,
+            0.0181,
+            0.097
+          ],
+          "position": [
+            -0.03275,
+            0.0,
+            0.0495
+          ],
+          "rotation_deg": [
+            0.0,
+            7.9,
+            180.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "wall_07",
+          "shape": "box",
+          "size": [
+            0.0015,
+            0.0181,
+            0.097
+          ],
+          "position": [
+            -0.02836,
+            -0.01638,
+            0.0495
+          ],
+          "rotation_deg": [
+            0.0,
+            7.9,
+            210.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "wall_08",
+          "shape": "box",
+          "size": [
+            0.0015,
+            0.0181,
+            0.097
+          ],
+          "position": [
+            -0.01638,
+            -0.02836,
+            0.0495
+          ],
+          "rotation_deg": [
+            0.0,
+            7.9,
+            240.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "wall_09",
+          "shape": "box",
+          "size": [
+            0.0015,
+            0.0181,
+            0.097
+          ],
+          "position": [
+            0.0,
+            -0.03275,
+            0.0495
+          ],
+          "rotation_deg": [
+            0.0,
+            7.9,
+            270.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "wall_10",
+          "shape": "box",
+          "size": [
+            0.0015,
+            0.0181,
+            0.097
+          ],
+          "position": [
+            0.01638,
+            -0.02836,
+            0.0495
+          ],
+          "rotation_deg": [
+            0.0,
+            7.9,
+            300.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "wall_11",
+          "shape": "box",
+          "size": [
+            0.0015,
+            0.0181,
+            0.097
+          ],
+          "position": [
+            0.02836,
+            -0.01638,
+            0.0495
+          ],
+          "rotation_deg": [
+            0.0,
+            7.9,
+            330.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rim_00",
+          "shape": "box",
+          "size": [
+            0.001,
+            0.016,
+            0.003
+          ],
+          "position": [
+            0.04,
+            0.0,
+            0.0985
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rim_01",
+          "shape": "box",
+          "size": [
+            0.001,
+            0.016,
+            0.003
+          ],
+          "position": [
+            0.034641,
+            0.02,
+            0.0985
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            30.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rim_02",
+          "shape": "box",
+          "size": [
+            0.001,
+            0.016,
+            0.003
+          ],
+          "position": [
+            0.02,
+            0.034641,
+            0.0985
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            60.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rim_03",
+          "shape": "box",
+          "size": [
+            0.001,
+            0.016,
+            0.003
+          ],
+          "position": [
+            0.0,
+            0.04,
+            0.0985
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            90.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rim_04",
+          "shape": "box",
+          "size": [
+            0.001,
+            0.016,
+            0.003
+          ],
+          "position": [
+            -0.02,
+            0.034641,
+            0.0985
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            120.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rim_05",
+          "shape": "box",
+          "size": [
+            0.001,
+            0.016,
+            0.003
+          ],
+          "position": [
+            -0.034641,
+            0.02,
+            0.0985
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            150.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rim_06",
+          "shape": "box",
+          "size": [
+            0.001,
+            0.016,
+            0.003
+          ],
+          "position": [
+            -0.04,
+            0.0,
+            0.0985
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            180.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rim_07",
+          "shape": "box",
+          "size": [
+            0.001,
+            0.016,
+            0.003
+          ],
+          "position": [
+            -0.034641,
+            -0.02,
+            0.0985
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            210.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rim_08",
+          "shape": "box",
+          "size": [
+            0.001,
+            0.016,
+            0.003
+          ],
+          "position": [
+            -0.02,
+            -0.034641,
+            0.0985
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            240.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rim_09",
+          "shape": "box",
+          "size": [
+            0.001,
+            0.016,
+            0.003
+          ],
+          "position": [
+            0.0,
+            -0.04,
+            0.0985
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            270.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rim_10",
+          "shape": "box",
+          "size": [
+            0.001,
+            0.016,
+            0.003
+          ],
+          "position": [
+            0.02,
+            -0.034641,
+            0.0985
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            300.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rim_11",
+          "shape": "box",
+          "size": [
+            0.001,
+            0.016,
+            0.003
+          ],
+          "position": [
+            0.034641,
+            -0.02,
+            0.0985
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            330.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        }
+      ],
+      "reconstruction_note": "首先加盖的杯；exact6几何及25个碰撞部件不变。卷边顶面局部z=0.100m，杯腔开放，保持自由动态。"
+    },
+    {
+      "id": "cup_right_large",
+      "label_zh": "最右侧宽口大杯",
+      "source_object_id": "cup_right_large",
+      "evidence_frames": [
+        0,
+        11,
+        203,
+        226,
+        231,
+        248,
+        254,
+        259,
+        265
+      ],
+      "body_type": "dynamic",
+      "mass_kg": 0.016,
+      "position": [
+        0.19,
+        0.145,
+        0.72
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parts": [
+        {
+          "id": "hollow_shell",
+          "shape": "lathe",
+          "size": [
+            0.104,
+            0.104,
+            0.105
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": [
+            [
+              0.0,
+              0.0
+            ],
+            [
+              0.033,
+              0.0
+            ],
+            [
+              0.05,
+              0.101
+            ],
+            [
+              0.052,
+              0.102
+            ],
+            [
+              0.052,
+              0.104
+            ],
+            [
+              0.0518,
+              0.105
+            ],
+            [
+              0.0487,
+              0.105
+            ],
+            [
+              0.0485,
+              0.104
+            ],
+            [
+              0.0485,
+              0.101
+            ],
+            [
+              0.0315,
+              0.003
+            ],
+            [
+              0.0,
+              0.003
+            ],
+            [
+              0.0,
+              0.0
+            ]
+          ],
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "base",
+          "shape": "cylinder",
+          "size": [
+            0.066,
+            0.066,
+            0.003
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.0015
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "wall_00",
+          "shape": "box",
+          "size": [
+            0.0015,
+            0.0226,
+            0.103
+          ],
+          "position": [
+            0.04075,
+            0.0,
+            0.052
+          ],
+          "rotation_deg": [
+            0.0,
+            9.8,
+            0.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "wall_01",
+          "shape": "box",
+          "size": [
+            0.0015,
+            0.0226,
+            0.103
+          ],
+          "position": [
+            0.03529,
+            0.02038,
+            0.052
+          ],
+          "rotation_deg": [
+            0.0,
+            9.8,
+            30.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "wall_02",
+          "shape": "box",
+          "size": [
+            0.0015,
+            0.0226,
+            0.103
+          ],
+          "position": [
+            0.02038,
+            0.03529,
+            0.052
+          ],
+          "rotation_deg": [
+            0.0,
+            9.8,
+            60.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "wall_03",
+          "shape": "box",
+          "size": [
+            0.0015,
+            0.0226,
+            0.103
+          ],
+          "position": [
+            0.0,
+            0.04075,
+            0.052
+          ],
+          "rotation_deg": [
+            0.0,
+            9.8,
+            90.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "wall_04",
+          "shape": "box",
+          "size": [
+            0.0015,
+            0.0226,
+            0.103
+          ],
+          "position": [
+            -0.02038,
+            0.03529,
+            0.052
+          ],
+          "rotation_deg": [
+            0.0,
+            9.8,
+            120.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "wall_05",
+          "shape": "box",
+          "size": [
+            0.0015,
+            0.0226,
+            0.103
+          ],
+          "position": [
+            -0.03529,
+            0.02038,
+            0.052
+          ],
+          "rotation_deg": [
+            0.0,
+            9.8,
+            150.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "wall_06",
+          "shape": "box",
+          "size": [
+            0.0015,
+            0.0226,
+            0.103
+          ],
+          "position": [
+            -0.04075,
+            0.0,
+            0.052
+          ],
+          "rotation_deg": [
+            0.0,
+            9.8,
+            180.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "wall_07",
+          "shape": "box",
+          "size": [
+            0.0015,
+            0.0226,
+            0.103
+          ],
+          "position": [
+            -0.03529,
+            -0.02038,
+            0.052
+          ],
+          "rotation_deg": [
+            0.0,
+            9.8,
+            210.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "wall_08",
+          "shape": "box",
+          "size": [
+            0.0015,
+            0.0226,
+            0.103
+          ],
+          "position": [
+            -0.02038,
+            -0.03529,
+            0.052
+          ],
+          "rotation_deg": [
+            0.0,
+            9.8,
+            240.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "wall_09",
+          "shape": "box",
+          "size": [
+            0.0015,
+            0.0226,
+            0.103
+          ],
+          "position": [
+            0.0,
+            -0.04075,
+            0.052
+          ],
+          "rotation_deg": [
+            0.0,
+            9.8,
+            270.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "wall_10",
+          "shape": "box",
+          "size": [
+            0.0015,
+            0.0226,
+            0.103
+          ],
+          "position": [
+            0.02038,
+            -0.03529,
+            0.052
+          ],
+          "rotation_deg": [
+            0.0,
+            9.8,
+            300.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "wall_11",
+          "shape": "box",
+          "size": [
+            0.0015,
+            0.0226,
+            0.103
+          ],
+          "position": [
+            0.03529,
+            -0.02038,
+            0.052
+          ],
+          "rotation_deg": [
+            0.0,
+            9.8,
+            330.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rim_00",
+          "shape": "box",
+          "size": [
+            0.001,
+            0.018,
+            0.003
+          ],
+          "position": [
+            0.0505,
+            0.0,
+            0.1035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rim_01",
+          "shape": "box",
+          "size": [
+            0.001,
+            0.018,
+            0.003
+          ],
+          "position": [
+            0.043734,
+            0.02525,
+            0.1035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            30.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rim_02",
+          "shape": "box",
+          "size": [
+            0.001,
+            0.018,
+            0.003
+          ],
+          "position": [
+            0.02525,
+            0.043734,
+            0.1035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            60.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rim_03",
+          "shape": "box",
+          "size": [
+            0.001,
+            0.018,
+            0.003
+          ],
+          "position": [
+            0.0,
+            0.0505,
+            0.1035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            90.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rim_04",
+          "shape": "box",
+          "size": [
+            0.001,
+            0.018,
+            0.003
+          ],
+          "position": [
+            -0.02525,
+            0.043734,
+            0.1035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            120.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rim_05",
+          "shape": "box",
+          "size": [
+            0.001,
+            0.018,
+            0.003
+          ],
+          "position": [
+            -0.043734,
+            0.02525,
+            0.1035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            150.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rim_06",
+          "shape": "box",
+          "size": [
+            0.001,
+            0.018,
+            0.003
+          ],
+          "position": [
+            -0.0505,
+            0.0,
+            0.1035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            180.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rim_07",
+          "shape": "box",
+          "size": [
+            0.001,
+            0.018,
+            0.003
+          ],
+          "position": [
+            -0.043734,
+            -0.02525,
+            0.1035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            210.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rim_08",
+          "shape": "box",
+          "size": [
+            0.001,
+            0.018,
+            0.003
+          ],
+          "position": [
+            -0.02525,
+            -0.043734,
+            0.1035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            240.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rim_09",
+          "shape": "box",
+          "size": [
+            0.001,
+            0.018,
+            0.003
+          ],
+          "position": [
+            0.0,
+            -0.0505,
+            0.1035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            270.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rim_10",
+          "shape": "box",
+          "size": [
+            0.001,
+            0.018,
+            0.003
+          ],
+          "position": [
+            0.02525,
+            -0.043734,
+            0.1035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            300.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rim_11",
+          "shape": "box",
+          "size": [
+            0.001,
+            0.018,
+            0.003
+          ],
+          "position": [
+            0.043734,
+            -0.02525,
+            0.1035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            330.0
+          ],
+          "color": [
+            0.88,
+            0.86,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        }
+      ],
+      "reconstruction_note": "最后加盖的宽口杯，初始开放。exact6几何及25个碰撞部件不变，卷边碰撞顶面局部z=0.105m，保持自由动态。"
+    },
+    {
+      "id": "lid_left_small",
+      "label_zh": "左前方独立小杯盖",
+      "source_object_id": "lid_left_small",
+      "evidence_frames": [
+        0,
+        141,
+        147,
+        158,
+        164,
+        169,
+        180,
+        186,
+        197,
+        265
+      ],
+      "body_type": "dynamic",
+      "mass_kg": 0.003,
+      "position": [
+        -0.19,
+        -0.1,
+        0.72
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        -30.0
+      ],
+      "parts": [
+        {
+          "id": "stepped_shell",
+          "shape": "lathe",
+          "size": [
+            0.074,
+            0.074,
+            0.012
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": [
+            [
+              0.0,
+              0.007
+            ],
+            [
+              0.0354,
+              0.007
+            ],
+            [
+              0.0354,
+              0.0
+            ],
+            [
+              0.037,
+              0.0
+            ],
+            [
+              0.037,
+              0.003
+            ],
+            [
+              0.0365,
+              0.009
+            ],
+            [
+              0.033,
+              0.009
+            ],
+            [
+              0.031,
+              0.011
+            ],
+            [
+              0.028,
+              0.012
+            ],
+            [
+              0.0,
+              0.012
+            ],
+            [
+              0.0,
+              0.007
+            ]
+          ],
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "roof_collision",
+          "shape": "cylinder",
+          "size": [
+            0.073,
+            0.073,
+            0.002
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.008
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "upper_pressing_cap_lower",
+          "shape": "lathe",
+          "size": [
+            0.066,
+            0.066,
+            0.002
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": [
+            [
+              0.0,
+              0.009
+            ],
+            [
+              0.033,
+              0.009
+            ],
+            [
+              0.031,
+              0.011
+            ],
+            [
+              0.0,
+              0.011
+            ],
+            [
+              0.0,
+              0.009
+            ]
+          ],
+          "segments": 48,
+          "convex_sectors": 48,
+          "convex_hull": {
+            "hull_vertex_limit": 64,
+            "min_thickness": 0.0001
+          },
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "upper_pressing_cap_upper",
+          "shape": "lathe",
+          "size": [
+            0.062,
+            0.062,
+            0.001
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": [
+            [
+              0.0,
+              0.011
+            ],
+            [
+              0.031,
+              0.011
+            ],
+            [
+              0.028,
+              0.012
+            ],
+            [
+              0.0,
+              0.012
+            ],
+            [
+              0.0,
+              0.011
+            ]
+          ],
+          "segments": 48,
+          "convex_sectors": 48,
+          "convex_hull": {
+            "hull_vertex_limit": 64,
+            "min_thickness": 0.0001
+          },
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "opening_visual",
+          "shape": "sphere",
+          "size": [
+            0.006,
+            0.0025,
+            0.0004
+          ],
+          "position": [
+            0.0,
+            -0.025,
+            0.0121
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.22,
+            0.17,
+            0.1
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "skirt_00",
+          "shape": "box",
+          "size": [
+            0.0016,
+            0.0195,
+            0.007
+          ],
+          "position": [
+            0.0362,
+            0.0,
+            0.0035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "skirt_01",
+          "shape": "box",
+          "size": [
+            0.0016,
+            0.0195,
+            0.007
+          ],
+          "position": [
+            0.03135,
+            0.0181,
+            0.0035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            30.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "skirt_02",
+          "shape": "box",
+          "size": [
+            0.0016,
+            0.0195,
+            0.007
+          ],
+          "position": [
+            0.0181,
+            0.03135,
+            0.0035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            60.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "skirt_03",
+          "shape": "box",
+          "size": [
+            0.0016,
+            0.0195,
+            0.007
+          ],
+          "position": [
+            0.0,
+            0.0362,
+            0.0035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            90.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "skirt_04",
+          "shape": "box",
+          "size": [
+            0.0016,
+            0.0195,
+            0.007
+          ],
+          "position": [
+            -0.0181,
+            0.03135,
+            0.0035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            120.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "skirt_05",
+          "shape": "box",
+          "size": [
+            0.0016,
+            0.0195,
+            0.007
+          ],
+          "position": [
+            -0.03135,
+            0.0181,
+            0.0035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            150.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "skirt_06",
+          "shape": "box",
+          "size": [
+            0.0016,
+            0.0195,
+            0.007
+          ],
+          "position": [
+            -0.0362,
+            0.0,
+            0.0035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            180.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "skirt_07",
+          "shape": "box",
+          "size": [
+            0.0016,
+            0.0195,
+            0.007
+          ],
+          "position": [
+            -0.03135,
+            -0.0181,
+            0.0035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            210.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "skirt_08",
+          "shape": "box",
+          "size": [
+            0.0016,
+            0.0195,
+            0.007
+          ],
+          "position": [
+            -0.0181,
+            -0.03135,
+            0.0035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            240.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "skirt_09",
+          "shape": "box",
+          "size": [
+            0.0016,
+            0.0195,
+            0.007
+          ],
+          "position": [
+            0.0,
+            -0.0362,
+            0.0035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            270.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "skirt_10",
+          "shape": "box",
+          "size": [
+            0.0016,
+            0.0195,
+            0.007
+          ],
+          "position": [
+            0.0181,
+            -0.03135,
+            0.0035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            300.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "skirt_11",
+          "shape": "box",
+          "size": [
+            0.0016,
+            0.0195,
+            0.007
+          ],
+          "position": [
+            0.03135,
+            -0.0181,
+            0.0035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            330.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        }
+      ],
+      "reconstruction_note": "初始盖面向上、裙边下缘接触桌面，第三个装配。revision7仅将上下两层按压碰撞part各分为48个闭合凸角楔，保留exact6截面：(0.033,0.009)至(0.031,0.011)至(0.028,0.012)。可见壳、开口标记、roof和裙边不变；下表面z=0.007m，装配原点z=0.803m。每盖预期109个实际碰撞体，独立动态且无附件；新表示尚未原生验收。"
+    },
+    {
+      "id": "lid_center_left",
+      "label_zh": "中间偏左独立杯盖",
+      "source_object_id": "lid_center_left",
+      "evidence_frames": [
+        0,
+        85,
+        90,
+        101,
+        107,
+        113,
+        130,
+        135,
+        141,
+        265
+      ],
+      "body_type": "dynamic",
+      "mass_kg": 0.0035,
+      "position": [
+        -0.09,
+        0.005,
+        0.72
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        20.0
+      ],
+      "parts": [
+        {
+          "id": "stepped_shell",
+          "shape": "lathe",
+          "size": [
+            0.079,
+            0.079,
+            0.012
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": [
+            [
+              0.0,
+              0.007
+            ],
+            [
+              0.0379,
+              0.007
+            ],
+            [
+              0.0379,
+              0.0
+            ],
+            [
+              0.0395,
+              0.0
+            ],
+            [
+              0.0395,
+              0.003
+            ],
+            [
+              0.039,
+              0.009
+            ],
+            [
+              0.0355,
+              0.009
+            ],
+            [
+              0.033,
+              0.011
+            ],
+            [
+              0.03,
+              0.012
+            ],
+            [
+              0.0,
+              0.012
+            ],
+            [
+              0.0,
+              0.007
+            ]
+          ],
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "roof_collision",
+          "shape": "cylinder",
+          "size": [
+            0.078,
+            0.078,
+            0.002
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.008
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "upper_pressing_cap_lower",
+          "shape": "lathe",
+          "size": [
+            0.071,
+            0.071,
+            0.002
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": [
+            [
+              0.0,
+              0.009
+            ],
+            [
+              0.0355,
+              0.009
+            ],
+            [
+              0.033,
+              0.011
+            ],
+            [
+              0.0,
+              0.011
+            ],
+            [
+              0.0,
+              0.009
+            ]
+          ],
+          "segments": 48,
+          "convex_sectors": 48,
+          "convex_hull": {
+            "hull_vertex_limit": 64,
+            "min_thickness": 0.0001
+          },
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "upper_pressing_cap_upper",
+          "shape": "lathe",
+          "size": [
+            0.066,
+            0.066,
+            0.001
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": [
+            [
+              0.0,
+              0.011
+            ],
+            [
+              0.033,
+              0.011
+            ],
+            [
+              0.03,
+              0.012
+            ],
+            [
+              0.0,
+              0.012
+            ],
+            [
+              0.0,
+              0.011
+            ]
+          ],
+          "segments": 48,
+          "convex_sectors": 48,
+          "convex_hull": {
+            "hull_vertex_limit": 64,
+            "min_thickness": 0.0001
+          },
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "opening_visual",
+          "shape": "sphere",
+          "size": [
+            0.0065,
+            0.0025,
+            0.0004
+          ],
+          "position": [
+            0.0,
+            -0.027,
+            0.0121
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.22,
+            0.17,
+            0.1
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "skirt_00",
+          "shape": "box",
+          "size": [
+            0.0016,
+            0.0209,
+            0.007
+          ],
+          "position": [
+            0.0387,
+            0.0,
+            0.0035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "skirt_01",
+          "shape": "box",
+          "size": [
+            0.0016,
+            0.0209,
+            0.007
+          ],
+          "position": [
+            0.03352,
+            0.01935,
+            0.0035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            30.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "skirt_02",
+          "shape": "box",
+          "size": [
+            0.0016,
+            0.0209,
+            0.007
+          ],
+          "position": [
+            0.01935,
+            0.03352,
+            0.0035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            60.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "skirt_03",
+          "shape": "box",
+          "size": [
+            0.0016,
+            0.0209,
+            0.007
+          ],
+          "position": [
+            0.0,
+            0.0387,
+            0.0035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            90.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "skirt_04",
+          "shape": "box",
+          "size": [
+            0.0016,
+            0.0209,
+            0.007
+          ],
+          "position": [
+            -0.01935,
+            0.03352,
+            0.0035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            120.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "skirt_05",
+          "shape": "box",
+          "size": [
+            0.0016,
+            0.0209,
+            0.007
+          ],
+          "position": [
+            -0.03352,
+            0.01935,
+            0.0035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            150.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "skirt_06",
+          "shape": "box",
+          "size": [
+            0.0016,
+            0.0209,
+            0.007
+          ],
+          "position": [
+            -0.0387,
+            0.0,
+            0.0035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            180.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "skirt_07",
+          "shape": "box",
+          "size": [
+            0.0016,
+            0.0209,
+            0.007
+          ],
+          "position": [
+            -0.03352,
+            -0.01935,
+            0.0035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            210.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "skirt_08",
+          "shape": "box",
+          "size": [
+            0.0016,
+            0.0209,
+            0.007
+          ],
+          "position": [
+            -0.01935,
+            -0.03352,
+            0.0035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            240.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "skirt_09",
+          "shape": "box",
+          "size": [
+            0.0016,
+            0.0209,
+            0.007
+          ],
+          "position": [
+            0.0,
+            -0.0387,
+            0.0035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            270.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "skirt_10",
+          "shape": "box",
+          "size": [
+            0.0016,
+            0.0209,
+            0.007
+          ],
+          "position": [
+            0.01935,
+            -0.03352,
+            0.0035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            300.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "skirt_11",
+          "shape": "box",
+          "size": [
+            0.0016,
+            0.0209,
+            0.007
+          ],
+          "position": [
+            0.03352,
+            -0.01935,
+            0.0035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            330.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        }
+      ],
+      "reconstruction_note": "初始为两个中间盖中的左盖，第二个装配，对应高杯。revision7两层上帽各采用48个独立凸角楔，保留exact6截面：(0.0355,0.009)至(0.033,0.011)至(0.030,0.012)。可见形状、平肩至r=0.039m、下表面z=0.007m和装配原点z=0.833m不变。每盖预期109个实际碰撞体，保持自由动态，新表示待验证。"
+    },
+    {
+      "id": "lid_center_right",
+      "label_zh": "中间偏右独立杯盖",
+      "source_object_id": "lid_center_right",
+      "evidence_frames": [
+        0,
+        23,
+        28,
+        34,
+        39,
+        45,
+        56,
+        73,
+        85,
+        265
+      ],
+      "body_type": "dynamic",
+      "mass_kg": 0.004,
+      "position": [
+        0.035,
+        -0.008,
+        0.72
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        70.0
+      ],
+      "parts": [
+        {
+          "id": "stepped_shell",
+          "shape": "lathe",
+          "size": [
+            0.087,
+            0.087,
+            0.012
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": [
+            [
+              0.0,
+              0.007
+            ],
+            [
+              0.0419,
+              0.007
+            ],
+            [
+              0.0419,
+              0.0
+            ],
+            [
+              0.0435,
+              0.0
+            ],
+            [
+              0.0435,
+              0.003
+            ],
+            [
+              0.043,
+              0.009
+            ],
+            [
+              0.0395,
+              0.009
+            ],
+            [
+              0.036,
+              0.011
+            ],
+            [
+              0.033,
+              0.012
+            ],
+            [
+              0.0,
+              0.012
+            ],
+            [
+              0.0,
+              0.007
+            ]
+          ],
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "roof_collision",
+          "shape": "cylinder",
+          "size": [
+            0.086,
+            0.086,
+            0.002
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.008
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "upper_pressing_cap_lower",
+          "shape": "lathe",
+          "size": [
+            0.079,
+            0.079,
+            0.002
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": [
+            [
+              0.0,
+              0.009
+            ],
+            [
+              0.0395,
+              0.009
+            ],
+            [
+              0.036,
+              0.011
+            ],
+            [
+              0.0,
+              0.011
+            ],
+            [
+              0.0,
+              0.009
+            ]
+          ],
+          "segments": 48,
+          "convex_sectors": 48,
+          "convex_hull": {
+            "hull_vertex_limit": 64,
+            "min_thickness": 0.0001
+          },
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "upper_pressing_cap_upper",
+          "shape": "lathe",
+          "size": [
+            0.072,
+            0.072,
+            0.001
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": [
+            [
+              0.0,
+              0.011
+            ],
+            [
+              0.036,
+              0.011
+            ],
+            [
+              0.033,
+              0.012
+            ],
+            [
+              0.0,
+              0.012
+            ],
+            [
+              0.0,
+              0.011
+            ]
+          ],
+          "segments": 48,
+          "convex_sectors": 48,
+          "convex_hull": {
+            "hull_vertex_limit": 64,
+            "min_thickness": 0.0001
+          },
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "opening_visual",
+          "shape": "sphere",
+          "size": [
+            0.007,
+            0.0028,
+            0.0004
+          ],
+          "position": [
+            0.0,
+            -0.03,
+            0.0121
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.22,
+            0.17,
+            0.1
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "skirt_00",
+          "shape": "box",
+          "size": [
+            0.0016,
+            0.023,
+            0.007
+          ],
+          "position": [
+            0.0427,
+            0.0,
+            0.0035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "skirt_01",
+          "shape": "box",
+          "size": [
+            0.0016,
+            0.023,
+            0.007
+          ],
+          "position": [
+            0.03698,
+            0.02135,
+            0.0035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            30.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "skirt_02",
+          "shape": "box",
+          "size": [
+            0.0016,
+            0.023,
+            0.007
+          ],
+          "position": [
+            0.02135,
+            0.03698,
+            0.0035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            60.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "skirt_03",
+          "shape": "box",
+          "size": [
+            0.0016,
+            0.023,
+            0.007
+          ],
+          "position": [
+            0.0,
+            0.0427,
+            0.0035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            90.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "skirt_04",
+          "shape": "box",
+          "size": [
+            0.0016,
+            0.023,
+            0.007
+          ],
+          "position": [
+            -0.02135,
+            0.03698,
+            0.0035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            120.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "skirt_05",
+          "shape": "box",
+          "size": [
+            0.0016,
+            0.023,
+            0.007
+          ],
+          "position": [
+            -0.03698,
+            0.02135,
+            0.0035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            150.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "skirt_06",
+          "shape": "box",
+          "size": [
+            0.0016,
+            0.023,
+            0.007
+          ],
+          "position": [
+            -0.0427,
+            0.0,
+            0.0035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            180.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "skirt_07",
+          "shape": "box",
+          "size": [
+            0.0016,
+            0.023,
+            0.007
+          ],
+          "position": [
+            -0.03698,
+            -0.02135,
+            0.0035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            210.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "skirt_08",
+          "shape": "box",
+          "size": [
+            0.0016,
+            0.023,
+            0.007
+          ],
+          "position": [
+            -0.02135,
+            -0.03698,
+            0.0035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            240.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "skirt_09",
+          "shape": "box",
+          "size": [
+            0.0016,
+            0.023,
+            0.007
+          ],
+          "position": [
+            0.0,
+            -0.0427,
+            0.0035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            270.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "skirt_10",
+          "shape": "box",
+          "size": [
+            0.0016,
+            0.023,
+            0.007
+          ],
+          "position": [
+            0.02135,
+            -0.03698,
+            0.0035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            300.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "skirt_11",
+          "shape": "box",
+          "size": [
+            0.0016,
+            0.023,
+            0.007
+          ],
+          "position": [
+            0.03698,
+            -0.02135,
+            0.0035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            330.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        }
+      ],
+      "reconstruction_note": "第一个拾起和装配的盖。revision7两层上帽各采用48个独立凸角楔，保留exact6截面：(0.0395,0.009)至(0.036,0.011)至(0.033,0.012)。平肩至r=0.043m、装配原点z=0.813m和下表面世界z=0.820m不变。最终开口近似朝右；每盖预期109个实际碰撞体，保持自由动态，新表示待验证。"
+    },
+    {
+      "id": "lid_right_large",
+      "label_zh": "右前方独立大杯盖",
+      "source_object_id": "lid_right_large",
+      "evidence_frames": [
+        0,
+        197,
+        209,
+        220,
+        226,
+        231,
+        237,
+        248,
+        254,
+        259,
+        265
+      ],
+      "body_type": "dynamic",
+      "mass_kg": 0.006,
+      "position": [
+        0.235,
+        -0.13,
+        0.72
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        30.0
+      ],
+      "parts": [
+        {
+          "id": "stepped_shell",
+          "shape": "lathe",
+          "size": [
+            0.108,
+            0.108,
+            0.012
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": [
+            [
+              0.0,
+              0.007
+            ],
+            [
+              0.0524,
+              0.007
+            ],
+            [
+              0.0524,
+              0.0
+            ],
+            [
+              0.054,
+              0.0
+            ],
+            [
+              0.054,
+              0.003
+            ],
+            [
+              0.0535,
+              0.009
+            ],
+            [
+              0.05,
+              0.009
+            ],
+            [
+              0.046,
+              0.011
+            ],
+            [
+              0.043,
+              0.012
+            ],
+            [
+              0.0,
+              0.012
+            ],
+            [
+              0.0,
+              0.007
+            ]
+          ],
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "roof_collision",
+          "shape": "cylinder",
+          "size": [
+            0.107,
+            0.107,
+            0.002
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.008
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "upper_pressing_cap_lower",
+          "shape": "lathe",
+          "size": [
+            0.1,
+            0.1,
+            0.002
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": [
+            [
+              0.0,
+              0.009
+            ],
+            [
+              0.05,
+              0.009
+            ],
+            [
+              0.046,
+              0.011
+            ],
+            [
+              0.0,
+              0.011
+            ],
+            [
+              0.0,
+              0.009
+            ]
+          ],
+          "segments": 48,
+          "convex_sectors": 48,
+          "convex_hull": {
+            "hull_vertex_limit": 64,
+            "min_thickness": 0.0001
+          },
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "upper_pressing_cap_upper",
+          "shape": "lathe",
+          "size": [
+            0.092,
+            0.092,
+            0.001
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": [
+            [
+              0.0,
+              0.011
+            ],
+            [
+              0.046,
+              0.011
+            ],
+            [
+              0.043,
+              0.012
+            ],
+            [
+              0.0,
+              0.012
+            ],
+            [
+              0.0,
+              0.011
+            ]
+          ],
+          "segments": 48,
+          "convex_sectors": 48,
+          "convex_hull": {
+            "hull_vertex_limit": 64,
+            "min_thickness": 0.0001
+          },
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "opening_visual",
+          "shape": "sphere",
+          "size": [
+            0.009,
+            0.003,
+            0.0004
+          ],
+          "position": [
+            0.0,
+            -0.039,
+            0.0121
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.22,
+            0.17,
+            0.1
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "skirt_00",
+          "shape": "box",
+          "size": [
+            0.0016,
+            0.0286,
+            0.007
+          ],
+          "position": [
+            0.0532,
+            0.0,
+            0.0035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "skirt_01",
+          "shape": "box",
+          "size": [
+            0.0016,
+            0.0286,
+            0.007
+          ],
+          "position": [
+            0.04607,
+            0.0266,
+            0.0035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            30.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "skirt_02",
+          "shape": "box",
+          "size": [
+            0.0016,
+            0.0286,
+            0.007
+          ],
+          "position": [
+            0.0266,
+            0.04607,
+            0.0035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            60.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "skirt_03",
+          "shape": "box",
+          "size": [
+            0.0016,
+            0.0286,
+            0.007
+          ],
+          "position": [
+            0.0,
+            0.0532,
+            0.0035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            90.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "skirt_04",
+          "shape": "box",
+          "size": [
+            0.0016,
+            0.0286,
+            0.007
+          ],
+          "position": [
+            -0.0266,
+            0.04607,
+            0.0035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            120.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "skirt_05",
+          "shape": "box",
+          "size": [
+            0.0016,
+            0.0286,
+            0.007
+          ],
+          "position": [
+            -0.04607,
+            0.0266,
+            0.0035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            150.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "skirt_06",
+          "shape": "box",
+          "size": [
+            0.0016,
+            0.0286,
+            0.007
+          ],
+          "position": [
+            -0.0532,
+            0.0,
+            0.0035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            180.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "skirt_07",
+          "shape": "box",
+          "size": [
+            0.0016,
+            0.0286,
+            0.007
+          ],
+          "position": [
+            -0.04607,
+            -0.0266,
+            0.0035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            210.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "skirt_08",
+          "shape": "box",
+          "size": [
+            0.0016,
+            0.0286,
+            0.007
+          ],
+          "position": [
+            -0.0266,
+            -0.04607,
+            0.0035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            240.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "skirt_09",
+          "shape": "box",
+          "size": [
+            0.0016,
+            0.0286,
+            0.007
+          ],
+          "position": [
+            0.0,
+            -0.0532,
+            0.0035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            270.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "skirt_10",
+          "shape": "box",
+          "size": [
+            0.0016,
+            0.0286,
+            0.007
+          ],
+          "position": [
+            0.0266,
+            -0.04607,
+            0.0035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            300.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "skirt_11",
+          "shape": "box",
+          "size": [
+            0.0016,
+            0.0286,
+            0.007
+          ],
+          "position": [
+            0.04607,
+            -0.0266,
+            0.0035
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            330.0
+          ],
+          "color": [
+            0.92,
+            0.9,
+            0.83
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        }
+      ],
+      "reconstruction_note": "初始在右前方独立平放，最后装配；椭圆投影不解释为椭圆实体。revision7两层上帽各采用48个独立凸角楔，保留exact6截面：(0.050,0.009)至(0.046,0.011)至(0.043,0.012)。平肩至r=0.0535m、装配原点z=0.818m和下表面世界z=0.825m不变。每盖预期109个实际碰撞体，保留独立动态及下方盖腔，新表示待验证。"
+    }
+  ],
+  "joints": [],
+  "attachments": [],
+  "diagnostic_states": [
+    {
+      "name_zh": "S00 初始四只开口杯与四个独立杯盖",
+      "kind": "initial",
+      "evidence_frames": [
+        0,
+        6,
+        11
+      ],
+      "poses": [],
+      "joint_positions": [],
+      "enabled_attachments": [],
+      "note": "初始八个任务物体全部可见，四杯开口，四盖独立由桌面承托，环境静态。保持exact6源状态姿态。此状态为脚本检查输入，全部任务物体仍为动态重力刚体；revision7须独立进行上方几何及首次冲量检查，并另行无探头支撑回归。"
+    },
+    {
+      "name_zh": "S01 第三杯加盖并撤手",
+      "kind": "reveal",
+      "evidence_frames": [
+        73,
+        79,
+        85
+      ],
+      "poses": [
+        {
+          "asset_id": "cup_left_small",
+          "position": [
+            -0.22,
+            0.12,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "cup_center_left_tall",
+          "position": [
+            -0.105,
+            0.16,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "cup_center_right",
+          "position": [
+            0.035,
+            0.15,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "cup_right_large",
+          "position": [
+            0.19,
+            0.145,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "lid_left_small",
+          "position": [
+            -0.19,
+            -0.1,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -30.0
+          ]
+        },
+        {
+          "asset_id": "lid_center_left",
+          "position": [
+            -0.09,
+            0.005,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            20.0
+          ]
+        },
+        {
+          "asset_id": "lid_center_right",
+          "position": [
+            0.035,
+            0.15,
+            0.813
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            90.0
+          ]
+        },
+        {
+          "asset_id": "lid_right_large",
+          "position": [
+            0.235,
+            -0.13,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            30.0
+          ]
+        }
+      ],
+      "joint_positions": [],
+      "enabled_attachments": [],
+      "note": "第85帧第三杯盖在松手后仍覆盖杯口，其余三盖仍在桌面。第三盖下表面世界z=0.820m、中央上表面z=0.825m、平肩z=0.822m。保持exact6姿态；这是独立脚本初始化，不是已执行的拾取装配，revision7支撑回归尚未执行。"
+    },
+    {
+      "name_zh": "S02 第二只高杯完成加盖",
+      "kind": "reveal",
+      "evidence_frames": [
+        130,
+        135,
+        141
+      ],
+      "poses": [
+        {
+          "asset_id": "cup_left_small",
+          "position": [
+            -0.22,
+            0.12,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "cup_center_left_tall",
+          "position": [
+            -0.105,
+            0.16,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "cup_center_right",
+          "position": [
+            0.035,
+            0.15,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "cup_right_large",
+          "position": [
+            0.19,
+            0.145,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "lid_left_small",
+          "position": [
+            -0.19,
+            -0.1,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -30.0
+          ]
+        },
+        {
+          "asset_id": "lid_center_left",
+          "position": [
+            -0.105,
+            0.16,
+            0.833
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            10.0
+          ]
+        },
+        {
+          "asset_id": "lid_center_right",
+          "position": [
+            0.035,
+            0.15,
+            0.813
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            90.0
+          ]
+        },
+        {
+          "asset_id": "lid_right_large",
+          "position": [
+            0.235,
+            -0.13,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            30.0
+          ]
+        }
+      ],
+      "joint_positions": [],
+      "enabled_attachments": [],
+      "note": "第141帧中间两杯已加盖且手已离开，左右两杯仍开口。高杯盖下表面世界z=0.840m、中央上表面z=0.845m、平肩z=0.842m。保持exact6姿态，全部任务物体保持动态；该状态为独立检查输入，revision7待原生回归。"
+    },
+    {
+      "name_zh": "S03 最左小杯完成加盖",
+      "kind": "reveal",
+      "evidence_frames": [
+        180,
+        186,
+        192,
+        197
+      ],
+      "poses": [
+        {
+          "asset_id": "cup_left_small",
+          "position": [
+            -0.22,
+            0.12,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "cup_center_left_tall",
+          "position": [
+            -0.105,
+            0.16,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "cup_center_right",
+          "position": [
+            0.035,
+            0.15,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "cup_right_large",
+          "position": [
+            0.19,
+            0.145,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "lid_left_small",
+          "position": [
+            -0.22,
+            0.12,
+            0.803
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -35.0
+          ]
+        },
+        {
+          "asset_id": "lid_center_left",
+          "position": [
+            -0.105,
+            0.16,
+            0.833
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            10.0
+          ]
+        },
+        {
+          "asset_id": "lid_center_right",
+          "position": [
+            0.035,
+            0.15,
+            0.813
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            90.0
+          ]
+        },
+        {
+          "asset_id": "lid_right_large",
+          "position": [
+            0.235,
+            -0.13,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            30.0
+          ]
+        }
+      ],
+      "joint_positions": [],
+      "enabled_attachments": [],
+      "note": "第197帧左侧三杯盖释放后在位，仅右前方大盖仍独立留在桌面。小盖下表面世界z=0.810m、中央上表面z=0.815m、平肩z=0.812m。微小杯移与相机运动难以区分，保持exact6平面位置；这是独立脚本检查状态，revision7待原生回归。"
+    },
+    {
+      "name_zh": "S04 最终四杯均覆盖杯盖",
+      "kind": "final",
+      "evidence_frames": [
+        248,
+        254,
+        259,
+        265
+      ],
+      "poses": [
+        {
+          "asset_id": "cup_left_small",
+          "position": [
+            -0.22,
+            0.12,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "cup_center_left_tall",
+          "position": [
+            -0.105,
+            0.16,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "cup_center_right",
+          "position": [
+            0.035,
+            0.15,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "cup_right_large",
+          "position": [
+            0.19,
+            0.145,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "lid_left_small",
+          "position": [
+            -0.22,
+            0.12,
+            0.803
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -35.0
+          ]
+        },
+        {
+          "asset_id": "lid_center_left",
+          "position": [
+            -0.105,
+            0.16,
+            0.833
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            10.0
+          ]
+        },
+        {
+          "asset_id": "lid_center_right",
+          "position": [
+            0.035,
+            0.15,
+            0.813
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            90.0
+          ]
+        },
+        {
+          "asset_id": "lid_right_large",
+          "position": [
+            0.19,
+            0.145,
+            0.818
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            25.0
+          ]
+        }
+      ],
+      "joint_positions": [],
+      "enabled_attachments": [],
+      "note": "以第265帧为释放后的源状态，四盖对应四个杯口，前方无剩余独立盖。大盖下表面世界z=0.825m、中央上表面z=0.830m、平肩z=0.827m。保持exact6全部姿态。exact6的180步支撑报告不等于上方几何合格，其最终状态最高末段盖速度约0.0152412m/s，不能称完全静止。revision7须重新检查支撑、上方碰撞及实际最终图像；此脚本状态不证明策略执行、整圈锁紧或密封。"
+    }
+  ],
+  "action_summary_zh": "初始四只开口杯直立于黄褐色桌面，四个对应杯盖独立平放在前方。第17至39帧拾起中间偏右盖并移向第三杯，第39至85帧对准、按压并撤手；第85至107帧拾起中间偏左盖并移向第二只高杯，第107至141帧按压并撤手；第141至164帧拾起左前小盖并移向最左小杯，第164至197帧按压、扶持并释放；第203至231帧拾起右前大盖并移向最右大杯，第231至265帧按压并撤手。八个任务物体均为独立动态重力刚体，无机械铰接。revision7使用compiler4，仅把每盖原有上下两层按压碰撞体分别改为48个独立闭合凸角楔，保留原截面、可见形状、下方支撑和盖腔、位姿、质量及完整动作。exact6已确认存在上方几何误差，新表示尚待原生验证。",
+  "final_state_description": "源视频第265帧四杯均直立，四盖分别覆盖对应杯口且在松手后保持在位，桌面前方没有剩余独立盖。最左小杯略靠前，第二杯最高，最右杯最宽；可见前侧盖缘基本贴合，背侧、整圈锁紧及密封未知。revision7保留全部源可见几何与最终姿态，仅修改上方按压碰撞分解，杯盖仍可独立自由运动。exact6的有限时段支撑证据保留，但其原生射线查询最大误差约0.557mm，1ms首次冲量斜面检查仅17/24通过，不能判为合格。revision7必须维持0.25mm及15度验收目标，并完成新哈希关联的原生几何查询、首次冲量检查、五状态支撑回归和最终视觉复核；本规划未宣称这些工作已完成。"
+}

@@ -1,0 +1,76 @@
+{
+  "scene_id": "box_demo",
+  "summary_zh": "打开盒盖",
+  "environment": {
+    "category": "tabletop",
+    "rationale": "Synthetic fixture",
+    "support_surface": "Plane",
+    "camera_motion": "Static"
+  },
+  "objects": [
+    {
+      "id": "box",
+      "name_zh": "box",
+      "role": "container",
+      "visible_at_start": true,
+      "first_visible_frame": 0,
+      "evidence_frames": [
+        0,
+        29
+      ],
+      "initial_state": "Closed",
+      "final_state": "Open",
+      "geometry_observations": "Thin boards",
+      "material_observations": "Brown",
+      "confidence": 0.8,
+      "uncertainty": "Synthetic fixture"
+    },
+    {
+      "id": "lid",
+      "name_zh": "lid",
+      "role": "target",
+      "visible_at_start": true,
+      "first_visible_frame": 0,
+      "evidence_frames": [
+        0,
+        29
+      ],
+      "initial_state": "Closed",
+      "final_state": "Open",
+      "geometry_observations": "Thin boards",
+      "material_observations": "Brown",
+      "confidence": 0.8,
+      "uncertainty": "Synthetic fixture"
+    }
+  ],
+  "actions": [
+    {
+      "name_zh": "打开",
+      "start_frame": 0,
+      "end_frame": 29,
+      "participants": [
+        "box",
+        "lid"
+      ],
+      "observed_precondition": "Closed",
+      "observed_postcondition": "Open",
+      "evidence_frames": [
+        0,
+        29
+      ],
+      "confidence": 0.8,
+      "uncertainty": "Fixture"
+    }
+  ],
+  "hidden_object_reasoning": [],
+  "initial_scene_state": "Closed",
+  "final_scene_state": "Open",
+  "task_success_predicates": [
+    "lid open"
+  ],
+  "missing_evidence": [],
+  "reconstruction_priorities": [
+    "box",
+    "lid"
+  ]
+}

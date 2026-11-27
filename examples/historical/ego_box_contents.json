@@ -1,0 +1,4600 @@
+{
+  "scene_id": "ego_box_contents",
+  "compiler_version": 5,
+  "units": "meters",
+  "up_axis": "Z",
+  "scale_assumptions": [
+    "绝对尺度未标定；采用小型浴鸭宽约0.050–0.056米、长约0.072米、高约0.071–0.075米的尺寸先验，尺度不确定性约25%。",
+    "盒体外尺寸保持0.260×0.160×0.080米，纸板厚约0.002–0.003米；这些是建模假设，不是图像测量值。",
+    "桌面顶面z=0.720米，以有限静态支撑板表示可见桌面，不推断桌腿或其他家具。",
+    "初始采用盒底朝上、带标签的盖面朝下的解释，与0–92帧翻面动作相符，但并非唯一解释。",
+    "五鸭初始全部位于闭盒内部；包含关系可信，内部位置和姿态未知。翻转后的显露布局不作为初始布局的直接证据。",
+    "盒体原点为正常放置时外底面中心；盖原点为后缘折痕；鸭原点为自身直立底面中心。parts坐标均为资产局部坐标。",
+    "旋转采用Rz·Ry·Rx，角度单位为度；size是旋转前完整尺寸，非等轴sphere表示椭球的三个完整直径。所有资产及祖先变换尺度保持[1,1,1]，几何尺寸只应用一次。",
+    "鸭嘴朝局部负Y；偏航-90度时朝世界负X，即源视图左侧。各状态共享相同几何、质量和尺度。",
+    "相机是第一人称视频的固定近似；源单帧为16:9，渲染应保持方形像素与等比缩放，不能使用时间线拼图的画幅比例。",
+    "颜色依据暖光图像估计，未校准白平衡；质量为轻质纸板和小型成型玩具的粗略先验。"
+  ],
+  "geometry_limitations": [
+    "本次是仅输出JSON的规范修订，未运行工具、原生连续扫掠或生成沉降后图像。采纳用户提供的revision 5原生证据，不把待执行检查写成已完成结果。",
+    "几何和诊断起始位姿保持上一规范；不因缺少沉降后姿态数据而虚构修正角度、扩大盒体、添加支撑或改变鸭体尺寸。上一原生证据对应source_spec_sha256=48f1af2dce690c41c1ac6d3961c380de53e5eeda68c5f4e50ef5632cc1a0b064、source_usd_sha256=acbb8796a72ea27e92243666597c5b7533e19c3d22d586ab0b36c7797c98be07，不代表本JSON已重新导入验证。",
+    "原生报告确认七个可动资产均为dynamic、启用刚体及重力。最终状态五鸭均有桌面接触；这些已有结果无需作为未知事项重复要求全面重测。报告中的零冲量接触项不能单独解释为承重证据。",
+    "连续开盖仍未验证：需要从S02的五鸭在盒内状态执行0至-98度原生连续运动，显式启用盒体—盖碰撞，保留盖—玩具碰撞，记录请求角与实际角、最小分离或最大穿透、发生角度及具体part对，并检查中间图像。端点沉降或几个孤立角度快照不能替代该检查。",
+    "现有production报告将相邻盒体—盖碰撞过滤；adjacent_clearance仅覆盖指定状态。本修订要求原生交付启用该相邻碰撞对，不以过滤掩盖阻碍；此要求尚未在原生资产执行。刚性侧翼外侧间隙、前折边及后缘实际碰撞壳均须纳入扫掠。",
+    "保留驱动保持开盖的方案，并明确它是仿真替代机制。原生authored参数为stiffness=250、damping=40、max_force=1000，开放状态目标-98度，最终实测-98.2463265度；不再宣称未配置驱动或被动保持于-98度。",
+    "报告未提供drive type、角误差单位、参数单位或USD到求解器的换算，不能把250、40直接标为N·m/rad或N·m/deg。需从原生驱动属性确认：若为力矩驱动，应明确刚度对应每弧度或每度、阻尼对应相同角速度单位，最大作用量为力矩；若为加速度驱动，则须记录其不同单位。单位确认仍未完成，不能据这些裸数计算反力矩。",
+    "passive与adjacent_clearance报告虽然仍列出250、40、1000的authored元数据，报告说明实际测试禁用了弹簧和阻尼；应区分authored值与effective disabled设置。该变体从-98度落至约-110度关节下限，仍保持开盒，但不是所选-98度展示机制。未测量反力矩，也未标定真实纸板折痕力学。",
+    "S10A橙鸭三种变体均报告平移0.02149045米、总旋转41.52470度，末段最大线速度0.000473612米/秒；已有桌面接触证据，所列90度侧躺快照只是沉降起点。报告缺少最终位置向量、四元数和沉降后图像，不能从标量漂移恢复唯一终态。",
+    "针对S10A应优先读取既有探针终态并输出源相机及侧视静帧、最终位置和四元数、身体局部Z与世界Z夹角、嘴方向与接触part。若终态仍符合侧躺源状态，以该终态作为检查图；否则仅调整有源证据支持的初始朝向或可见外形，并重查该状态。不得冻结玩具或添加隐藏支撑。",
+    "最终五鸭总旋转变化依次为普通黄鸭8.52578度、戴帽黄鸭8.52847度、粉鸭8.12773度、橙鸭7.76752度、黄绿鸭8.56803度。若报告rotation_deg是初末姿态的最短相对旋转角，则各鸭倾斜不超过对应角，且橙鸭嘴相对原负X方向偏离不超过7.76752度；这是条件性几何界限，不是已取得的最终倾角或偏航测量。仍需既有终态姿态和静帧确认。",
+    "最终authored测试中五鸭平移约0.000406–0.000457米，末段最大线速度不超过0.002645米/秒；全场最大瞬时穿透约0.000362米、末段约0.00000183米。它们支持已测试接触和小位移，不覆盖被过滤的盒体—盖连续运动，也不能替代沉降后的视觉检查。",
+    "鸭体lathe是具有自身平底的实心外形近似，可用凸体碰撞；不添加单独薄底盘。玩具真实内腔、弹性、重心和摩擦未知。规定高度普通黄鸭0.071米、戴帽黄鸭0.074米、粉鸭0.071米、橙鸭0.0745米、黄绿鸭约0.0714米。",
+    "盒底和四壁构成空腔，不能整体凸包填满。主盖板、前折边和圆端侧翼为一个刚体，折痕用转动关节近似；插舌解锁及纸板柔性未恢复。帽饰、头饰和颈带均属于各自玩具，不推断可拆卸连接。",
+    "橙鸭颈带是贴身视觉环，保留环形截面，其内部已有实体颈部；不是独立可穿入的容器。眼睛、标签和印刷不参与碰撞。未见独立螺钉或铆钉，数量为0。",
+    "所有诊断状态为独立脚本检查起点，不是连续物理轨迹或策略执行。悬空状态省略人体，不添加虚构附件；七个可动资产保持动态。橙鸭短暂返回盒底时是否完全释放未知。",
+    "环境保持静止；辅助检查图须收紧构图或关闭渲染网格，不能用新增家具遮挡白色网格区域。连续扫掠、驱动单位核对、S10A及最终沉降后定向检查尚未完成，因此不能声明review通过或recording ready。"
+  ],
+  "camera": {
+    "position": [
+      0.015,
+      -0.46,
+      1.24
+    ],
+    "target": [
+      0.045,
+      0.025,
+      0.765
+    ],
+    "vertical_fov_deg": 48.0
+  },
+  "orbit": {
+    "target": [
+      0.065,
+      0.01,
+      0.805
+    ],
+    "radius": 0.62,
+    "height": 0.4
+  },
+  "ground": {
+    "size": [
+      4.0,
+      4.0,
+      0.05
+    ],
+    "position": [
+      0.0,
+      0.0,
+      -0.025
+    ],
+    "color": [
+      0.56,
+      0.5,
+      0.42
+    ]
+  },
+  "assets": [
+    {
+      "id": "wood_table",
+      "label_zh": "浅黄木纹桌面支撑板",
+      "source_object_id": "wood_table",
+      "evidence_frames": [
+        0,
+        92,
+        185,
+        300,
+        438,
+        493,
+        542
+      ],
+      "body_type": "static",
+      "mass_kg": 20.0,
+      "position": [
+        0.08,
+        -0.17,
+        0.7
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parts": [
+        {
+          "id": "table_slab",
+          "shape": "box",
+          "size": [
+            1.6,
+            1.5,
+            0.04
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.76,
+            0.55,
+            0.27
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        }
+      ],
+      "reconstruction_note": "顶面z=0.720米；有限静态板表示可见操作区和前景。未见桌腿，不添加；平均色近似浅黄木纹。"
+    },
+    {
+      "id": "background_panels",
+      "label_zh": "米色背景墙板及左侧转角",
+      "source_object_id": "background_panels",
+      "evidence_frames": [
+        0,
+        58,
+        127,
+        185,
+        542
+      ],
+      "body_type": "static",
+      "mass_kg": 30.0,
+      "position": [
+        0.0,
+        0.0,
+        0.72
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parts": [
+        {
+          "id": "rear_main",
+          "shape": "box",
+          "size": [
+            2.62,
+            0.018,
+            2.2
+          ],
+          "position": [
+            1.09,
+            0.349,
+            1.1
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.74,
+            0.65,
+            0.54
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rear_left",
+          "shape": "box",
+          "size": [
+            0.399,
+            0.018,
+            2.2
+          ],
+          "position": [
+            -0.4205,
+            0.349,
+            1.1
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.72,
+            0.63,
+            0.52
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "left_return",
+          "shape": "box",
+          "size": [
+            0.018,
+            1.35,
+            2.2
+          ],
+          "position": [
+            -0.629,
+            -0.326,
+            1.1
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.7,
+            0.61,
+            0.5
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        }
+      ],
+      "reconstruction_note": "后侧可见表面y=0.340米，x约-0.220米保留1毫米板缝，左侧为转角板。不可见延伸仅用于平面背景覆盖，不代表新增家具。"
+    },
+    {
+      "id": "cardboard_box",
+      "label_zh": "牛皮纸浅长方形空腔盒体",
+      "source_object_id": "cardboard_box",
+      "evidence_frames": [
+        0,
+        35,
+        58,
+        92,
+        138,
+        185,
+        400,
+        473,
+        542
+      ],
+      "body_type": "dynamic",
+      "mass_kg": 0.09,
+      "position": [
+        0.0,
+        0.0,
+        0.8024
+      ],
+      "rotation_deg": [
+        180.0,
+        0.0,
+        0.0
+      ],
+      "parts": [
+        {
+          "id": "bottom",
+          "shape": "box",
+          "size": [
+            0.26,
+            0.16,
+            0.003
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.0015
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.52,
+            0.38,
+            0.2
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "front_wall",
+          "shape": "box",
+          "size": [
+            0.26,
+            0.003,
+            0.077
+          ],
+          "position": [
+            0.0,
+            -0.0785,
+            0.0415
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.49,
+            0.35,
+            0.17
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rear_wall",
+          "shape": "box",
+          "size": [
+            0.26,
+            0.003,
+            0.077
+          ],
+          "position": [
+            0.0,
+            0.0785,
+            0.0415
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.48,
+            0.34,
+            0.17
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "left_wall",
+          "shape": "box",
+          "size": [
+            0.003,
+            0.154,
+            0.077
+          ],
+          "position": [
+            -0.1285,
+            0.0,
+            0.0415
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.52,
+            0.38,
+            0.2
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "right_wall",
+          "shape": "box",
+          "size": [
+            0.003,
+            0.154,
+            0.077
+          ],
+          "position": [
+            0.1285,
+            0.0,
+            0.0415
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.52,
+            0.38,
+            0.2
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "left_fold",
+          "shape": "box",
+          "size": [
+            0.002,
+            0.145,
+            0.012
+          ],
+          "position": [
+            -0.126,
+            0.0,
+            0.073
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.56,
+            0.41,
+            0.22
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "right_fold",
+          "shape": "box",
+          "size": [
+            0.002,
+            0.145,
+            0.012
+          ],
+          "position": [
+            0.126,
+            0.0,
+            0.073
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.56,
+            0.41,
+            0.22
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "printed_mark_left",
+          "shape": "box",
+          "size": [
+            0.001,
+            0.0002,
+            0.009
+          ],
+          "position": [
+            -0.0022,
+            -0.08012,
+            0.03
+          ],
+          "rotation_deg": [
+            0.0,
+            30.0,
+            0.0
+          ],
+          "color": [
+            0.17,
+            0.14,
+            0.09
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "printed_mark_right",
+          "shape": "box",
+          "size": [
+            0.001,
+            0.0002,
+            0.009
+          ],
+          "position": [
+            0.0022,
+            -0.08012,
+            0.03
+          ],
+          "rotation_deg": [
+            0.0,
+            -30.0,
+            0.0
+          ],
+          "color": [
+            0.17,
+            0.14,
+            0.09
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "printed_mark_base",
+          "shape": "box",
+          "size": [
+            0.009,
+            0.0002,
+            0.001
+          ],
+          "position": [
+            0.0,
+            -0.08012,
+            0.026
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.17,
+            0.14,
+            0.09
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "printed_text_hint",
+          "shape": "box",
+          "size": [
+            0.017,
+            0.0002,
+            0.002
+          ],
+          "position": [
+            0.0,
+            -0.08012,
+            0.021
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.17,
+            0.14,
+            0.09
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        }
+      ],
+      "reconstruction_note": "底板、四壁和两处折边共7个碰撞part；真实空腔，无整体实心碰撞盒或隔板。正常放置时内底面z=0.723米，闭盖内面z=0.800米。初始倒置并留0.4毫米落桌余量。三角印刷由三线近似，文字仅示意墨迹。"
+    },
+    {
+      "id": "box_lid",
+      "label_zh": "带白标签和圆端侧翼的连接翻盖",
+      "source_object_id": "box_lid",
+      "evidence_frames": [
+        0,
+        76,
+        92,
+        127,
+        150,
+        161,
+        185,
+        196,
+        542
+      ],
+      "body_type": "dynamic",
+      "mass_kg": 0.045,
+      "position": [
+        0.0,
+        -0.08,
+        0.7224
+      ],
+      "rotation_deg": [
+        180.0,
+        0.0,
+        0.0
+      ],
+      "parts": [
+        {
+          "id": "main_panel",
+          "shape": "box",
+          "size": [
+            0.268,
+            0.164,
+            0.002
+          ],
+          "position": [
+            0.0,
+            -0.082,
+            0.001
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.55,
+            0.4,
+            0.21
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "front_lip",
+          "shape": "box",
+          "size": [
+            0.264,
+            0.002,
+            0.026
+          ],
+          "position": [
+            0.0,
+            -0.163,
+            -0.013
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.5,
+            0.36,
+            0.18
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "left_wing_plate",
+          "shape": "box",
+          "size": [
+            0.002,
+            0.075,
+            0.028
+          ],
+          "position": [
+            -0.133,
+            -0.0435,
+            -0.014
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.52,
+            0.38,
+            0.2
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "left_wing_round_end",
+          "shape": "cylinder",
+          "size": [
+            0.028,
+            0.028,
+            0.002
+          ],
+          "position": [
+            -0.133,
+            -0.081,
+            -0.014
+          ],
+          "rotation_deg": [
+            0.0,
+            90.0,
+            0.0
+          ],
+          "color": [
+            0.52,
+            0.38,
+            0.2
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "right_wing_plate",
+          "shape": "box",
+          "size": [
+            0.002,
+            0.075,
+            0.028
+          ],
+          "position": [
+            0.133,
+            -0.0435,
+            -0.014
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.52,
+            0.38,
+            0.2
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "right_wing_round_end",
+          "shape": "cylinder",
+          "size": [
+            0.028,
+            0.028,
+            0.002
+          ],
+          "position": [
+            0.133,
+            -0.081,
+            -0.014
+          ],
+          "rotation_deg": [
+            0.0,
+            90.0,
+            0.0
+          ],
+          "color": [
+            0.52,
+            0.38,
+            0.2
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "white_label",
+          "shape": "box",
+          "size": [
+            0.05,
+            0.035,
+            0.0002
+          ],
+          "position": [
+            0.026,
+            -0.066,
+            0.0021
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -4.0
+          ],
+          "color": [
+            0.9,
+            0.87,
+            0.8
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "label_line_1",
+          "shape": "box",
+          "size": [
+            0.032,
+            0.002,
+            0.00005
+          ],
+          "position": [
+            0.026,
+            -0.06,
+            0.002225
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -4.0
+          ],
+          "color": [
+            0.3,
+            0.28,
+            0.24
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "label_line_2",
+          "shape": "box",
+          "size": [
+            0.023,
+            0.002,
+            0.00005
+          ],
+          "position": [
+            0.024,
+            -0.07,
+            0.002225
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -4.0
+          ],
+          "color": [
+            0.3,
+            0.28,
+            0.24
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        }
+      ],
+      "reconstruction_note": "6个碰撞part构成同一动态盖体，原点为后侧折痕，绕局部X负向开盖。侧翼内表面x=±0.132米，盒外侧x=±0.130米，名义侧向间隙2毫米；不据此宣称连续路径已验证。保留原生驱动作为仿真开盖保持替代，目标为诊断状态给出的关节角；开放状态为-98度。已报告参数250/40/1000的单位未提供，须核对原生属性后记录，不能擅自换算。盒体—盖碰撞必须显式启用；未添加止挡几何、拉杆或隐形支撑。"
+    },
+    {
+      "id": "yellow_duck_plain",
+      "label_zh": "普通黄色浴鸭",
+      "source_object_id": "yellow_duck_plain",
+      "evidence_frames": [
+        138,
+        185,
+        219,
+        231,
+        236,
+        254,
+        542
+      ],
+      "body_type": "dynamic",
+      "mass_kg": 0.025,
+      "position": [
+        0.075,
+        -0.036,
+        0.7224
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parts": [
+        {
+          "id": "rounded_body_with_integral_flat_bottom",
+          "shape": "lathe",
+          "size": [
+            0.048,
+            0.048,
+            0.042
+          ],
+          "position": [
+            0.0,
+            0.003,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.98,
+            0.79,
+            0.04
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": [
+            [
+              0.0,
+              0.0
+            ],
+            [
+              0.016,
+              0.0
+            ],
+            [
+              0.02,
+              0.003
+            ],
+            [
+              0.023,
+              0.009
+            ],
+            [
+              0.024,
+              0.019
+            ],
+            [
+              0.023,
+              0.028
+            ],
+            [
+              0.018,
+              0.037
+            ],
+            [
+              0.009,
+              0.041
+            ],
+            [
+              0.0,
+              0.042
+            ],
+            [
+              0.0,
+              0.0
+            ]
+          ],
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "neck",
+          "shape": "sphere",
+          "size": [
+            0.025,
+            0.027,
+            0.037
+          ],
+          "position": [
+            0.0,
+            -0.012,
+            0.0395
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.98,
+            0.79,
+            0.04
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "head",
+          "shape": "sphere",
+          "size": [
+            0.033,
+            0.032,
+            0.034
+          ],
+          "position": [
+            0.0,
+            -0.013,
+            0.054
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.99,
+            0.81,
+            0.05
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "bill",
+          "shape": "sphere",
+          "size": [
+            0.023,
+            0.016,
+            0.01
+          ],
+          "position": [
+            0.0,
+            -0.03,
+            0.049
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.98,
+            0.38,
+            0.035
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "tail",
+          "shape": "sphere",
+          "size": [
+            0.019,
+            0.02,
+            0.022
+          ],
+          "position": [
+            0.0,
+            0.024,
+            0.031
+          ],
+          "rotation_deg": [
+            -15.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.95,
+            0.75,
+            0.035
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "left_wing",
+          "shape": "sphere",
+          "size": [
+            0.009,
+            0.026,
+            0.024
+          ],
+          "position": [
+            -0.0215,
+            0.004,
+            0.024
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.91,
+            0.68,
+            0.025
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "right_wing",
+          "shape": "sphere",
+          "size": [
+            0.009,
+            0.026,
+            0.024
+          ],
+          "position": [
+            0.0215,
+            0.004,
+            0.024
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.91,
+            0.68,
+            0.025
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "left_eye",
+          "shape": "sphere",
+          "size": [
+            0.003,
+            0.003,
+            0.003
+          ],
+          "position": [
+            -0.011,
+            -0.0245,
+            0.058
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.035,
+            0.025,
+            0.015
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "right_eye",
+          "shape": "sphere",
+          "size": [
+            0.003,
+            0.003,
+            0.003
+          ],
+          "position": [
+            0.011,
+            -0.0245,
+            0.058
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.035,
+            0.025,
+            0.015
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        }
+      ],
+      "reconstruction_note": "连续鼓腹身体自带直径0.032米的平底，无单独底盘。规定总高0.071米、宽0.052米；7个碰撞part。初始隐藏在盒内，不放到最终桌面位置。"
+    },
+    {
+      "id": "yellow_duck_dark_top",
+      "label_zh": "戴深棕帽子的黄色浴鸭",
+      "source_object_id": "yellow_duck_dark_top",
+      "evidence_frames": [
+        138,
+        185,
+        265,
+        277,
+        288,
+        300,
+        369,
+        542
+      ],
+      "body_type": "dynamic",
+      "mass_kg": 0.028,
+      "position": [
+        0.075,
+        0.036,
+        0.7224
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        180.0
+      ],
+      "parts": [
+        {
+          "id": "rounded_body_with_integral_flat_bottom",
+          "shape": "lathe",
+          "size": [
+            0.048,
+            0.048,
+            0.042
+          ],
+          "position": [
+            0.0,
+            0.003,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.97,
+            0.78,
+            0.04
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": [
+            [
+              0.0,
+              0.0
+            ],
+            [
+              0.016,
+              0.0
+            ],
+            [
+              0.02,
+              0.003
+            ],
+            [
+              0.023,
+              0.009
+            ],
+            [
+              0.024,
+              0.019
+            ],
+            [
+              0.023,
+              0.028
+            ],
+            [
+              0.018,
+              0.037
+            ],
+            [
+              0.009,
+              0.041
+            ],
+            [
+              0.0,
+              0.042
+            ],
+            [
+              0.0,
+              0.0
+            ]
+          ],
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "neck",
+          "shape": "sphere",
+          "size": [
+            0.025,
+            0.027,
+            0.034
+          ],
+          "position": [
+            0.0,
+            -0.012,
+            0.038
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.97,
+            0.78,
+            0.04
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "head",
+          "shape": "sphere",
+          "size": [
+            0.032,
+            0.031,
+            0.032
+          ],
+          "position": [
+            0.0,
+            -0.013,
+            0.05
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.99,
+            0.8,
+            0.05
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "bill",
+          "shape": "sphere",
+          "size": [
+            0.022,
+            0.016,
+            0.01
+          ],
+          "position": [
+            0.0,
+            -0.03,
+            0.046
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.96,
+            0.38,
+            0.03
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "tail",
+          "shape": "sphere",
+          "size": [
+            0.019,
+            0.019,
+            0.021
+          ],
+          "position": [
+            0.0,
+            0.024,
+            0.031
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.94,
+            0.73,
+            0.03
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "left_wing",
+          "shape": "sphere",
+          "size": [
+            0.009,
+            0.026,
+            0.024
+          ],
+          "position": [
+            -0.0215,
+            0.004,
+            0.024
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.91,
+            0.68,
+            0.025
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "right_wing",
+          "shape": "sphere",
+          "size": [
+            0.009,
+            0.026,
+            0.024
+          ],
+          "position": [
+            0.0215,
+            0.004,
+            0.024
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.91,
+            0.68,
+            0.025
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "hat_brim",
+          "shape": "cylinder",
+          "size": [
+            0.028,
+            0.028,
+            0.003
+          ],
+          "position": [
+            0.0,
+            -0.013,
+            0.0645
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.25,
+            0.14,
+            0.065
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "hat_crown",
+          "shape": "sphere",
+          "size": [
+            0.019,
+            0.019,
+            0.014
+          ],
+          "position": [
+            0.0,
+            -0.013,
+            0.067
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.2,
+            0.105,
+            0.045
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "left_eye",
+          "shape": "sphere",
+          "size": [
+            0.003,
+            0.003,
+            0.003
+          ],
+          "position": [
+            -0.011,
+            -0.0245,
+            0.054
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.04,
+            0.025,
+            0.015
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "right_eye",
+          "shape": "sphere",
+          "size": [
+            0.003,
+            0.003,
+            0.003
+          ],
+          "position": [
+            0.011,
+            -0.0245,
+            0.054
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.04,
+            0.025,
+            0.015
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        }
+      ],
+      "reconstruction_note": "规定总高0.074米、宽0.052米，裸头最高0.066米。帽檐和帽冠分别建模但属于同一刚体，无拆卸证据；9个碰撞part。"
+    },
+    {
+      "id": "pink_duck",
+      "label_zh": "鲜粉色浴鸭",
+      "source_object_id": "pink_duck",
+      "evidence_frames": [
+        138,
+        185,
+        311,
+        334,
+        339,
+        346,
+        357,
+        542
+      ],
+      "body_type": "dynamic",
+      "mass_kg": 0.025,
+      "position": [
+        -0.018,
+        -0.036,
+        0.7224
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parts": [
+        {
+          "id": "rounded_body_with_integral_flat_bottom",
+          "shape": "lathe",
+          "size": [
+            0.05,
+            0.05,
+            0.043
+          ],
+          "position": [
+            0.0,
+            0.003,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.9,
+            0.045,
+            0.4
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": [
+            [
+              0.0,
+              0.0
+            ],
+            [
+              0.017,
+              0.0
+            ],
+            [
+              0.021,
+              0.003
+            ],
+            [
+              0.024,
+              0.01
+            ],
+            [
+              0.025,
+              0.02
+            ],
+            [
+              0.024,
+              0.029
+            ],
+            [
+              0.019,
+              0.038
+            ],
+            [
+              0.009,
+              0.042
+            ],
+            [
+              0.0,
+              0.043
+            ],
+            [
+              0.0,
+              0.0
+            ]
+          ],
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "neck",
+          "shape": "sphere",
+          "size": [
+            0.026,
+            0.027,
+            0.037
+          ],
+          "position": [
+            0.0,
+            -0.012,
+            0.0395
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.9,
+            0.045,
+            0.4
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "head",
+          "shape": "sphere",
+          "size": [
+            0.033,
+            0.032,
+            0.034
+          ],
+          "position": [
+            0.0,
+            -0.013,
+            0.054
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.94,
+            0.06,
+            0.44
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "orange_bill",
+          "shape": "sphere",
+          "size": [
+            0.023,
+            0.016,
+            0.01
+          ],
+          "position": [
+            0.0,
+            -0.03,
+            0.049
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.95,
+            0.32,
+            0.08
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "tail",
+          "shape": "sphere",
+          "size": [
+            0.02,
+            0.019,
+            0.022
+          ],
+          "position": [
+            0.0,
+            0.024,
+            0.031
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.86,
+            0.04,
+            0.36
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "left_wing",
+          "shape": "sphere",
+          "size": [
+            0.009,
+            0.026,
+            0.024
+          ],
+          "position": [
+            -0.0225,
+            0.004,
+            0.024
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.8,
+            0.03,
+            0.32
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "right_wing",
+          "shape": "sphere",
+          "size": [
+            0.009,
+            0.026,
+            0.024
+          ],
+          "position": [
+            0.0225,
+            0.004,
+            0.024
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.8,
+            0.03,
+            0.32
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "left_eye",
+          "shape": "sphere",
+          "size": [
+            0.003,
+            0.003,
+            0.003
+          ],
+          "position": [
+            -0.011,
+            -0.0245,
+            0.058
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.07,
+            0.02,
+            0.035
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "right_eye",
+          "shape": "sphere",
+          "size": [
+            0.003,
+            0.003,
+            0.003
+          ],
+          "position": [
+            0.011,
+            -0.0245,
+            0.058
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.07,
+            0.02,
+            0.035
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        }
+      ],
+      "reconstruction_note": "规定总高0.071米、宽0.054米，头顶比身体高0.028米。连续鼓腹身体和平底属于同一外形，无额外底盘；7个碰撞part。"
+    },
+    {
+      "id": "orange_white_toy",
+      "label_zh": "带浅色帽饰和颈部条带的橙色浴鸭",
+      "source_object_id": "orange_white_toy",
+      "evidence_frames": [
+        138,
+        185,
+        376,
+        384,
+        392,
+        400,
+        415,
+        420,
+        438,
+        493,
+        519,
+        542
+      ],
+      "body_type": "dynamic",
+      "mass_kg": 0.03,
+      "position": [
+        -0.084,
+        0.036,
+        0.7224
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        180.0
+      ],
+      "parts": [
+        {
+          "id": "rounded_body_with_integral_flat_bottom",
+          "shape": "lathe",
+          "size": [
+            0.052,
+            0.052,
+            0.043
+          ],
+          "position": [
+            0.0,
+            0.003,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.98,
+            0.32,
+            0.045
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": [
+            [
+              0.0,
+              0.0
+            ],
+            [
+              0.018,
+              0.0
+            ],
+            [
+              0.022,
+              0.003
+            ],
+            [
+              0.025,
+              0.01
+            ],
+            [
+              0.026,
+              0.02
+            ],
+            [
+              0.0245,
+              0.03
+            ],
+            [
+              0.019,
+              0.038
+            ],
+            [
+              0.009,
+              0.042
+            ],
+            [
+              0.0,
+              0.043
+            ],
+            [
+              0.0,
+              0.0
+            ]
+          ],
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "neck",
+          "shape": "sphere",
+          "size": [
+            0.027,
+            0.027,
+            0.035
+          ],
+          "position": [
+            0.0,
+            -0.012,
+            0.0385
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.98,
+            0.34,
+            0.05
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "head",
+          "shape": "sphere",
+          "size": [
+            0.033,
+            0.031,
+            0.032
+          ],
+          "position": [
+            0.0,
+            -0.013,
+            0.0505
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.99,
+            0.36,
+            0.065
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "bill",
+          "shape": "sphere",
+          "size": [
+            0.024,
+            0.016,
+            0.011
+          ],
+          "position": [
+            0.0,
+            -0.03,
+            0.0465
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.93,
+            0.25,
+            0.03
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "tail",
+          "shape": "sphere",
+          "size": [
+            0.021,
+            0.019,
+            0.022
+          ],
+          "position": [
+            0.0,
+            0.024,
+            0.031
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.94,
+            0.27,
+            0.035
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "left_wing",
+          "shape": "sphere",
+          "size": [
+            0.009,
+            0.026,
+            0.024
+          ],
+          "position": [
+            -0.0235,
+            0.004,
+            0.024
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.91,
+            0.24,
+            0.03
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "right_wing",
+          "shape": "sphere",
+          "size": [
+            0.009,
+            0.026,
+            0.024
+          ],
+          "position": [
+            0.0235,
+            0.004,
+            0.024
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.91,
+            0.24,
+            0.03
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "pale_hat_brim",
+          "shape": "cylinder",
+          "size": [
+            0.029,
+            0.029,
+            0.003
+          ],
+          "position": [
+            0.0,
+            -0.013,
+            0.065
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.91,
+            0.86,
+            0.7
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "pale_hat_crown",
+          "shape": "sphere",
+          "size": [
+            0.021,
+            0.02,
+            0.014
+          ],
+          "position": [
+            0.0,
+            -0.013,
+            0.0675
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.95,
+            0.9,
+            0.77
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "pale_neck_band",
+          "shape": "lathe",
+          "size": [
+            0.029,
+            0.029,
+            0.006
+          ],
+          "position": [
+            0.0,
+            -0.012,
+            0.039
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.9,
+            0.88,
+            0.78
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": [
+            [
+              0.0125,
+              -0.003
+            ],
+            [
+              0.0145,
+              -0.003
+            ],
+            [
+              0.0145,
+              0.003
+            ],
+            [
+              0.0125,
+              0.003
+            ],
+            [
+              0.0125,
+              -0.003
+            ]
+          ],
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "pale_blue_front_detail",
+          "shape": "sphere",
+          "size": [
+            0.013,
+            0.003,
+            0.009
+          ],
+          "position": [
+            0.0,
+            -0.026,
+            0.036
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.68,
+            0.8,
+            0.78
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "left_eye",
+          "shape": "sphere",
+          "size": [
+            0.003,
+            0.003,
+            0.003
+          ],
+          "position": [
+            -0.011,
+            -0.0245,
+            0.0545
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.06,
+            0.035,
+            0.02
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "right_eye",
+          "shape": "sphere",
+          "size": [
+            0.003,
+            0.003,
+            0.003
+          ],
+          "position": [
+            0.011,
+            -0.0245,
+            0.0545
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.06,
+            0.035,
+            0.02
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        }
+      ],
+      "reconstruction_note": "规定总高0.0745米、宽0.056米；9个碰撞part。浅色帽饰和环形颈带为整体装饰，不解释为鱼形或独立松散零件。名义侧躺起点绕Y转90度并按局部X外伸0.028米设支撑高度；原生已显示此起点继续转动41.52470度，不能把起点图标作沉降终态。最终扶正只改变刚体姿态。"
+    },
+    {
+      "id": "yellow_green_toy",
+      "label_zh": "带绿色头饰和粉色侧突起的黄色浴鸭",
+      "source_object_id": "yellow_green_toy",
+      "evidence_frames": [
+        138,
+        185,
+        400,
+        455,
+        468,
+        473,
+        484,
+        493,
+        542
+      ],
+      "body_type": "dynamic",
+      "mass_kg": 0.027,
+      "position": [
+        -0.084,
+        -0.036,
+        0.7224
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parts": [
+        {
+          "id": "rounded_body_with_integral_flat_bottom",
+          "shape": "lathe",
+          "size": [
+            0.047,
+            0.047,
+            0.042
+          ],
+          "position": [
+            0.0,
+            0.003,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.97,
+            0.8,
+            0.045
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": [
+            [
+              0.0,
+              0.0
+            ],
+            [
+              0.016,
+              0.0
+            ],
+            [
+              0.02,
+              0.003
+            ],
+            [
+              0.0225,
+              0.009
+            ],
+            [
+              0.0235,
+              0.019
+            ],
+            [
+              0.0225,
+              0.028
+            ],
+            [
+              0.0175,
+              0.037
+            ],
+            [
+              0.0085,
+              0.041
+            ],
+            [
+              0.0,
+              0.042
+            ],
+            [
+              0.0,
+              0.0
+            ]
+          ],
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "neck",
+          "shape": "sphere",
+          "size": [
+            0.026,
+            0.027,
+            0.036
+          ],
+          "position": [
+            0.0,
+            -0.012,
+            0.039
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.97,
+            0.8,
+            0.045
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "head",
+          "shape": "sphere",
+          "size": [
+            0.032,
+            0.031,
+            0.032
+          ],
+          "position": [
+            0.0,
+            -0.013,
+            0.052
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.98,
+            0.81,
+            0.055
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "broad_red_bill",
+          "shape": "sphere",
+          "size": [
+            0.026,
+            0.016,
+            0.011
+          ],
+          "position": [
+            0.0,
+            -0.03,
+            0.0475
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.88,
+            0.16,
+            0.08
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "tail",
+          "shape": "sphere",
+          "size": [
+            0.019,
+            0.019,
+            0.022
+          ],
+          "position": [
+            0.0,
+            0.024,
+            0.031
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.94,
+            0.75,
+            0.035
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "left_wing",
+          "shape": "sphere",
+          "size": [
+            0.009,
+            0.026,
+            0.024
+          ],
+          "position": [
+            -0.021,
+            0.004,
+            0.024
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.9,
+            0.69,
+            0.025
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "right_wing",
+          "shape": "sphere",
+          "size": [
+            0.009,
+            0.026,
+            0.024
+          ],
+          "position": [
+            0.021,
+            0.004,
+            0.024
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.9,
+            0.69,
+            0.025
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "green_head_cap",
+          "shape": "sphere",
+          "size": [
+            0.03,
+            0.026,
+            0.018
+          ],
+          "position": [
+            -0.004,
+            -0.012,
+            0.062
+          ],
+          "rotation_deg": [
+            0.0,
+            -12.0,
+            0.0
+          ],
+          "color": [
+            0.25,
+            0.58,
+            0.09
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "green_side_lobe",
+          "shape": "sphere",
+          "size": [
+            0.013,
+            0.021,
+            0.02
+          ],
+          "position": [
+            -0.014,
+            -0.011,
+            0.056
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.28,
+            0.61,
+            0.1
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "pink_head_side_protrusion",
+          "shape": "sphere",
+          "size": [
+            0.016,
+            0.016,
+            0.017
+          ],
+          "position": [
+            0.018,
+            -0.012,
+            0.061
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.94,
+            0.12,
+            0.43
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "left_eye",
+          "shape": "sphere",
+          "size": [
+            0.003,
+            0.003,
+            0.003
+          ],
+          "position": [
+            -0.01,
+            -0.025,
+            0.055
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.04,
+            0.035,
+            0.02
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "right_eye",
+          "shape": "sphere",
+          "size": [
+            0.003,
+            0.003,
+            0.003
+          ],
+          "position": [
+            0.01,
+            -0.025,
+            0.055
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.04,
+            0.035,
+            0.02
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "blue_cheek_detail",
+          "shape": "sphere",
+          "size": [
+            0.005,
+            0.002,
+            0.006
+          ],
+          "position": [
+            -0.009,
+            -0.0275,
+            0.05
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.12,
+            0.48,
+            0.67
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        }
+      ],
+      "reconstruction_note": "规定总宽约0.0515米、高约0.0714米；10个碰撞part。绿色装饰覆盖头顶和一侧，另一侧有粉色圆突；保留宽红嘴与蓝色面部小细节。装饰具体含义及左右归属近似，未观察到分离。"
+    }
+  ],
+  "joints": [
+    {
+      "id": "lid_fold_hinge",
+      "type": "revolute",
+      "parent": "cardboard_box",
+      "child": "box_lid",
+      "axis": "X",
+      "lower": -110.0,
+      "upper": 0.0,
+      "parent_anchor": [
+        0.0,
+        0.08,
+        0.08
+      ],
+      "child_anchor": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "initial_position": 0.0,
+      "drive": {
+        "stiffness": 250.0,
+        "damping": 40.0,
+        "max_force": 1000.0
+      },
+      "collision_enabled": true
+    }
+  ],
+  "attachments": [],
+  "diagnostic_states": [
+    {
+      "name_zh": "S00_初始倒置闭盒_五鸭隐藏",
+      "kind": "initial",
+      "evidence_frames": [
+        0,
+        12,
+        23
+      ],
+      "poses": [],
+      "joint_positions": [],
+      "enabled_attachments": [],
+      "note": "默认初始状态。五鸭站在倒置盖内表面是可容纳假设，不是直接观测。最高橙鸭顶面z=0.7969米，上方盒底内表面z=0.7994米。revision 5已有初始动态接触测试；不要求重新证明隐藏玩具从盒内出现。"
+    },
+    {
+      "name_zh": "S01_闭盒抬起_长轴近乎竖直",
+      "kind": "reveal",
+      "evidence_frames": [
+        51,
+        58,
+        69,
+        76
+      ],
+      "poses": [
+        {
+          "asset_id": "cardboard_box",
+          "position": [
+            0.0,
+            0.0,
+            0.88
+          ],
+          "rotation_deg": [
+            180.0,
+            85.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "box_lid",
+          "position": [
+            -0.079696,
+            -0.08,
+            0.873028
+          ],
+          "rotation_deg": [
+            180.0,
+            85.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "yellow_duck_plain",
+          "position": [
+            -0.073159,
+            -0.036,
+            0.798313
+          ],
+          "rotation_deg": [
+            0.0,
+            85.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "yellow_duck_dark_top",
+          "position": [
+            -0.073159,
+            0.036,
+            0.798313
+          ],
+          "rotation_deg": [
+            0.0,
+            -85.0,
+            180.0
+          ]
+        },
+        {
+          "asset_id": "pink_duck",
+          "position": [
+            -0.081265,
+            -0.036,
+            0.89096
+          ],
+          "rotation_deg": [
+            0.0,
+            85.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "orange_white_toy",
+          "position": [
+            -0.087017,
+            0.036,
+            0.956708
+          ],
+          "rotation_deg": [
+            0.0,
+            -85.0,
+            180.0
+          ]
+        },
+        {
+          "asset_id": "yellow_green_toy",
+          "position": [
+            -0.087017,
+            -0.036,
+            0.956708
+          ],
+          "rotation_deg": [
+            0.0,
+            85.0,
+            0.0
+          ]
+        }
+      ],
+      "joint_positions": [
+        {
+          "joint_id": "lid_fold_hinge",
+          "value": 0.0
+        }
+      ],
+      "enabled_attachments": [],
+      "note": "盒长轴距竖直约5度；关节锚点一致至舍入误差。隐藏内容物仅随整体变换安排检查快照，不推断真实翻滚路径。人手省略，悬空状态不接受无支撑静止测试。"
+    },
+    {
+      "name_zh": "S02_翻面落桌_标签朝上仍闭合",
+      "kind": "reveal",
+      "evidence_frames": [
+        92,
+        104,
+        115,
+        127
+      ],
+      "poses": [
+        {
+          "asset_id": "cardboard_box",
+          "position": [
+            0.0,
+            0.0,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "box_lid",
+          "position": [
+            0.0,
+            0.08,
+            0.8
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "yellow_duck_plain",
+          "position": [
+            0.075,
+            0.036,
+            0.723
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            180.0
+          ]
+        },
+        {
+          "asset_id": "yellow_duck_dark_top",
+          "position": [
+            0.075,
+            -0.036,
+            0.723
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "pink_duck",
+          "position": [
+            -0.018,
+            0.036,
+            0.723
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            180.0
+          ]
+        },
+        {
+          "asset_id": "orange_white_toy",
+          "position": [
+            -0.084,
+            0.025,
+            0.723
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            180.0
+          ]
+        },
+        {
+          "asset_id": "yellow_green_toy",
+          "position": [
+            -0.075,
+            -0.043,
+            0.723
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -90.0
+          ]
+        }
+      ],
+      "joint_positions": [
+        {
+          "joint_id": "lid_fold_hinge",
+          "value": 0.0
+        }
+      ],
+      "enabled_attachments": [],
+      "note": "翻面后盒底落桌、标签朝上，五鸭在盒内。此状态作为待执行连续开盖检查起点，所有目标碰撞和重力保持启用。已有adjacent_clearance闭合端点盒—盖最小分离约-0.00000235米，仅是端点结果。"
+    },
+    {
+      "name_zh": "S03_翻盖完全打开_五鸭显露",
+      "kind": "reveal",
+      "evidence_frames": [
+        138,
+        150,
+        161,
+        168,
+        173,
+        185,
+        196
+      ],
+      "poses": [
+        {
+          "asset_id": "cardboard_box",
+          "position": [
+            0.0,
+            0.0,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "box_lid",
+          "position": [
+            0.0,
+            0.08,
+            0.8
+          ],
+          "rotation_deg": [
+            -98.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "yellow_duck_plain",
+          "position": [
+            0.075,
+            0.036,
+            0.723
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            180.0
+          ]
+        },
+        {
+          "asset_id": "yellow_duck_dark_top",
+          "position": [
+            0.075,
+            -0.036,
+            0.723
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "pink_duck",
+          "position": [
+            -0.018,
+            0.036,
+            0.723
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            180.0
+          ]
+        },
+        {
+          "asset_id": "orange_white_toy",
+          "position": [
+            -0.084,
+            0.025,
+            0.723
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            180.0
+          ]
+        },
+        {
+          "asset_id": "yellow_green_toy",
+          "position": [
+            -0.075,
+            -0.043,
+            0.723
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -90.0
+          ]
+        }
+      ],
+      "joint_positions": [
+        {
+          "joint_id": "lid_fold_hinge",
+          "value": -98.0
+        }
+      ],
+      "enabled_attachments": [],
+      "note": "对应185–196帧完全开盖结果，138帧只支持开始显露。右侧两黄鸭、左后粉鸭、左侧橙鸭、左前黄绿鸭。authored探针180步末角-98.243114度；passive末角-109.999380度。两者均不是从闭合状态完成连续开盖的证据。"
+    },
+    {
+      "name_zh": "S04_普通黄鸭取出_盒内剩四鸭",
+      "kind": "reveal",
+      "evidence_frames": [
+        219,
+        231,
+        236,
+        242,
+        254
+      ],
+      "poses": [
+        {
+          "asset_id": "cardboard_box",
+          "position": [
+            0.0,
+            0.0,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "box_lid",
+          "position": [
+            0.0,
+            0.08,
+            0.8
+          ],
+          "rotation_deg": [
+            -98.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "yellow_duck_plain",
+          "position": [
+            0.17,
+            -0.015,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -30.0
+          ]
+        },
+        {
+          "asset_id": "yellow_duck_dark_top",
+          "position": [
+            0.075,
+            -0.036,
+            0.723
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "pink_duck",
+          "position": [
+            -0.018,
+            0.036,
+            0.723
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            180.0
+          ]
+        },
+        {
+          "asset_id": "orange_white_toy",
+          "position": [
+            -0.084,
+            0.025,
+            0.723
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            180.0
+          ]
+        },
+        {
+          "asset_id": "yellow_green_toy",
+          "position": [
+            -0.075,
+            -0.043,
+            0.723
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -90.0
+          ]
+        }
+      ],
+      "joint_positions": [
+        {
+          "joint_id": "lid_fold_hinge",
+          "value": -98.0
+        }
+      ],
+      "enabled_attachments": [],
+      "note": "表达254帧附近结果。普通黄鸭在盒右侧，其他四鸭留在盒内；没有改变任何玩具的尺寸。"
+    },
+    {
+      "name_zh": "S05_戴帽黄鸭取出_盒内剩三鸭",
+      "kind": "reveal",
+      "evidence_frames": [
+        265,
+        277,
+        283,
+        288,
+        300
+      ],
+      "poses": [
+        {
+          "asset_id": "cardboard_box",
+          "position": [
+            0.0,
+            0.0,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "box_lid",
+          "position": [
+            0.0,
+            0.08,
+            0.8
+          ],
+          "rotation_deg": [
+            -98.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "yellow_duck_plain",
+          "position": [
+            0.17,
+            -0.015,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -30.0
+          ]
+        },
+        {
+          "asset_id": "yellow_duck_dark_top",
+          "position": [
+            0.183,
+            0.058,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -15.0
+          ]
+        },
+        {
+          "asset_id": "pink_duck",
+          "position": [
+            -0.018,
+            0.036,
+            0.723
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            180.0
+          ]
+        },
+        {
+          "asset_id": "orange_white_toy",
+          "position": [
+            -0.084,
+            0.025,
+            0.723
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            180.0
+          ]
+        },
+        {
+          "asset_id": "yellow_green_toy",
+          "position": [
+            -0.075,
+            -0.043,
+            0.723
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -90.0
+          ]
+        }
+      ],
+      "joint_positions": [
+        {
+          "joint_id": "lid_fold_hinge",
+          "value": -98.0
+        }
+      ],
+      "enabled_attachments": [],
+      "note": "表达300帧结果。戴帽黄鸭位于普通黄鸭后方，两者是独立动态物体。"
+    },
+    {
+      "name_zh": "S06_粉鸭取出_盒内剩两鸭",
+      "kind": "reveal",
+      "evidence_frames": [
+        311,
+        323,
+        334,
+        339,
+        346,
+        357
+      ],
+      "poses": [
+        {
+          "asset_id": "cardboard_box",
+          "position": [
+            0.0,
+            0.0,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "box_lid",
+          "position": [
+            0.0,
+            0.08,
+            0.8
+          ],
+          "rotation_deg": [
+            -98.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "yellow_duck_plain",
+          "position": [
+            0.17,
+            -0.015,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -30.0
+          ]
+        },
+        {
+          "asset_id": "yellow_duck_dark_top",
+          "position": [
+            0.183,
+            0.058,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -15.0
+          ]
+        },
+        {
+          "asset_id": "pink_duck",
+          "position": [
+            0.213,
+            -0.085,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -15.0
+          ]
+        },
+        {
+          "asset_id": "orange_white_toy",
+          "position": [
+            -0.084,
+            0.025,
+            0.723
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            180.0
+          ]
+        },
+        {
+          "asset_id": "yellow_green_toy",
+          "position": [
+            -0.075,
+            -0.043,
+            0.723
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -90.0
+          ]
+        }
+      ],
+      "joint_positions": [
+        {
+          "joint_id": "lid_fold_hinge",
+          "value": -98.0
+        }
+      ],
+      "enabled_attachments": [],
+      "note": "表达357帧附近结果。粉鸭位于右侧玩具组前方，盒内保留橙鸭和黄绿鸭。"
+    },
+    {
+      "name_zh": "S07_橙鸭首次提起",
+      "kind": "reveal",
+      "evidence_frames": [
+        369,
+        376,
+        381,
+        384,
+        387
+      ],
+      "poses": [
+        {
+          "asset_id": "cardboard_box",
+          "position": [
+            0.0,
+            0.0,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "box_lid",
+          "position": [
+            0.0,
+            0.08,
+            0.8
+          ],
+          "rotation_deg": [
+            -98.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "yellow_duck_plain",
+          "position": [
+            0.17,
+            -0.015,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -30.0
+          ]
+        },
+        {
+          "asset_id": "yellow_duck_dark_top",
+          "position": [
+            0.183,
+            0.058,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -15.0
+          ]
+        },
+        {
+          "asset_id": "pink_duck",
+          "position": [
+            0.213,
+            -0.085,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -15.0
+          ]
+        },
+        {
+          "asset_id": "orange_white_toy",
+          "position": [
+            0.015,
+            0.005,
+            0.835
+          ],
+          "rotation_deg": [
+            0.0,
+            25.0,
+            -25.0
+          ]
+        },
+        {
+          "asset_id": "yellow_green_toy",
+          "position": [
+            -0.075,
+            -0.043,
+            0.723
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -90.0
+          ]
+        }
+      ],
+      "joint_positions": [
+        {
+          "joint_id": "lid_fold_hinge",
+          "value": -98.0
+        }
+      ],
+      "enabled_attachments": [],
+      "note": "橙鸭第一次被提至盒口上方。悬空检查姿态不意味着已经释放，也不要求省略人手后自行悬停。"
+    },
+    {
+      "name_zh": "S08_橙鸭返回盒底区域并侧倾",
+      "kind": "reveal",
+      "evidence_frames": [
+        392,
+        400,
+        404
+      ],
+      "poses": [
+        {
+          "asset_id": "cardboard_box",
+          "position": [
+            0.0,
+            0.0,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "box_lid",
+          "position": [
+            0.0,
+            0.08,
+            0.8
+          ],
+          "rotation_deg": [
+            -98.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "yellow_duck_plain",
+          "position": [
+            0.17,
+            -0.015,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -30.0
+          ]
+        },
+        {
+          "asset_id": "yellow_duck_dark_top",
+          "position": [
+            0.183,
+            0.058,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -15.0
+          ]
+        },
+        {
+          "asset_id": "pink_duck",
+          "position": [
+            0.213,
+            -0.085,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -15.0
+          ]
+        },
+        {
+          "asset_id": "orange_white_toy",
+          "position": [
+            -0.025,
+            0.005,
+            0.751
+          ],
+          "rotation_deg": [
+            0.0,
+            90.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "yellow_green_toy",
+          "position": [
+            -0.075,
+            -0.043,
+            0.723
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -90.0
+          ]
+        }
+      ],
+      "joint_positions": [
+        {
+          "joint_id": "lid_fold_hinge",
+          "value": -98.0
+        }
+      ],
+      "enabled_attachments": [],
+      "note": "橙鸭侧倾返回盒底区域，按右翼局部X最大外伸0.028米给出名义最低点z=0.723米。90度是近似姿态，不能确定完全释放、主动放回或滑落。"
+    },
+    {
+      "name_zh": "S09_橙鸭再次提起并移出",
+      "kind": "reveal",
+      "evidence_frames": [
+        404,
+        415,
+        420,
+        427
+      ],
+      "poses": [
+        {
+          "asset_id": "cardboard_box",
+          "position": [
+            0.0,
+            0.0,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "box_lid",
+          "position": [
+            0.0,
+            0.08,
+            0.8
+          ],
+          "rotation_deg": [
+            -98.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "yellow_duck_plain",
+          "position": [
+            0.17,
+            -0.015,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -30.0
+          ]
+        },
+        {
+          "asset_id": "yellow_duck_dark_top",
+          "position": [
+            0.183,
+            0.058,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -15.0
+          ]
+        },
+        {
+          "asset_id": "pink_duck",
+          "position": [
+            0.213,
+            -0.085,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -15.0
+          ]
+        },
+        {
+          "asset_id": "orange_white_toy",
+          "position": [
+            0.19,
+            -0.015,
+            0.88
+          ],
+          "rotation_deg": [
+            0.0,
+            30.0,
+            -60.0
+          ]
+        },
+        {
+          "asset_id": "yellow_green_toy",
+          "position": [
+            -0.075,
+            -0.043,
+            0.723
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -90.0
+          ]
+        }
+      ],
+      "joint_positions": [
+        {
+          "joint_id": "lid_fold_hinge",
+          "value": -98.0
+        }
+      ],
+      "enabled_attachments": [],
+      "note": "橙鸭再次被提起并移向右侧，盒内仅余黄绿鸭。保持动态物理资产身份，不增加抓持附件。"
+    },
+    {
+      "name_zh": "S10A_橙鸭侧躺桌面_盒内剩最后一鸭",
+      "kind": "reveal",
+      "evidence_frames": [
+        438,
+        444,
+        450,
+        455,
+        461
+      ],
+      "poses": [
+        {
+          "asset_id": "cardboard_box",
+          "position": [
+            0.0,
+            0.0,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "box_lid",
+          "position": [
+            0.0,
+            0.08,
+            0.8
+          ],
+          "rotation_deg": [
+            -98.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "yellow_duck_plain",
+          "position": [
+            0.17,
+            -0.015,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -30.0
+          ]
+        },
+        {
+          "asset_id": "yellow_duck_dark_top",
+          "position": [
+            0.183,
+            0.058,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -15.0
+          ]
+        },
+        {
+          "asset_id": "pink_duck",
+          "position": [
+            0.213,
+            -0.085,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -15.0
+          ]
+        },
+        {
+          "asset_id": "orange_white_toy",
+          "position": [
+            0.32,
+            -0.045,
+            0.748
+          ],
+          "rotation_deg": [
+            0.0,
+            90.0,
+            -90.0
+          ]
+        },
+        {
+          "asset_id": "yellow_green_toy",
+          "position": [
+            -0.075,
+            -0.043,
+            0.723
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -90.0
+          ]
+        }
+      ],
+      "joint_positions": [
+        {
+          "joint_id": "lid_fold_hinge",
+          "value": -98.0
+        }
+      ],
+      "enabled_attachments": [],
+      "note": "这是已测试的侧躺沉降起点，不是终态替代品。橙鸭实际平移0.02149045米、总旋转41.52470度，桌面接触对最大穿透约0.00005054米，末段最大线速度0.000473612米/秒。最终位置向量及四元数未提供，不能推断转动方向。待从既有探针获取终态静帧及倾角；若仍侧躺，则采用真实终态作检查图。"
+    },
+    {
+      "name_zh": "S10B_最后黄绿鸭提起_盒底清空",
+      "kind": "reveal",
+      "evidence_frames": [
+        468,
+        473,
+        478,
+        484
+      ],
+      "poses": [
+        {
+          "asset_id": "cardboard_box",
+          "position": [
+            0.0,
+            0.0,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "box_lid",
+          "position": [
+            0.0,
+            0.08,
+            0.8
+          ],
+          "rotation_deg": [
+            -98.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "yellow_duck_plain",
+          "position": [
+            0.17,
+            -0.015,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -30.0
+          ]
+        },
+        {
+          "asset_id": "yellow_duck_dark_top",
+          "position": [
+            0.183,
+            0.058,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -15.0
+          ]
+        },
+        {
+          "asset_id": "pink_duck",
+          "position": [
+            0.213,
+            -0.085,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -15.0
+          ]
+        },
+        {
+          "asset_id": "orange_white_toy",
+          "position": [
+            0.32,
+            -0.045,
+            0.748
+          ],
+          "rotation_deg": [
+            0.0,
+            90.0,
+            -90.0
+          ]
+        },
+        {
+          "asset_id": "yellow_green_toy",
+          "position": [
+            0.14,
+            0.005,
+            0.89
+          ],
+          "rotation_deg": [
+            0.0,
+            15.0,
+            -30.0
+          ]
+        }
+      ],
+      "joint_positions": [
+        {
+          "joint_id": "lid_fold_hinge",
+          "value": -98.0
+        }
+      ],
+      "enabled_attachments": [],
+      "note": "黄绿鸭被提离盒口，盒底清空。橙鸭所列姿态沿用源条件检查起点，不能标为已验证的沉降侧躺终态；后续检查图应使用S10A取得的真实终态。"
+    },
+    {
+      "name_zh": "S10C_五鸭均已取出_橙鸭仍侧躺",
+      "kind": "reveal",
+      "evidence_frames": [
+        490,
+        493,
+        496
+      ],
+      "poses": [
+        {
+          "asset_id": "cardboard_box",
+          "position": [
+            0.0,
+            0.0,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "box_lid",
+          "position": [
+            0.0,
+            0.08,
+            0.8
+          ],
+          "rotation_deg": [
+            -98.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "yellow_duck_plain",
+          "position": [
+            0.17,
+            -0.015,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -30.0
+          ]
+        },
+        {
+          "asset_id": "yellow_duck_dark_top",
+          "position": [
+            0.183,
+            0.058,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -15.0
+          ]
+        },
+        {
+          "asset_id": "pink_duck",
+          "position": [
+            0.213,
+            -0.085,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -15.0
+          ]
+        },
+        {
+          "asset_id": "orange_white_toy",
+          "position": [
+            0.32,
+            -0.045,
+            0.748
+          ],
+          "rotation_deg": [
+            0.0,
+            90.0,
+            -90.0
+          ]
+        },
+        {
+          "asset_id": "yellow_green_toy",
+          "position": [
+            0.238,
+            -0.007,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -15.0
+          ]
+        }
+      ],
+      "joint_positions": [
+        {
+          "joint_id": "lid_fold_hinge",
+          "value": -98.0
+        }
+      ],
+      "enabled_attachments": [],
+      "note": "源状态为全部出盒、四只直立、橙鸭侧躺，发生在最后扶正前。本poses为源条件布局，橙鸭沉降后对应性仍须终态静帧确认，不能与最终五鸭直立混用。"
+    },
+    {
+      "name_zh": "S11_最终空盒_五鸭直立_橙鸭朝左",
+      "kind": "final",
+      "evidence_frames": [
+        519,
+        525,
+        530,
+        542
+      ],
+      "poses": [
+        {
+          "asset_id": "cardboard_box",
+          "position": [
+            0.0,
+            0.0,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "box_lid",
+          "position": [
+            0.0,
+            0.08,
+            0.8
+          ],
+          "rotation_deg": [
+            -98.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "yellow_duck_plain",
+          "position": [
+            0.17,
+            -0.015,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -30.0
+          ]
+        },
+        {
+          "asset_id": "yellow_duck_dark_top",
+          "position": [
+            0.183,
+            0.058,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -15.0
+          ]
+        },
+        {
+          "asset_id": "pink_duck",
+          "position": [
+            0.213,
+            -0.085,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -15.0
+          ]
+        },
+        {
+          "asset_id": "orange_white_toy",
+          "position": [
+            0.312,
+            -0.081,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -90.0
+          ]
+        },
+        {
+          "asset_id": "yellow_green_toy",
+          "position": [
+            0.238,
+            -0.007,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -15.0
+          ]
+        }
+      ],
+      "joint_positions": [
+        {
+          "joint_id": "lid_fold_hinge",
+          "value": -98.0
+        }
+      ],
+      "enabled_attachments": [],
+      "note": "对应530–542帧完成调整后的源布局，519帧仍在调整。盒内0只、盒外5只，橙鸭名义嘴方向为负X。已有原生结果支持五鸭桌面接触与亚毫米平移，但所列poses是沉降前起点。需读取既有最终四元数并输出每只鸭的倾角、嘴水平朝向和沉降后静帧，不能把7.77–8.57度总旋转直接写成偏航。authored盖末角-98.2463265度由驱动保持；passive约-110.0026912度，二者须分别标识。"
+    }
+  ],
+  "action_summary_zh": "六组源时间线共同支持完整动作链：闭合纸盒被抬起、长轴竖转并翻面，白标签面朝上后放回桌面；连接翻盖打开，露出原本就在盒内的五只独立鸭形玩具。依次取出普通黄鸭、戴深棕帽黄鸭和粉鸭，放在盒右侧。橙鸭第一次提起后短暂返回盒底区域，是否完全松手未知，随后再次提起并移至右侧桌面侧躺。最后取出带绿色头饰和粉色突起的黄鸭，使盒内清空，再扶正橙鸭并将嘴转向左方。排除人体，不恢复精确操作时序或控制策略。此次修订明确采用驱动保持盖角的仿真替代方案、要求保留盒盖相邻碰撞，并区分摆拍起点、已报告沉降标量与尚未取得的终态姿态和图像。",
+  "final_state_description": "源视频最终状态为纸盒正常平放于桌面，开口朝上、内部为空，连接翻盖向后打开；五鸭全部直立位于盒右侧。普通黄鸭最靠近盒体，戴帽黄鸭在其后方，粉鸭位于前方，黄绿鸭在粉鸭后方，橙鸭位于最右侧且嘴大致朝左。规范保留该目标布局及五个独立动态刚体，不改变尺寸或冻结物体。已有原生探针支持桌面接触和最终小位移；驱动将盖保持在约-98.246度，被动变体则达到约-110度。连续开盖扫掠、驱动单位核对，以及橙鸭侧躺和最终五鸭的沉降后姿态与静帧检查仍未完成，本JSON不声明修复验收通过。"
+}

@@ -1,0 +1,3115 @@
+{
+  "scene_id": "ego_drawer_retrieve",
+  "compiler_version": 5,
+  "units": "meters",
+  "up_axis": "Z",
+  "scale_assumptions": [
+    "无尺度标定，以可单手捏持的玩偶主体宽约0.04米、迷你收纳柜宽约0.18米为先验，整体尺度可能存在约25%误差。",
+    "柜体估计宽0.18米、深0.14米、高0.18米；上层两个小抽屉，下方两个宽抽屉。",
+    "桌面顶面假设为z=0.72米；采用有限静态支撑板，不推断未入镜的桌腿。",
+    "抽屉壁厚假设0.003米，柜体侧壁厚0.006米；隐藏背板与导向机构均未标定。",
+    "中间抽屉观察最大伸出量估计0.09米，末态暂取0.012米残余开度，不表示已确认精确闭合终点。",
+    "挂件主体约0.047米宽、0.04米高；绳圈外径约0.0304米，线径约0.0024米，整体质量先验0.012千克。",
+    "挂件柔软主体的承托底面推定存在压平区域，修订为直径0.024米的平底并连续过渡到圆润腹部；底部细节受分辨率限制，属于接触形状假设。",
+    "相机位置、俯角、视场角和环境范围由四组时间线共同估计，均非标定结果。"
+  ],
+  "geometry_limitations": [
+    "综合四个时间线块第0至116帧及所给视频理解；排除人体、手和衣袖。",
+    "初始抽屉内部内容未知，后续未辨认出独立隐藏物件，不凭空增加物体，也不将未建模内容解释为已证实为空。",
+    "本次针对挂件自由静置时翻倒的问题修订主体接触几何：将原单球腹部替换为具有宽平底的连续圆润实体，保持初始位置、黄白红轮廓及向右铺放的绳圈。平底属于可见主体自身，不增加隐藏底座、支撑件、固定约束或配重。",
+    "挂件及附属绳圈仍为单一动态刚体，重力及实际表面碰撞保持开启；质量分布由修订后的实体几何推定，不依靠未经表达的质心覆盖。绳圈不能模拟柔性下垂、折叠或夹绳。",
+    "旧版本S00/S01原生探针180步后平移约0.04053米、旋转约124.24度，已证明旧初态失稳；这些结果不适用于修订后的几何。本规格尚未执行新的原生静置验证，不声称修复已经通过。",
+    "后续须对修订S00/S01进行至少180步原生自由静置，记录完整位姿漂移、末段速度、接触分离及实际静置渲染，重点检查主体保持源图朝向、绳圈留在右侧桌面。可将平移不超过0.002米、转角不超过5度作为暂定诊断容差，并同时核对图像，不能仅凭末速度小判定通过。",
+    "S03/S04采用同一修订挂件几何，亦需重新检查承托和容纳；给出的状态均为脚本化检查位姿，不是恢复出的运动、接触轨迹或机器人策略。",
+    "抽屉采用独立底板和四壁保留空腔；滑动副是对不可见导向机构的理想化，不添加隐藏稳定器。柜体动态并由桌面支撑，不替代左手扶稳作用。",
+    "四个抽屉关节明确保留250 N/m刚度、40 N*s/m阻尼、1000 N力上限的诊断保持驱动，以保持本轮修复范围；这些是旧编译器使用的未测量仿真替代参数，不代表观察到的塑料抽屉机械性质。物理证据必须区分驱动开启与关闭，并另查相邻关节物体碰撞开启的结果。",
+    "旧驱动版本末态约保持12毫米开度；旧被动和相邻碰撞版本约到26毫米且仍有4.4至4.8毫米每秒末段抽屉速度，不能据此宣称精确终点或被动静止。这些旧结果仅作对照，修订后须重测。",
+    "四个浅色把手各由短柄及两个圆润凸部近似；未辨认出可可靠计数的外露螺钉，不添加虚构紧固件。",
+    "后方布面采用薄板、折角和卷边近似，不模拟布料；背景边条不延伸为未观察到的家具。",
+    "末态玩偶朝向、绳圈是否全部收纳及抽屉是否完全关闭仍未知；诊断终态仅提供与可见结果兼容的放置假设。"
+  ],
+  "camera": {
+    "position": [
+      0.015,
+      -0.65,
+      1.14
+    ],
+    "target": [
+      0.0,
+      0.0,
+      0.805
+    ],
+    "vertical_fov_deg": 52.0
+  },
+  "orbit": {
+    "target": [
+      0.0,
+      0.0,
+      0.81
+    ],
+    "radius": 0.65,
+    "height": 0.36
+  },
+  "ground": {
+    "size": [
+      3.0,
+      3.0,
+      0.04
+    ],
+    "position": [
+      0.0,
+      0.0,
+      -0.02
+    ],
+    "color": [
+      0.55,
+      0.53,
+      0.48
+    ]
+  },
+  "assets": [
+    {
+      "id": "tabletop",
+      "label_zh": "浅灰米色桌面支撑板",
+      "source_object_id": "tabletop",
+      "evidence_frames": [
+        0,
+        27,
+        49,
+        67,
+        94,
+        116
+      ],
+      "body_type": "static",
+      "mass_kg": 18.0,
+      "position": [
+        0.0,
+        -0.15,
+        0.7
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parts": [
+        {
+          "id": "support_slab",
+          "shape": "box",
+          "size": [
+            1.15,
+            0.9,
+            0.04
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.64,
+            0.61,
+            0.52
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        }
+      ],
+      "reconstruction_note": "顶面z=0.72米；有限静态板代表画面支撑面，不推断桌腿。"
+    },
+    {
+      "id": "drawer_cabinet",
+      "label_zh": "米白色三层四抽屉柜框架",
+      "source_object_id": "drawer_cabinet",
+      "evidence_frames": [
+        0,
+        15,
+        27,
+        49,
+        74,
+        104,
+        116
+      ],
+      "body_type": "dynamic",
+      "mass_kg": 0.5,
+      "position": [
+        0.0,
+        0.0,
+        0.72
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parts": [
+        {
+          "id": "base",
+          "shape": "box",
+          "size": [
+            0.18,
+            0.14,
+            0.008
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.004
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.77,
+            0.72,
+            0.56
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "top",
+          "shape": "box",
+          "size": [
+            0.18,
+            0.14,
+            0.004
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.178
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.82,
+            0.77,
+            0.63
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "left_wall",
+          "shape": "box",
+          "size": [
+            0.006,
+            0.14,
+            0.168
+          ],
+          "position": [
+            -0.087,
+            0.0,
+            0.092
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.78,
+            0.73,
+            0.58
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "right_wall",
+          "shape": "box",
+          "size": [
+            0.006,
+            0.14,
+            0.168
+          ],
+          "position": [
+            0.087,
+            0.0,
+            0.092
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.78,
+            0.73,
+            0.58
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rear_wall",
+          "shape": "box",
+          "size": [
+            0.168,
+            0.004,
+            0.168
+          ],
+          "position": [
+            0.0,
+            0.068,
+            0.092
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.74,
+            0.69,
+            0.55
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "lower_shelf",
+          "shape": "box",
+          "size": [
+            0.168,
+            0.136,
+            0.004
+          ],
+          "position": [
+            0.0,
+            -0.002,
+            0.061
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.79,
+            0.74,
+            0.6
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "upper_shelf",
+          "shape": "box",
+          "size": [
+            0.168,
+            0.136,
+            0.004
+          ],
+          "position": [
+            0.0,
+            -0.002,
+            0.118
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.79,
+            0.74,
+            0.6
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "upper_center_partition",
+          "shape": "box",
+          "size": [
+            0.003,
+            0.136,
+            0.056
+          ],
+          "position": [
+            0.0,
+            -0.002,
+            0.148
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.79,
+            0.74,
+            0.6
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        }
+      ],
+      "reconstruction_note": "原点位于柜体底面中心，正面朝-Y；开放前面、分层空腔和上层中央隔板均保留。背板形状为不确定假设，柜体不固定到桌面。"
+    },
+    {
+      "id": "upper_left_drawer",
+      "label_zh": "左上半透明小抽屉",
+      "source_object_id": "upper_left_drawer",
+      "evidence_frames": [
+        0,
+        49,
+        69,
+        104,
+        116
+      ],
+      "body_type": "dynamic",
+      "mass_kg": 0.035,
+      "position": [
+        -0.0425,
+        -0.004,
+        0.842
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parts": [
+        {
+          "id": "base",
+          "shape": "box",
+          "size": [
+            0.079,
+            0.128,
+            0.003
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.0015
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.76,
+            0.74,
+            0.64
+          ],
+          "collision": true,
+          "opacity": 0.28,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "front",
+          "shape": "box",
+          "size": [
+            0.079,
+            0.003,
+            0.046
+          ],
+          "position": [
+            0.0,
+            -0.0625,
+            0.026
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.78,
+            0.76,
+            0.65
+          ],
+          "collision": true,
+          "opacity": 0.35,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "back",
+          "shape": "box",
+          "size": [
+            0.079,
+            0.003,
+            0.046
+          ],
+          "position": [
+            0.0,
+            0.0625,
+            0.026
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.78,
+            0.76,
+            0.65
+          ],
+          "collision": true,
+          "opacity": 0.25,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "left",
+          "shape": "box",
+          "size": [
+            0.003,
+            0.122,
+            0.046
+          ],
+          "position": [
+            -0.038,
+            0.0,
+            0.026
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.78,
+            0.76,
+            0.65
+          ],
+          "collision": true,
+          "opacity": 0.25,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "right",
+          "shape": "box",
+          "size": [
+            0.003,
+            0.122,
+            0.046
+          ],
+          "position": [
+            0.038,
+            0.0,
+            0.026
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.78,
+            0.76,
+            0.65
+          ],
+          "collision": true,
+          "opacity": 0.25,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "handle_stem",
+          "shape": "cylinder",
+          "size": [
+            0.006,
+            0.006,
+            0.006
+          ],
+          "position": [
+            0.0,
+            -0.067,
+            0.024
+          ],
+          "rotation_deg": [
+            90.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.91,
+            0.88,
+            0.74
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "handle_lower_lobe",
+          "shape": "sphere",
+          "size": [
+            0.022,
+            0.006,
+            0.007
+          ],
+          "position": [
+            0.0,
+            -0.071,
+            0.023
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.93,
+            0.9,
+            0.77
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "handle_upper_lobe",
+          "shape": "sphere",
+          "size": [
+            0.01,
+            0.006,
+            0.009
+          ],
+          "position": [
+            0.0,
+            -0.071,
+            0.027
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.93,
+            0.9,
+            0.77
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        }
+      ],
+      "reconstruction_note": "原点位于抽屉底部外表面中心；开放顶部、内部内容未知，初态收回。"
+    },
+    {
+      "id": "upper_right_drawer",
+      "label_zh": "右上半透明小抽屉",
+      "source_object_id": "upper_right_drawer",
+      "evidence_frames": [
+        0,
+        49,
+        69,
+        104,
+        116
+      ],
+      "body_type": "dynamic",
+      "mass_kg": 0.035,
+      "position": [
+        0.0425,
+        -0.004,
+        0.842
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parts": [
+        {
+          "id": "base",
+          "shape": "box",
+          "size": [
+            0.079,
+            0.128,
+            0.003
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.0015
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.76,
+            0.74,
+            0.64
+          ],
+          "collision": true,
+          "opacity": 0.28,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "front",
+          "shape": "box",
+          "size": [
+            0.079,
+            0.003,
+            0.046
+          ],
+          "position": [
+            0.0,
+            -0.0625,
+            0.026
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.78,
+            0.76,
+            0.65
+          ],
+          "collision": true,
+          "opacity": 0.35,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "back",
+          "shape": "box",
+          "size": [
+            0.079,
+            0.003,
+            0.046
+          ],
+          "position": [
+            0.0,
+            0.0625,
+            0.026
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.78,
+            0.76,
+            0.65
+          ],
+          "collision": true,
+          "opacity": 0.25,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "left",
+          "shape": "box",
+          "size": [
+            0.003,
+            0.122,
+            0.046
+          ],
+          "position": [
+            -0.038,
+            0.0,
+            0.026
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.78,
+            0.76,
+            0.65
+          ],
+          "collision": true,
+          "opacity": 0.25,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "right",
+          "shape": "box",
+          "size": [
+            0.003,
+            0.122,
+            0.046
+          ],
+          "position": [
+            0.038,
+            0.0,
+            0.026
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.78,
+            0.76,
+            0.65
+          ],
+          "collision": true,
+          "opacity": 0.25,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "handle_stem",
+          "shape": "cylinder",
+          "size": [
+            0.006,
+            0.006,
+            0.006
+          ],
+          "position": [
+            0.0,
+            -0.067,
+            0.024
+          ],
+          "rotation_deg": [
+            90.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.91,
+            0.88,
+            0.74
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "handle_lower_lobe",
+          "shape": "sphere",
+          "size": [
+            0.022,
+            0.006,
+            0.007
+          ],
+          "position": [
+            0.0,
+            -0.071,
+            0.023
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.93,
+            0.9,
+            0.77
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "handle_upper_lobe",
+          "shape": "sphere",
+          "size": [
+            0.01,
+            0.006,
+            0.009
+          ],
+          "position": [
+            0.0,
+            -0.071,
+            0.027
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.93,
+            0.9,
+            0.77
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        }
+      ],
+      "reconstruction_note": "原点位于底部外表面中心；与左上抽屉具有独立空腔和滑动关节，未观察到开合。"
+    },
+    {
+      "id": "middle_wide_drawer",
+      "label_zh": "接收挂件的中间宽抽屉",
+      "source_object_id": "middle_wide_drawer",
+      "evidence_frames": [
+        0,
+        17,
+        27,
+        35,
+        44,
+        49,
+        52,
+        79,
+        99,
+        109,
+        116
+      ],
+      "body_type": "dynamic",
+      "mass_kg": 0.065,
+      "position": [
+        0.0,
+        -0.004,
+        0.785
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parts": [
+        {
+          "id": "base",
+          "shape": "box",
+          "size": [
+            0.164,
+            0.128,
+            0.003
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.0015
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.76,
+            0.74,
+            0.64
+          ],
+          "collision": true,
+          "opacity": 0.28,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "front",
+          "shape": "box",
+          "size": [
+            0.164,
+            0.003,
+            0.046
+          ],
+          "position": [
+            0.0,
+            -0.0625,
+            0.026
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.78,
+            0.76,
+            0.65
+          ],
+          "collision": true,
+          "opacity": 0.35,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "back",
+          "shape": "box",
+          "size": [
+            0.164,
+            0.003,
+            0.046
+          ],
+          "position": [
+            0.0,
+            0.0625,
+            0.026
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.78,
+            0.76,
+            0.65
+          ],
+          "collision": true,
+          "opacity": 0.25,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "left",
+          "shape": "box",
+          "size": [
+            0.003,
+            0.122,
+            0.046
+          ],
+          "position": [
+            -0.0805,
+            0.0,
+            0.026
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.78,
+            0.76,
+            0.65
+          ],
+          "collision": true,
+          "opacity": 0.25,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "right",
+          "shape": "box",
+          "size": [
+            0.003,
+            0.122,
+            0.046
+          ],
+          "position": [
+            0.0805,
+            0.0,
+            0.026
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.78,
+            0.76,
+            0.65
+          ],
+          "collision": true,
+          "opacity": 0.25,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "handle_stem",
+          "shape": "cylinder",
+          "size": [
+            0.007,
+            0.007,
+            0.007
+          ],
+          "position": [
+            0.0,
+            -0.0675,
+            0.024
+          ],
+          "rotation_deg": [
+            90.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.91,
+            0.88,
+            0.74
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "handle_lower_lobe",
+          "shape": "sphere",
+          "size": [
+            0.025,
+            0.007,
+            0.008
+          ],
+          "position": [
+            0.0,
+            -0.072,
+            0.023
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.93,
+            0.9,
+            0.77
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "handle_upper_lobe",
+          "shape": "sphere",
+          "size": [
+            0.012,
+            0.007,
+            0.011
+          ],
+          "position": [
+            0.0,
+            -0.072,
+            0.028
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.93,
+            0.9,
+            0.77
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        }
+      ],
+      "reconstruction_note": "原点位于底部外表面中心；顶部开放，净宽0.158米、净深0.122米、内底面z=0.788米。沿-Y拉出，初始挂件不在其内。"
+    },
+    {
+      "id": "bottom_wide_drawer",
+      "label_zh": "底部宽抽屉",
+      "source_object_id": "bottom_wide_drawer",
+      "evidence_frames": [
+        0,
+        12,
+        49,
+        104,
+        116
+      ],
+      "body_type": "dynamic",
+      "mass_kg": 0.065,
+      "position": [
+        0.0,
+        -0.004,
+        0.728
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parts": [
+        {
+          "id": "base",
+          "shape": "box",
+          "size": [
+            0.164,
+            0.128,
+            0.003
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.0015
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.76,
+            0.74,
+            0.64
+          ],
+          "collision": true,
+          "opacity": 0.28,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "front",
+          "shape": "box",
+          "size": [
+            0.164,
+            0.003,
+            0.046
+          ],
+          "position": [
+            0.0,
+            -0.0625,
+            0.026
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.78,
+            0.76,
+            0.65
+          ],
+          "collision": true,
+          "opacity": 0.35,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "back",
+          "shape": "box",
+          "size": [
+            0.164,
+            0.003,
+            0.046
+          ],
+          "position": [
+            0.0,
+            0.0625,
+            0.026
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.78,
+            0.76,
+            0.65
+          ],
+          "collision": true,
+          "opacity": 0.25,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "left",
+          "shape": "box",
+          "size": [
+            0.003,
+            0.122,
+            0.046
+          ],
+          "position": [
+            -0.0805,
+            0.0,
+            0.026
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.78,
+            0.76,
+            0.65
+          ],
+          "collision": true,
+          "opacity": 0.25,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "right",
+          "shape": "box",
+          "size": [
+            0.003,
+            0.122,
+            0.046
+          ],
+          "position": [
+            0.0805,
+            0.0,
+            0.026
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.78,
+            0.76,
+            0.65
+          ],
+          "collision": true,
+          "opacity": 0.25,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "handle_stem",
+          "shape": "cylinder",
+          "size": [
+            0.007,
+            0.007,
+            0.007
+          ],
+          "position": [
+            0.0,
+            -0.0675,
+            0.024
+          ],
+          "rotation_deg": [
+            90.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.91,
+            0.88,
+            0.74
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "handle_lower_lobe",
+          "shape": "sphere",
+          "size": [
+            0.025,
+            0.007,
+            0.008
+          ],
+          "position": [
+            0.0,
+            -0.072,
+            0.023
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.93,
+            0.9,
+            0.77
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "handle_upper_lobe",
+          "shape": "sphere",
+          "size": [
+            0.012,
+            0.007,
+            0.011
+          ],
+          "position": [
+            0.0,
+            -0.072,
+            0.028
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.93,
+            0.9,
+            0.77
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        }
+      ],
+      "reconstruction_note": "原点位于底部外表面中心；独立空腔与滑动关节，所有源状态均保持收回。"
+    },
+    {
+      "id": "toy_charm",
+      "label_zh": "带浅色绳圈的黄白红小玩偶挂件",
+      "source_object_id": "toy_charm",
+      "evidence_frames": [
+        0,
+        12,
+        30,
+        49,
+        52,
+        54,
+        57,
+        62,
+        67,
+        74,
+        84,
+        94,
+        104,
+        111
+      ],
+      "body_type": "dynamic",
+      "mass_kg": 0.012,
+      "position": [
+        0.145,
+        -0.055,
+        0.74
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parts": [
+        {
+          "id": "cream_body",
+          "shape": "lathe",
+          "size": [
+            0.034,
+            0.034,
+            0.032
+          ],
+          "position": [
+            0.0,
+            0.0,
+            -0.004
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.88,
+            0.84,
+            0.66
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": [
+            [
+              0.0,
+              -0.016
+            ],
+            [
+              0.012,
+              -0.016
+            ],
+            [
+              0.015,
+              -0.012
+            ],
+            [
+              0.017,
+              -0.003
+            ],
+            [
+              0.016,
+              0.006
+            ],
+            [
+              0.011,
+              0.014
+            ],
+            [
+              0.0,
+              0.016
+            ],
+            [
+              0.0,
+              -0.016
+            ]
+          ],
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "yellow_head",
+          "shape": "sphere",
+          "size": [
+            0.023,
+            0.024,
+            0.025
+          ],
+          "position": [
+            -0.01,
+            0.002,
+            0.0075
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.91,
+            0.76,
+            0.35
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "pale_front_patch",
+          "shape": "sphere",
+          "size": [
+            0.019,
+            0.009,
+            0.02
+          ],
+          "position": [
+            0.0,
+            -0.013,
+            -0.003
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.95,
+            0.91,
+            0.76
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "left_rounded_protrusion",
+          "shape": "sphere",
+          "size": [
+            0.012,
+            0.014,
+            0.018
+          ],
+          "position": [
+            -0.018,
+            -0.002,
+            -0.008
+          ],
+          "rotation_deg": [
+            0.0,
+            -25.0,
+            0.0
+          ],
+          "color": [
+            0.9,
+            0.79,
+            0.48
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "right_rounded_protrusion",
+          "shape": "sphere",
+          "size": [
+            0.013,
+            0.014,
+            0.016
+          ],
+          "position": [
+            0.017,
+            -0.002,
+            -0.009
+          ],
+          "rotation_deg": [
+            0.0,
+            25.0,
+            0.0
+          ],
+          "color": [
+            0.88,
+            0.84,
+            0.66
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "small_upper_protrusion",
+          "shape": "sphere",
+          "size": [
+            0.01,
+            0.011,
+            0.011
+          ],
+          "position": [
+            -0.018,
+            0.004,
+            0.014
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.91,
+            0.76,
+            0.35
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "red_accent",
+          "shape": "sphere",
+          "size": [
+            0.012,
+            0.01,
+            0.012
+          ],
+          "position": [
+            0.002,
+            -0.009,
+            0.012
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.76,
+            0.14,
+            0.07
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "cord_connector",
+          "shape": "capsule",
+          "size": [
+            0.0024,
+            0.0024,
+            0.022
+          ],
+          "position": [
+            0.022,
+            0.0,
+            -0.0188
+          ],
+          "rotation_deg": [
+            0.0,
+            90.0,
+            0.0
+          ],
+          "color": [
+            0.87,
+            0.85,
+            0.73
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "cord_loop_visual",
+          "shape": "lathe",
+          "size": [
+            0.0304,
+            0.0304,
+            0.0024
+          ],
+          "position": [
+            0.042,
+            0.0,
+            -0.0188
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.9,
+            0.87,
+            0.76
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": [
+            [
+              0.0152,
+              0.0
+            ],
+            [
+              0.014849,
+              0.000849
+            ],
+            [
+              0.014,
+              0.0012
+            ],
+            [
+              0.013151,
+              0.000849
+            ],
+            [
+              0.0128,
+              0.0
+            ],
+            [
+              0.013151,
+              -0.000849
+            ],
+            [
+              0.014,
+              -0.0012
+            ],
+            [
+              0.014849,
+              -0.000849
+            ],
+            [
+              0.0152,
+              0.0
+            ]
+          ],
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "cord_loop_segment_00",
+          "shape": "box",
+          "size": [
+            0.0075,
+            0.0024,
+            0.0024
+          ],
+          "position": [
+            0.055523,
+            0.003623,
+            -0.0188
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            105.0
+          ],
+          "color": [
+            0.9,
+            0.87,
+            0.76
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "cord_loop_segment_01",
+          "shape": "box",
+          "size": [
+            0.0075,
+            0.0024,
+            0.0024
+          ],
+          "position": [
+            0.051899,
+            0.009899,
+            -0.0188
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            135.0
+          ],
+          "color": [
+            0.9,
+            0.87,
+            0.76
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "cord_loop_segment_02",
+          "shape": "box",
+          "size": [
+            0.0075,
+            0.0024,
+            0.0024
+          ],
+          "position": [
+            0.045623,
+            0.013523,
+            -0.0188
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            165.0
+          ],
+          "color": [
+            0.9,
+            0.87,
+            0.76
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "cord_loop_segment_03",
+          "shape": "box",
+          "size": [
+            0.0075,
+            0.0024,
+            0.0024
+          ],
+          "position": [
+            0.038377,
+            0.013523,
+            -0.0188
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            195.0
+          ],
+          "color": [
+            0.9,
+            0.87,
+            0.76
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "cord_loop_segment_04",
+          "shape": "box",
+          "size": [
+            0.0075,
+            0.0024,
+            0.0024
+          ],
+          "position": [
+            0.032101,
+            0.009899,
+            -0.0188
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            225.0
+          ],
+          "color": [
+            0.9,
+            0.87,
+            0.76
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "cord_loop_segment_05",
+          "shape": "box",
+          "size": [
+            0.0075,
+            0.0024,
+            0.0024
+          ],
+          "position": [
+            0.028477,
+            0.003623,
+            -0.0188
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            255.0
+          ],
+          "color": [
+            0.9,
+            0.87,
+            0.76
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "cord_loop_segment_06",
+          "shape": "box",
+          "size": [
+            0.0075,
+            0.0024,
+            0.0024
+          ],
+          "position": [
+            0.028477,
+            -0.003623,
+            -0.0188
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            285.0
+          ],
+          "color": [
+            0.9,
+            0.87,
+            0.76
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "cord_loop_segment_07",
+          "shape": "box",
+          "size": [
+            0.0075,
+            0.0024,
+            0.0024
+          ],
+          "position": [
+            0.032101,
+            -0.009899,
+            -0.0188
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            315.0
+          ],
+          "color": [
+            0.9,
+            0.87,
+            0.76
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "cord_loop_segment_08",
+          "shape": "box",
+          "size": [
+            0.0075,
+            0.0024,
+            0.0024
+          ],
+          "position": [
+            0.038377,
+            -0.013523,
+            -0.0188
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            345.0
+          ],
+          "color": [
+            0.9,
+            0.87,
+            0.76
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "cord_loop_segment_09",
+          "shape": "box",
+          "size": [
+            0.0075,
+            0.0024,
+            0.0024
+          ],
+          "position": [
+            0.045623,
+            -0.013523,
+            -0.0188
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            15.0
+          ],
+          "color": [
+            0.9,
+            0.87,
+            0.76
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "cord_loop_segment_10",
+          "shape": "box",
+          "size": [
+            0.0075,
+            0.0024,
+            0.0024
+          ],
+          "position": [
+            0.051899,
+            -0.009899,
+            -0.0188
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            45.0
+          ],
+          "color": [
+            0.9,
+            0.87,
+            0.76
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "cord_loop_segment_11",
+          "shape": "box",
+          "size": [
+            0.0075,
+            0.0024,
+            0.0024
+          ],
+          "position": [
+            0.055523,
+            -0.003623,
+            -0.0188
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            75.0
+          ],
+          "color": [
+            0.9,
+            0.87,
+            0.76
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        }
+      ],
+      "reconstruction_note": "原点沿用主体参考点，所有部件坐标为局部坐标。初始位于柜体右侧桌面；主体底面在局部z=-0.020米，形成半径0.012米的承托圆面，世界高度z=0.720米，与右侧绳圈及连接绳最低点共面。实体lathe为封闭凸实心主体，允许与可见外形一致的凸碰撞；不是空腔，也不是附加支架。头部及突起保持源图近似轮廓，宽平底旨在避免旧球形腹部的点接触翻倒，效果须由新原生探针确认。绳圈采用环形视觉截面和12段实际壁碰撞体，保留开孔，不填充环心。挂件始终为自由动态刚体，无固定附件、重力关闭或人为保持驱动。"
+    },
+    {
+      "id": "rear_fabric_backdrop",
+      "label_zh": "后方浅灰紫色下垂布面",
+      "source_object_id": "rear_fabric_backdrop",
+      "evidence_frames": [
+        0,
+        27,
+        49,
+        74,
+        94,
+        116
+      ],
+      "body_type": "static",
+      "mass_kg": 0.4,
+      "position": [
+        0.015,
+        0.205,
+        1.055
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parts": [
+        {
+          "id": "central_sheet",
+          "shape": "box",
+          "size": [
+            0.52,
+            0.004,
+            0.62
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.025
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.65,
+            0.61,
+            0.62
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "left_fold",
+          "shape": "box",
+          "size": [
+            0.055,
+            0.004,
+            0.62
+          ],
+          "position": [
+            -0.284,
+            -0.007,
+            0.025
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -15.0
+          ],
+          "color": [
+            0.61,
+            0.57,
+            0.58
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "right_fold",
+          "shape": "box",
+          "size": [
+            0.055,
+            0.004,
+            0.62
+          ],
+          "position": [
+            0.284,
+            -0.007,
+            0.025
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            15.0
+          ],
+          "color": [
+            0.68,
+            0.64,
+            0.65
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "lower_drape",
+          "shape": "box",
+          "size": [
+            0.61,
+            0.004,
+            0.048
+          ],
+          "position": [
+            0.0,
+            -0.008,
+            -0.307
+          ],
+          "rotation_deg": [
+            -18.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.66,
+            0.62,
+            0.63
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "lower_hem",
+          "shape": "capsule",
+          "size": [
+            0.009,
+            0.009,
+            0.61
+          ],
+          "position": [
+            0.0,
+            -0.016,
+            -0.329
+          ],
+          "rotation_deg": [
+            0.0,
+            90.0,
+            0.0
+          ],
+          "color": [
+            0.62,
+            0.58,
+            0.59
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        }
+      ],
+      "reconstruction_note": "下缘接近桌面，折角和卷边近似可见褶皱，不推断布面后方空间。"
+    },
+    {
+      "id": "left_vertical_panel",
+      "label_zh": "左侧米白色竖直板面",
+      "source_object_id": "left_vertical_panel",
+      "evidence_frames": [
+        0,
+        27,
+        49,
+        74,
+        116
+      ],
+      "body_type": "static",
+      "mass_kg": 10.0,
+      "position": [
+        -0.46,
+        -0.015,
+        1.07
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parts": [
+        {
+          "id": "panel",
+          "shape": "box",
+          "size": [
+            0.018,
+            0.63,
+            0.7
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.76,
+            0.71,
+            0.58
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        }
+      ],
+      "reconstruction_note": "与桌面相接的竖直边界，保留为附近障碍；不能确定是墙面还是家具侧板。"
+    },
+    {
+      "id": "background_edge_members",
+      "label_zh": "布面两侧可见窄条结构",
+      "source_object_id": "background_edge_members",
+      "evidence_frames": [
+        0,
+        30,
+        59,
+        89,
+        116
+      ],
+      "body_type": "static",
+      "mass_kg": 1.0,
+      "position": [
+        0.0,
+        0.23,
+        0.72
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parts": [
+        {
+          "id": "left_dark_vertical_strip",
+          "shape": "box",
+          "size": [
+            0.014,
+            0.019,
+            0.68
+          ],
+          "position": [
+            -0.326,
+            0.0,
+            0.34
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.37,
+            0.35,
+            0.29
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "left_pale_vertical_strip",
+          "shape": "box",
+          "size": [
+            0.025,
+            0.024,
+            0.68
+          ],
+          "position": [
+            -0.351,
+            0.006,
+            0.34
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.68,
+            0.64,
+            0.51
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "right_pale_vertical_strip",
+          "shape": "box",
+          "size": [
+            0.024,
+            0.028,
+            0.68
+          ],
+          "position": [
+            0.352,
+            0.006,
+            0.34
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.75,
+            0.71,
+            0.59
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        }
+      ],
+      "reconstruction_note": "仅表示背景左右露出的窄边条，不扩展为未经观察的窗户、柜架或其他家具。"
+    }
+  ],
+  "joints": [
+    {
+      "id": "upper_left_slide",
+      "type": "prismatic",
+      "parent": "drawer_cabinet",
+      "child": "upper_left_drawer",
+      "axis": "Y",
+      "lower": -0.09,
+      "upper": 0.0,
+      "parent_anchor": [
+        -0.0425,
+        -0.004,
+        0.122
+      ],
+      "child_anchor": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "initial_position": 0.0,
+      "drive": {
+        "stiffness": 250.0,
+        "damping": 40.0,
+        "max_force": 1000.0
+      },
+      "collision_enabled": false
+    },
+    {
+      "id": "upper_right_slide",
+      "type": "prismatic",
+      "parent": "drawer_cabinet",
+      "child": "upper_right_drawer",
+      "axis": "Y",
+      "lower": -0.09,
+      "upper": 0.0,
+      "parent_anchor": [
+        0.0425,
+        -0.004,
+        0.122
+      ],
+      "child_anchor": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "initial_position": 0.0,
+      "drive": {
+        "stiffness": 250.0,
+        "damping": 40.0,
+        "max_force": 1000.0
+      },
+      "collision_enabled": false
+    },
+    {
+      "id": "middle_slide",
+      "type": "prismatic",
+      "parent": "drawer_cabinet",
+      "child": "middle_wide_drawer",
+      "axis": "Y",
+      "lower": -0.1,
+      "upper": 0.0,
+      "parent_anchor": [
+        0.0,
+        -0.004,
+        0.065
+      ],
+      "child_anchor": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "initial_position": 0.0,
+      "drive": {
+        "stiffness": 250.0,
+        "damping": 40.0,
+        "max_force": 1000.0
+      },
+      "collision_enabled": false
+    },
+    {
+      "id": "bottom_slide",
+      "type": "prismatic",
+      "parent": "drawer_cabinet",
+      "child": "bottom_wide_drawer",
+      "axis": "Y",
+      "lower": -0.1,
+      "upper": 0.0,
+      "parent_anchor": [
+        0.0,
+        -0.004,
+        0.008
+      ],
+      "child_anchor": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "initial_position": 0.0,
+      "drive": {
+        "stiffness": 250.0,
+        "damping": 40.0,
+        "max_force": 1000.0
+      },
+      "collision_enabled": false
+    }
+  ],
+  "attachments": [],
+  "diagnostic_states": [
+    {
+      "name_zh": "初始：抽屉收回，挂件位于右侧桌面",
+      "kind": "initial",
+      "evidence_frames": [
+        0,
+        2,
+        5,
+        12
+      ],
+      "poses": [],
+      "joint_positions": [],
+      "enabled_attachments": [],
+      "note": "S00脚本化初态。修订主体平底和右侧绳圈均在桌面z=0.72米，初始不穿透桌面；挂件自由动态，不固定、不关闭重力。须重新执行原生静置及实际状态渲染检查，旧版翻倒结果不能作为本修订的通过证据。"
+    },
+    {
+      "name_zh": "显露：中间抽屉拉开",
+      "kind": "reveal",
+      "evidence_frames": [
+        44,
+        49,
+        52,
+        54
+      ],
+      "poses": [
+        {
+          "asset_id": "middle_wide_drawer",
+          "position": [
+            0.0,
+            -0.094,
+            0.785
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "toy_charm",
+          "position": [
+            0.145,
+            -0.055,
+            0.74
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "joint_positions": [
+        {
+          "joint_id": "upper_left_slide",
+          "value": 0.0
+        },
+        {
+          "joint_id": "upper_right_slide",
+          "value": 0.0
+        },
+        {
+          "joint_id": "middle_slide",
+          "value": -0.09
+        },
+        {
+          "joint_id": "bottom_slide",
+          "value": 0.0
+        }
+      ],
+      "enabled_attachments": [],
+      "note": "S01脚本化显露状态。挂件从第0帧至拾起前应保持同一桌面布置，因此与S00使用完全相同的挂件位姿和修订几何。须独立验证自由静置时主体不翻倒、绳圈向右铺放；其余未列资产重置至初态，环境不变。"
+    },
+    {
+      "name_zh": "显露：挂件被抬到抽屉右上方",
+      "kind": "reveal",
+      "evidence_frames": [
+        62,
+        64,
+        67,
+        69
+      ],
+      "poses": [
+        {
+          "asset_id": "middle_wide_drawer",
+          "position": [
+            0.0,
+            -0.094,
+            0.785
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "toy_charm",
+          "position": [
+            0.115,
+            -0.07,
+            0.915
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            -35.0
+          ]
+        }
+      ],
+      "joint_positions": [
+        {
+          "joint_id": "upper_left_slide",
+          "value": 0.0
+        },
+        {
+          "joint_id": "upper_right_slide",
+          "value": 0.0
+        },
+        {
+          "joint_id": "middle_slide",
+          "value": -0.09
+        },
+        {
+          "joint_id": "bottom_slide",
+          "value": 0.0
+        }
+      ],
+      "enabled_attachments": [],
+      "note": "S02仅展示源视频拾起阶段；人体排除，无悬挂约束。挂件依然动态，若推进物理会自由下落，此状态不作为无支撑静置测试。未列资产使用初态。"
+    },
+    {
+      "name_zh": "显露：挂件进入打开的抽屉",
+      "kind": "reveal",
+      "evidence_frames": [
+        79,
+        84,
+        89,
+        94,
+        99,
+        104
+      ],
+      "poses": [
+        {
+          "asset_id": "middle_wide_drawer",
+          "position": [
+            0.0,
+            -0.094,
+            0.785
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "toy_charm",
+          "position": [
+            -0.02,
+            -0.105,
+            0.808
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "joint_positions": [
+        {
+          "joint_id": "upper_left_slide",
+          "value": 0.0
+        },
+        {
+          "joint_id": "upper_right_slide",
+          "value": 0.0
+        },
+        {
+          "joint_id": "middle_slide",
+          "value": -0.09
+        },
+        {
+          "joint_id": "bottom_slide",
+          "value": 0.0
+        }
+      ],
+      "enabled_attachments": [],
+      "note": "S03用于容纳及承托检查：修订主体平底和绳圈最低点均位于内底面z=0.788米。挂件几何全部处于抽屉空腔范围，未附着到抽屉。确切释放时刻和绳圈形态未知；须对修订几何重测驱动、被动及相邻碰撞开启的静置结果。未列资产使用初态。"
+    },
+    {
+      "name_zh": "最终：装有挂件的中间抽屉明显回缩",
+      "kind": "final",
+      "evidence_frames": [
+        106,
+        109,
+        111,
+        114,
+        116
+      ],
+      "poses": [
+        {
+          "asset_id": "drawer_cabinet",
+          "position": [
+            0.0,
+            0.0,
+            0.72
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "upper_left_drawer",
+          "position": [
+            -0.0425,
+            -0.004,
+            0.842
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "upper_right_drawer",
+          "position": [
+            0.0425,
+            -0.004,
+            0.842
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "middle_wide_drawer",
+          "position": [
+            0.0,
+            -0.016,
+            0.785
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "bottom_wide_drawer",
+          "position": [
+            0.0,
+            -0.004,
+            0.728
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "toy_charm",
+          "position": [
+            -0.02,
+            -0.027,
+            0.808
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "joint_positions": [
+        {
+          "joint_id": "upper_left_slide",
+          "value": 0.0
+        },
+        {
+          "joint_id": "upper_right_slide",
+          "value": 0.0
+        },
+        {
+          "joint_id": "middle_slide",
+          "value": -0.012
+        },
+        {
+          "joint_id": "bottom_slide",
+          "value": 0.0
+        }
+      ],
+      "enabled_attachments": [],
+      "note": "S04诊断终态，挂件位于中间抽屉，原右侧桌面位置为空；主体和绳圈底面接触内底板，不建立固定关节。12毫米残余开度、挂件朝向及绳圈完全位于内部均为假设。所列驱动会保持给定位姿，不能将该结果解释为被动终态；须分别报告关节驱动依赖和修订后自由静置漂移。环境保持静态。"
+    }
+  ],
+  "action_summary_zh": "左手扶稳柜体，右手抓住中间宽抽屉把手并向操作者方向拉开；随后从柜体右侧桌面拾起黄白红挂件，移入打开的抽屉、调整并放下，最后将抽屉向柜内推回。没有观察到从抽屉取出独立物体或拆离抽屉。",
+  "final_state_description": "柜体仍直立于桌面，中间宽抽屉接收了原先位于右侧桌面的同一个挂件并明显回缩。上层两个小抽屉和底部宽抽屉没有明确变化，挂件原桌面位置为空。诊断终态暂保留0.012米开度并将挂件与绳圈置于抽屉内部，但实际闭合终点、挂件最终朝向和绳圈是否全部收纳均被遮挡。本轮修订挂件主体为连续圆润平底实体以改善初始承托，原生静置验证尚待重新执行。"
+}

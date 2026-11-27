@@ -1,0 +1,6 @@
+{
+  "scope": "Fresh isolated Python 3.12 venv, wheel installed with declared dependencies, commands run outside source tree",
+  "wheel_code_snapshot_sha256": "485ee1384d4ec0ee8ff5395dc4e5792881c05d8a883b1d88bf89c0c34a6b3ac9",
+  "dependency_check": "passed",
+  "note": "Final archive is rebuilt after documentation/audit updates; source implementation and final artifact hashes are audited separately."
+}

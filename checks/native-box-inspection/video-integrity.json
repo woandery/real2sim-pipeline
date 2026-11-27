@@ -1,0 +1,51 @@
+{
+  "video_sha256": "ffed0eb8a815e1c166236b8e52301fa611876a692695384637ba56d96f01e3cf",
+  "frames": 192,
+  "fps": 24.0,
+  "minimum_image_std": 17.613451979689977,
+  "samples": [
+    {
+      "frame": 0,
+      "time_s": 0.0,
+      "path": "frame-0000000.jpg",
+      "sha256": "89030470ee019cffb42a13d5ba8a92b8f7dbd59b036f546b6c27af3defc556ae"
+    },
+    {
+      "frame": 48,
+      "time_s": 2.0,
+      "path": "frame-0000048.jpg",
+      "sha256": "ec496074df38cf6f786772795cc6f92c407f8fe37f23dd0bcd2b45768f806ed9"
+    },
+    {
+      "frame": 95,
+      "time_s": 3.9583333333333335,
+      "path": "frame-0000095.jpg",
+      "sha256": "173843c2f4f6d1d11a79a1fccbd48ee2e5183d58d7977c980d6126ae296f9f54"
+    },
+    {
+      "frame": 96,
+      "time_s": 4.0,
+      "path": "frame-0000096.jpg",
+      "sha256": "e0df58c3a8a3ec3f3e60ae27e1e65368852ee2d7ebb6772a65eaead90175515a"
+    },
+    {
+      "frame": 144,
+      "time_s": 6.0,
+      "path": "frame-0000144.jpg",
+      "sha256": "078a20327badfffc3e9d92604889128d65e2d7c6de9f49e8948e0baa4e40bb10"
+    },
+    {
+      "frame": 191,
+      "time_s": 7.958333333333333,
+      "path": "frame-0000191.jpg",
+      "sha256": "d9bd487b1dbdd555dbb91447481aff75c5fc7a5b57b5a4becfb52f7e84613f4e"
+    }
+  ],
+  "sheets": [
+    {
+      "path": "timeline-00.jpg",
+      "sha256": "7358c11bc6ca75e5d7d53a9b6b90436dce9c08d156e922f219001edd812a163d"
+    }
+  ],
+  "all_frames_decoded": true
+}

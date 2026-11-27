@@ -1,0 +1,22 @@
+{
+  "image": "native-box-review.jpg",
+  "sha256": "b65f57f17a4e001bafe81148f70fd2c63061f92c228c1ef5f1b7ca9230f79fd6",
+  "source": "v2 GPU box smoke render, synthetic contract fixture",
+  "observed": "Six actual Isaac images: three closed-box views and three open-box views. Walls, cavity and hinged lid visibly distinct; no blank frame. Labels state posed diagnostic, no policy.",
+  "limitations": "This checks native visual compilation only, not correspondence to a real video or successful physics. The following physics process crashed during Kit startup.",
+  "video": {
+    "file": "native-box-orbit.mp4",
+    "sha256": "ffed0eb8a815e1c166236b8e52301fa611876a692695384637ba56d96f01e3cf",
+    "decoded_frames": 192,
+    "fps": 24,
+    "inspected_frames": [
+      0,
+      48,
+      95,
+      96,
+      144,
+      191
+    ],
+    "observed": "Closed box during first 96 frames; open cavity and raised lid during second 96 frames. Camera orbit changes viewpoint, states change at frame 96. No blank or obviously malformed frame in inspected samples; all frames passed full decode/nonblank checks."
+  }
+}

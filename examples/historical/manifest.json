@@ -1,0 +1,182 @@
+{
+  "scope": "Geometry contract regression fixtures; no API/native validation or historical approval transferred.",
+  "scenes": [
+    {
+      "scene_id": "ego_drawer_retrieve",
+      "source": "scenes/ego_drawer_retrieve/scene-v3.json",
+      "source_sha256": "1469b483625aa708fd0203cd74925834bff0d51f07aef935dd8c6138181cc6ba",
+      "fixture": "ego_drawer_retrieve.json",
+      "fixture_sha256": "436eacb376aaa8d815de438db854af92b71a755f252ad55fdbd7da8bc96df8d6",
+      "excluded_metadata_fields": [],
+      "explicit_migration_changes": [
+        "compiler_version explicitly set to 5; this requires new native validation",
+        "Removed redundant initial-state pose/joint copies after exact equality check"
+      ]
+    },
+    {
+      "scene_id": "ego_lid",
+      "source": "scenes/ego_lid/scene-v7.json",
+      "source_sha256": "3de0160d45699a3bf78bab24d6a75e82f1e8bc99665fed57e6a681ff2c0db034",
+      "fixture": "ego_lid.json",
+      "fixture_sha256": "4bf4ed5d1039e9a8dfe523ab0c6b6fac06eccdbcb0c9be8d902dbfea4fcead4c",
+      "excluded_metadata_fields": [
+        "$.revision"
+      ],
+      "explicit_migration_changes": [
+        "compiler_version explicitly set to 5; this requires new native validation",
+        "Removed redundant initial-state pose/joint copies after exact equality check"
+      ]
+    },
+    {
+      "scene_id": "ego_allen_assembly",
+      "source": "scenes/ego_allen_assembly/scene-v5.json",
+      "source_sha256": "4d2e12a157a3c6c8743da9d322f72ff33c2ffd9bd111ed0a396bd9d780ecb960",
+      "fixture": "ego_allen_assembly.json",
+      "fixture_sha256": "b6a3cb4114da21cb3b47cbc8d6b36959042bf3c082944e29e590e1e606ff32f2",
+      "excluded_metadata_fields": [
+        "$.physics_contract",
+        "$.repair_evidence",
+        "$.native_validation_requirements",
+        "$.revision",
+        "$.infrastructure_revision_provenance"
+      ],
+      "explicit_migration_changes": [
+        "Removed redundant initial-state pose/joint copies after exact equality check"
+      ]
+    },
+    {
+      "scene_id": "ego_box_contents",
+      "source": "scenes/ego_box_contents/scene-v7.json",
+      "source_sha256": "4ed0c715307f8f897cd22ccd2871d5760b8b5ab2144c9604ba8635c4eac5332b",
+      "fixture": "ego_box_contents.json",
+      "fixture_sha256": "10839f6fa57760e33f1c9eb91b5c3d11c20cb8cc4e55e12f749f7f9eb92594dc",
+      "excluded_metadata_fields": [
+        "$.joints[0].drive_metadata_from_astra"
+      ],
+      "explicit_migration_changes": [
+        "compiler_version explicitly set to 5; this requires new native validation",
+        "Removed redundant initial-state pose/joint copies after exact equality check"
+      ]
+    },
+    {
+      "scene_id": "ego_fridge",
+      "source": "scenes/ego_fridge/scene-v4.json",
+      "source_sha256": "cf39d6f2574281c5eeb07980c950bfe89847444f8ac4b85ecbb0ac3e17c0b251",
+      "fixture": "ego_fridge.json",
+      "fixture_sha256": "58e50a2062a98dc6d3c1092915c9df6fd0e15c37e10629c879b2e3e196ca461e",
+      "excluded_metadata_fields": [],
+      "explicit_migration_changes": [
+        "compiler_version explicitly set to 5; this requires new native validation",
+        "Removed redundant initial-state pose/joint copies after exact equality check"
+      ]
+    },
+    {
+      "scene_id": "ego_ball_free",
+      "source": "scenes/ego_ball_free/scene-v4.json",
+      "source_sha256": "fb6a9d8205209f2b61e9a0dc2298426f4d2b765745f5a9da8df1845705f83cfe",
+      "fixture": "ego_ball_free.json",
+      "fixture_sha256": "9fc85dbeffbc7dc6bc3292ae760bea19852c67f8a213336acbc025d22849fe26",
+      "excluded_metadata_fields": [
+        "$.assets[0].parts[1].scale"
+      ],
+      "explicit_migration_changes": [
+        "compiler_version explicitly set to 5; this requires new native validation",
+        "Removed redundant initial-state pose/joint copies after exact equality check"
+      ]
+    },
+    {
+      "scene_id": "assembly_0037",
+      "source": "scenes/assembly_0037/scene-v3.json",
+      "source_sha256": "45cbb11d533a903c98ade977f89bf22f1422c04978f5cdda8c96b11561536faf",
+      "fixture": "assembly_0037.json",
+      "fixture_sha256": "f025b95f7377c67e54ba07cfa33a8476b34be0c7a8b8273d41636d05704f1bb5",
+      "excluded_metadata_fields": [
+        "$.diagnostic_states[0].transition_evidence_frames",
+        "$.diagnostic_states[1].transition_evidence_frames",
+        "$.diagnostic_states[2].transition_evidence_frames",
+        "$.diagnostic_states[3].transition_evidence_frames",
+        "$.diagnostic_states[4].transition_evidence_frames",
+        "$.diagnostic_states[5].transition_evidence_frames",
+        "$.diagnostic_states[6].transition_evidence_frames"
+      ],
+      "explicit_migration_changes": [
+        "compiler_version explicitly set to 5; this requires new native validation",
+        "Removed redundant initial-state pose/joint copies after exact equality check"
+      ]
+    },
+    {
+      "scene_id": "assembly_0043",
+      "source": "scenes/assembly_0043/scene-v3.json",
+      "source_sha256": "6fa85a3e1a60d41fc09512b1b25290bf25e702154c4280adf2e42297a05cb205",
+      "fixture": "assembly_0043.json",
+      "fixture_sha256": "1ffbbe3aa428f613aae02b6b0c20f8cd24c44a0ec9a4b1b5e2c5b42dcf757a53",
+      "excluded_metadata_fields": [
+        "$.diagnostic_states[0].transition_evidence_frames",
+        "$.diagnostic_states[1].transition_evidence_frames",
+        "$.diagnostic_states[2].transition_evidence_frames",
+        "$.diagnostic_states[3].transition_evidence_frames",
+        "$.diagnostic_states[4].transition_evidence_frames",
+        "$.diagnostic_states[5].transition_evidence_frames",
+        "$.diagnostic_states[6].transition_evidence_frames",
+        "$.diagnostic_states[7].transition_evidence_frames",
+        "$.attachment_state_policy",
+        "$.physics_validation"
+      ],
+      "explicit_migration_changes": [
+        "compiler_version explicitly set to 5; this requires new native validation",
+        "Removed redundant initial-state pose/joint copies after exact equality check"
+      ]
+    },
+    {
+      "scene_id": "assembly_0073",
+      "source": "scenes/assembly_0073/scene-v3.json",
+      "source_sha256": "12de8efbcbcbbca3f28f7be193b23dba5e58c76e5071c88046ee96a54a0ab972",
+      "fixture": "assembly_0073.json",
+      "fixture_sha256": "cdd3b19ff31cf96f36efb56792fb31204d26275e75d84d91990857b9b4fde87e",
+      "excluded_metadata_fields": [
+        "$.diagnostic_states[0].transition_evidence_frames",
+        "$.diagnostic_states[1].transition_evidence_frames",
+        "$.diagnostic_states[2].transition_evidence_frames",
+        "$.diagnostic_states[3].transition_evidence_frames",
+        "$.diagnostic_states[4].transition_evidence_frames",
+        "$.diagnostic_states[5].transition_evidence_frames",
+        "$.diagnostic_states[6].transition_evidence_frames",
+        "$.diagnostic_states[7].transition_evidence_frames",
+        "$.diagnostic_states[8].transition_evidence_frames",
+        "$.diagnostic_states[9].transition_evidence_frames",
+        "$.diagnostic_states[10].transition_evidence_frames",
+        "$.physics_validation_plan"
+      ],
+      "explicit_migration_changes": [
+        "compiler_version explicitly set to 5; this requires new native validation",
+        "Removed redundant initial-state pose/joint copies after exact equality check"
+      ]
+    },
+    {
+      "scene_id": "assembly_0060",
+      "source": "scenes/assembly_0060/scene-v4.json",
+      "source_sha256": "83805c1f9fa8542d8ed34f64063ad3e5fb284865c16e9ac8f06aeb075d134aef",
+      "fixture": "assembly_0060.json",
+      "fixture_sha256": "a5e28c33c6476536a10664709f4f3059fafc2df1411c1935f794b817a31a7f98",
+      "excluded_metadata_fields": [
+        "$.diagnostic_states[0].transition_evidence_frames",
+        "$.diagnostic_states[1].transition_evidence_frames",
+        "$.diagnostic_states[2].transition_evidence_frames",
+        "$.diagnostic_states[3].transition_evidence_frames",
+        "$.diagnostic_states[4].transition_evidence_frames",
+        "$.diagnostic_states[5].transition_evidence_frames",
+        "$.diagnostic_states[6].transition_evidence_frames",
+        "$.diagnostic_states[7].transition_evidence_frames",
+        "$.diagnostic_states[8].transition_evidence_frames",
+        "$.diagnostic_states[9].transition_evidence_frames",
+        "$.diagnostic_states[10].transition_evidence_frames",
+        "$.diagnostic_states[11].transition_evidence_frames",
+        "$.physics_validation_plan"
+      ],
+      "explicit_migration_changes": [
+        "compiler_version explicitly set to 5; this requires new native validation",
+        "Removed redundant initial-state pose/joint copies after exact equality check"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,3531 @@
+{
+  "scene_id": "assembly_0060",
+  "compiler_version": 5,
+  "units": "meters",
+  "up_axis": "Z",
+  "scale_assumptions": [
+    "没有尺度标定。以常见工作台高0.74米、宽1.80米、深0.80米作为尺度先验，尺寸可能存在约15%的误差。",
+    "小桌桌板估计为0.72×0.40×0.035米；深度主要依据翻转帧估计，不确定性较大。",
+    "四根桌腿均估计为0.36米长、0.04米见方。",
+    "工具估计总长0.17米；具体类型、尺寸和最终位置不确定。",
+    "初始四根腿沿Y方向平放、沿X方向并排，浅色自由端朝向镜头；连接端朝向属于推断。",
+    "同侧两腿的前后身份、拆卸次序及最终组内排序不能可靠区分；诊断使用固定的示意对应。",
+    "背景幕面、白板及墙面尺寸由常见教室设施尺寸和透视比例估计。",
+    "质量和连接强度均为仿真先验，不是RGB测量值；沿用已审核的质量与几何尺寸。"
+  ],
+  "geometry_limitations": [
+    "综合使用timeline-00至timeline-07全部八张时间线图及视频理解；没有恢复连续三维运动。",
+    "四根腿初始全部位于桌板右侧；后续显露的背侧腿没有被建模为新出现物体。",
+    "浅棕底面、中央标签和黑色使用面从初始即属于同一桌板。没有容器、抽屉或隐藏收纳物的证据。",
+    "四个薄环形连接座和四个腿端短轴仅示意四处安装位置；实际螺纹、孔深、材料及连接件构造不可辨认。",
+    "四个可分别启用和解除的固定约束近似已紧固螺接。它们连接桌板和对应桌腿，不连接工作台、地面或世界，不模拟螺纹旋入、紧固扭矩或卡扣。",
+    "初始和最终四个连接全部关闭，六个可移动资产均保持独立动态刚体、重力与实体碰撞。连接启用时不关闭相邻刚体碰撞。",
+    "连接强度1000牛及100牛米是未标定的约束上限，不代表实测承载能力；固定约束没有弹簧保持驱动。",
+    "腿采用实心方柱碰撞近似，内部是否中空未知。桌板采用板芯与边条，没有推断不可见内部构造。",
+    "薄环形标记和短轴为非碰撞视觉件，不构成可插入的真实孔洞；承载与连接由明确声明的实体碰撞和可拆约束负责。",
+    "所有源状态诊断图均为独立脚本位姿检查，不是操作轨迹、控制策略或物理验证结果。",
+    "本次仅修正诊断状态索引5中leg_2和leg_4的位置，使其符合既有桌板至桌腿局部连接框架；修正表达刚性连接一致性，不代表恢复了精确人类运动。其他资产几何、质量、锚点、参考框架、连接强度及无关诊断姿态保持不变。",
+    "旧版本原生证据不能作为本次更新规格的验证结果；原生v3探测不得改称v4结果。本次未运行新原生测试或策略评估，更新后的精确姿态仍需独立检查。",
+    "最终工具使用左侧范围内另一无初始几何相交的近似姿态，并非声称恢复精确源姿态或复用旧版本的完整静止结果。",
+    "背景仅包含可见墙面、白板、投影幕及其支撑，不添加未观察到的家具或人体。"
+  ],
+  "camera": {
+    "position": [
+      0.0,
+      -3.65,
+      1.62
+    ],
+    "target": [
+      0.0,
+      0.12,
+      1.05
+    ],
+    "vertical_fov_deg": 44.0
+  },
+  "orbit": {
+    "target": [
+      0.0,
+      0.0,
+      0.96
+    ],
+    "radius": 2.65,
+    "height": 1.65
+  },
+  "ground": {
+    "size": [
+      6.0,
+      6.0,
+      0.08
+    ],
+    "position": [
+      0.0,
+      0.0,
+      -0.04
+    ],
+    "color": [
+      0.075,
+      0.08,
+      0.09
+    ]
+  },
+  "assets": [
+    {
+      "id": "work_table",
+      "label_zh": "白色工作台及浅色金属框架",
+      "source_object_id": "work_table",
+      "evidence_frames": [
+        0,
+        2559,
+        2632,
+        2851,
+        5191
+      ],
+      "body_type": "static",
+      "mass_kg": 28.0,
+      "position": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parts": [
+        {
+          "id": "support_top",
+          "shape": "box",
+          "size": [
+            1.8,
+            0.8,
+            0.03
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.725
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.79,
+            0.81,
+            0.79
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "front_apron",
+          "shape": "box",
+          "size": [
+            1.7,
+            0.025,
+            0.065
+          ],
+          "position": [
+            0.0,
+            -0.345,
+            0.6775
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.65,
+            0.73,
+            0.76
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rear_apron",
+          "shape": "box",
+          "size": [
+            1.7,
+            0.025,
+            0.065
+          ],
+          "position": [
+            0.0,
+            0.345,
+            0.6775
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.65,
+            0.73,
+            0.76
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "left_apron",
+          "shape": "box",
+          "size": [
+            0.025,
+            0.665,
+            0.065
+          ],
+          "position": [
+            -0.8375,
+            0.0,
+            0.6775
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.65,
+            0.73,
+            0.76
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "right_apron",
+          "shape": "box",
+          "size": [
+            0.025,
+            0.665,
+            0.065
+          ],
+          "position": [
+            0.8375,
+            0.0,
+            0.6775
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.65,
+            0.73,
+            0.76
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "front_left_support",
+          "shape": "box",
+          "size": [
+            0.035,
+            0.035,
+            0.71
+          ],
+          "position": [
+            -0.8375,
+            -0.345,
+            0.355
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.69,
+            0.76,
+            0.78
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "front_right_support",
+          "shape": "box",
+          "size": [
+            0.035,
+            0.035,
+            0.71
+          ],
+          "position": [
+            0.8375,
+            -0.345,
+            0.355
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.69,
+            0.76,
+            0.78
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rear_left_support",
+          "shape": "box",
+          "size": [
+            0.035,
+            0.035,
+            0.71
+          ],
+          "position": [
+            -0.8375,
+            0.345,
+            0.355
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.69,
+            0.76,
+            0.78
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rear_right_support",
+          "shape": "box",
+          "size": [
+            0.035,
+            0.035,
+            0.71
+          ],
+          "position": [
+            0.8375,
+            0.345,
+            0.355
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.69,
+            0.76,
+            0.78
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        }
+      ],
+      "reconstruction_note": "原点位于台面中心正下方地面。台面上表面z=0.74米，桌下开放。保留已审核的支撑几何。"
+    },
+    {
+      "id": "tabletop_panel",
+      "label_zh": "黑边浅棕底面的小桌桌板",
+      "source_object_id": "tabletop_panel",
+      "evidence_frames": [
+        0,
+        146,
+        1222,
+        2525,
+        2549,
+        2559,
+        2632,
+        2778,
+        2851,
+        5191
+      ],
+      "body_type": "dynamic",
+      "mass_kg": 3.1,
+      "position": [
+        -0.07,
+        0.0,
+        0.7575
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parts": [
+        {
+          "id": "panel_core",
+          "shape": "box",
+          "size": [
+            0.708,
+            0.388,
+            0.031
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.002
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.6,
+            0.47,
+            0.25
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "black_use_surface",
+          "shape": "box",
+          "size": [
+            0.708,
+            0.388,
+            0.004
+          ],
+          "position": [
+            0.0,
+            0.0,
+            -0.0155
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.045,
+            0.048,
+            0.045
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "front_black_edge",
+          "shape": "box",
+          "size": [
+            0.72,
+            0.006,
+            0.035
+          ],
+          "position": [
+            0.0,
+            -0.197,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.045,
+            0.048,
+            0.045
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "rear_black_edge",
+          "shape": "box",
+          "size": [
+            0.72,
+            0.006,
+            0.035
+          ],
+          "position": [
+            0.0,
+            0.197,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.045,
+            0.048,
+            0.045
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "left_black_edge",
+          "shape": "box",
+          "size": [
+            0.006,
+            0.388,
+            0.035
+          ],
+          "position": [
+            -0.357,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.045,
+            0.048,
+            0.045
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "right_black_edge",
+          "shape": "box",
+          "size": [
+            0.006,
+            0.388,
+            0.035
+          ],
+          "position": [
+            0.357,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.045,
+            0.048,
+            0.045
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "underside_label",
+          "shape": "box",
+          "size": [
+            0.036,
+            0.022,
+            0.0004
+          ],
+          "position": [
+            0.025,
+            0.015,
+            0.0177
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.83,
+            0.81,
+            0.68
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "connection_seat_left_front",
+          "shape": "lathe",
+          "size": [
+            0.012,
+            0.012,
+            0.001
+          ],
+          "position": [
+            -0.335,
+            -0.175,
+            0.0175
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.36,
+            0.35,
+            0.3
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": [
+            [
+              0.0023,
+              0.0
+            ],
+            [
+              0.006,
+              0.0
+            ],
+            [
+              0.006,
+              0.001
+            ],
+            [
+              0.0023,
+              0.001
+            ],
+            [
+              0.0023,
+              0.0
+            ]
+          ],
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "connection_seat_left_rear",
+          "shape": "lathe",
+          "size": [
+            0.012,
+            0.012,
+            0.001
+          ],
+          "position": [
+            -0.335,
+            0.175,
+            0.0175
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.36,
+            0.35,
+            0.3
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": [
+            [
+              0.0023,
+              0.0
+            ],
+            [
+              0.006,
+              0.0
+            ],
+            [
+              0.006,
+              0.001
+            ],
+            [
+              0.0023,
+              0.001
+            ],
+            [
+              0.0023,
+              0.0
+            ]
+          ],
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "connection_seat_right_front",
+          "shape": "lathe",
+          "size": [
+            0.012,
+            0.012,
+            0.001
+          ],
+          "position": [
+            0.335,
+            -0.175,
+            0.0175
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.36,
+            0.35,
+            0.3
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": [
+            [
+              0.0023,
+              0.0
+            ],
+            [
+              0.006,
+              0.0
+            ],
+            [
+              0.006,
+              0.001
+            ],
+            [
+              0.0023,
+              0.001
+            ],
+            [
+              0.0023,
+              0.0
+            ]
+          ],
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "connection_seat_right_rear",
+          "shape": "lathe",
+          "size": [
+            0.012,
+            0.012,
+            0.001
+          ],
+          "position": [
+            0.335,
+            0.175,
+            0.0175
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.36,
+            0.35,
+            0.3
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": [
+            [
+              0.0023,
+              0.0
+            ],
+            [
+              0.006,
+              0.0
+            ],
+            [
+              0.006,
+              0.001
+            ],
+            [
+              0.0023,
+              0.001
+            ],
+            [
+              0.0023,
+              0.0
+            ]
+          ],
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        }
+      ],
+      "reconstruction_note": "原点为板件几何中心，局部+Z为浅棕底面，局部-Z为黑色使用面。初始黑色面接触工作台。四个连接座仅示意安装区域；真实螺孔未恢复。安装后由attachments中对应约束保持连接。"
+    },
+    {
+      "id": "leg_1",
+      "label_zh": "第一根黑色方柱桌腿",
+      "source_object_id": "leg_1",
+      "evidence_frames": [
+        0,
+        42,
+        73,
+        146,
+        512,
+        580,
+        2559,
+        3290,
+        3363,
+        5191
+      ],
+      "body_type": "dynamic",
+      "mass_kg": 0.32,
+      "position": [
+        0.39,
+        0.035,
+        0.76
+      ],
+      "rotation_deg": [
+        90.0,
+        0.0,
+        0.0
+      ],
+      "parts": [
+        {
+          "id": "leg_1_shaft",
+          "shape": "box",
+          "size": [
+            0.04,
+            0.04,
+            0.354
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.055,
+            0.06,
+            0.055
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "leg_1_free_end",
+          "shape": "box",
+          "size": [
+            0.04,
+            0.04,
+            0.003
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.1785
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.68,
+            0.62,
+            0.42
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "leg_1_mount_end",
+          "shape": "box",
+          "size": [
+            0.04,
+            0.04,
+            0.003
+          ],
+          "position": [
+            0.0,
+            0.0,
+            -0.1785
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.42,
+            0.37,
+            0.24
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "leg_1_inferred_captive_stud",
+          "shape": "cylinder",
+          "size": [
+            0.004,
+            0.004,
+            0.009
+          ],
+          "position": [
+            0.0,
+            0.0,
+            -0.1825
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.48,
+            0.48,
+            0.44
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        }
+      ],
+      "reconstruction_note": "原点为0.36米腿体中心，局部-Z为连接端。初始侧面接触台面。短轴是低置信度预置连接件示意；诊断约定此腿为左端先拆下者，真实身份不确定。"
+    },
+    {
+      "id": "leg_2",
+      "label_zh": "第二根黑色方柱桌腿",
+      "source_object_id": "leg_2",
+      "evidence_frames": [
+        0,
+        585,
+        613,
+        658,
+        731,
+        1170,
+        1222,
+        2559,
+        3436,
+        3948,
+        5191
+      ],
+      "body_type": "dynamic",
+      "mass_kg": 0.32,
+      "position": [
+        0.445,
+        0.035,
+        0.76
+      ],
+      "rotation_deg": [
+        90.0,
+        0.0,
+        0.0
+      ],
+      "parts": [
+        {
+          "id": "leg_2_shaft",
+          "shape": "box",
+          "size": [
+            0.04,
+            0.04,
+            0.354
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.055,
+            0.06,
+            0.055
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "leg_2_free_end",
+          "shape": "box",
+          "size": [
+            0.04,
+            0.04,
+            0.003
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.1785
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.68,
+            0.62,
+            0.42
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "leg_2_mount_end",
+          "shape": "box",
+          "size": [
+            0.04,
+            0.04,
+            0.003
+          ],
+          "position": [
+            0.0,
+            0.0,
+            -0.1785
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.42,
+            0.37,
+            0.24
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "leg_2_inferred_captive_stud",
+          "shape": "cylinder",
+          "size": [
+            0.004,
+            0.004,
+            0.009
+          ],
+          "position": [
+            0.0,
+            0.0,
+            -0.1825
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.48,
+            0.48,
+            0.44
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        }
+      ],
+      "reconstruction_note": "与第一根腿同形且保持独立动态刚体；遮挡时仍保留完整几何。前后角位和左端第二次拆卸身份均为示意对应。"
+    },
+    {
+      "id": "leg_3",
+      "label_zh": "第三根黑色方柱桌腿",
+      "source_object_id": "leg_3",
+      "evidence_frames": [
+        0,
+        1243,
+        1316,
+        1389,
+        1755,
+        1828,
+        2559,
+        4460,
+        4533,
+        4606,
+        5191
+      ],
+      "body_type": "dynamic",
+      "mass_kg": 0.32,
+      "position": [
+        0.5,
+        0.035,
+        0.76
+      ],
+      "rotation_deg": [
+        90.0,
+        0.0,
+        0.0
+      ],
+      "parts": [
+        {
+          "id": "leg_3_shaft",
+          "shape": "box",
+          "size": [
+            0.04,
+            0.04,
+            0.354
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.055,
+            0.06,
+            0.055
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "leg_3_free_end",
+          "shape": "box",
+          "size": [
+            0.04,
+            0.04,
+            0.003
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.1785
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.68,
+            0.62,
+            0.42
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "leg_3_mount_end",
+          "shape": "box",
+          "size": [
+            0.04,
+            0.04,
+            0.003
+          ],
+          "position": [
+            0.0,
+            0.0,
+            -0.1785
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.42,
+            0.37,
+            0.24
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "leg_3_inferred_captive_stud",
+          "shape": "cylinder",
+          "size": [
+            0.004,
+            0.004,
+            0.009
+          ],
+          "position": [
+            0.0,
+            0.0,
+            -0.1825
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.48,
+            0.48,
+            0.44
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        }
+      ],
+      "reconstruction_note": "初始为右侧四腿排列中的第三个示意位置；最终归入右侧两腿组。约定为右端先拆下者，真实组内身份不能确认。"
+    },
+    {
+      "id": "leg_4",
+      "label_zh": "第四根黑色方柱桌腿",
+      "source_object_id": "leg_4",
+      "evidence_frames": [
+        0,
+        1316,
+        1828,
+        1901,
+        1974,
+        2486,
+        2559,
+        2778,
+        4679,
+        5045,
+        5118,
+        5191
+      ],
+      "body_type": "dynamic",
+      "mass_kg": 0.32,
+      "position": [
+        0.555,
+        0.035,
+        0.76
+      ],
+      "rotation_deg": [
+        90.0,
+        0.0,
+        0.0
+      ],
+      "parts": [
+        {
+          "id": "leg_4_shaft",
+          "shape": "box",
+          "size": [
+            0.04,
+            0.04,
+            0.354
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.055,
+            0.06,
+            0.055
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "leg_4_free_end",
+          "shape": "box",
+          "size": [
+            0.04,
+            0.04,
+            0.003
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.1785
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.68,
+            0.62,
+            0.42
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "leg_4_mount_end",
+          "shape": "box",
+          "size": [
+            0.04,
+            0.04,
+            0.003
+          ],
+          "position": [
+            0.0,
+            0.0,
+            -0.1785
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.42,
+            0.37,
+            0.24
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "leg_4_inferred_captive_stud",
+          "shape": "cylinder",
+          "size": [
+            0.004,
+            0.004,
+            0.009
+          ],
+          "position": [
+            0.0,
+            0.0,
+            -0.1825
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.48,
+            0.48,
+            0.44
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        }
+      ],
+      "reconstruction_note": "初始即存在。最后一次拾取在抽样间隔内，翻转帧确认四腿同时存在。最终拆除其独立约束，保留动态刚体。"
+    },
+    {
+      "id": "hand_tool",
+      "label_zh": "黑柄细杆手工具",
+      "source_object_id": "hand_tool",
+      "evidence_frames": [
+        0,
+        580,
+        2549,
+        2592,
+        2778,
+        2851,
+        2925,
+        3995
+      ],
+      "body_type": "dynamic",
+      "mass_kg": 0.085,
+      "position": [
+        -0.435,
+        -0.245,
+        0.7505
+      ],
+      "rotation_deg": [
+        0.0,
+        90.0,
+        -10.0
+      ],
+      "parts": [
+        {
+          "id": "tool_handle",
+          "shape": "capsule",
+          "size": [
+            0.021,
+            0.021,
+            0.065
+          ],
+          "position": [
+            0.0,
+            0.0,
+            -0.0525
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.035,
+            0.04,
+            0.035
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "tool_collar",
+          "shape": "cylinder",
+          "size": [
+            0.012,
+            0.012,
+            0.008
+          ],
+          "position": [
+            0.0,
+            0.0,
+            -0.016
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.17,
+            0.18,
+            0.17
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "tool_metal_shaft",
+          "shape": "cylinder",
+          "size": [
+            0.0035,
+            0.0035,
+            0.09
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.033
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.59,
+            0.61,
+            0.6
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "tool_tip",
+          "shape": "box",
+          "size": [
+            0.004,
+            0.0015,
+            0.007
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.0815
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.46,
+            0.48,
+            0.47
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        }
+      ],
+      "reconstruction_note": "采用类似螺丝刀的柄、杆和扁端近似，不确认工具类型或实际使用方式。保留初始几何与位姿；最终另置于左前侧，避免已报告的杆尖与板边相交。"
+    },
+    {
+      "id": "rear_wall",
+      "label_zh": "浅灰色背景墙与踢脚线",
+      "source_object_id": "environment_wall",
+      "evidence_frames": [
+        0,
+        2632,
+        5191
+      ],
+      "body_type": "static",
+      "mass_kg": 600.0,
+      "position": [
+        0.0,
+        1.1,
+        0.0
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parts": [
+        {
+          "id": "wall_surface",
+          "shape": "box",
+          "size": [
+            4.8,
+            0.12,
+            2.8
+          ],
+          "position": [
+            0.0,
+            0.0,
+            1.4
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.68,
+            0.69,
+            0.68
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "wall_skirt",
+          "shape": "box",
+          "size": [
+            4.8,
+            0.025,
+            0.09
+          ],
+          "position": [
+            0.0,
+            -0.0725,
+            0.045
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.3,
+            0.33,
+            0.35
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        }
+      ],
+      "reconstruction_note": "仅重建可见背景墙区域，不推断完整房间或额外家具。"
+    },
+    {
+      "id": "projection_screen",
+      "label_zh": "背景投影幕与下方支撑",
+      "source_object_id": "projection_screen",
+      "evidence_frames": [
+        0,
+        2632,
+        5191
+      ],
+      "body_type": "static",
+      "mass_kg": 12.0,
+      "position": [
+        0.0,
+        0.94,
+        1.94
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parts": [
+        {
+          "id": "screen_fabric",
+          "shape": "box",
+          "size": [
+            1.25,
+            0.012,
+            0.91
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.77,
+            0.78,
+            0.77
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "screen_left_border",
+          "shape": "box",
+          "size": [
+            0.025,
+            0.035,
+            0.96
+          ],
+          "position": [
+            -0.6375,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.12,
+            0.14,
+            0.15
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "screen_right_border",
+          "shape": "box",
+          "size": [
+            0.025,
+            0.035,
+            0.96
+          ],
+          "position": [
+            0.6375,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.12,
+            0.14,
+            0.15
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "screen_top_border",
+          "shape": "box",
+          "size": [
+            1.25,
+            0.035,
+            0.025
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.4675
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.12,
+            0.14,
+            0.15
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "screen_bottom_border",
+          "shape": "box",
+          "size": [
+            1.25,
+            0.035,
+            0.025
+          ],
+          "position": [
+            0.0,
+            0.0,
+            -0.4675
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.12,
+            0.14,
+            0.15
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "screen_lower_rail",
+          "shape": "box",
+          "size": [
+            1.12,
+            0.045,
+            0.035
+          ],
+          "position": [
+            0.0,
+            0.035,
+            -0.505
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.5,
+            0.57,
+            0.59
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "screen_left_support",
+          "shape": "box",
+          "size": [
+            0.04,
+            0.045,
+            0.72
+          ],
+          "position": [
+            -0.53,
+            0.045,
+            -0.8825
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.62,
+            0.69,
+            0.7
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "screen_right_support",
+          "shape": "box",
+          "size": [
+            0.04,
+            0.045,
+            0.72
+          ],
+          "position": [
+            0.53,
+            0.045,
+            -0.8825
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.62,
+            0.69,
+            0.7
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        }
+      ],
+      "reconstruction_note": "幕面、边框及可见下方支撑分开建模，不添加未观察到的落地底座。"
+    },
+    {
+      "id": "left_whiteboard",
+      "label_zh": "背景左侧白板",
+      "source_object_id": "environment_left_whiteboard",
+      "evidence_frames": [
+        0,
+        2559,
+        5191
+      ],
+      "body_type": "static",
+      "mass_kg": 9.0,
+      "position": [
+        -1.28,
+        1.005,
+        1.7
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parts": [
+        {
+          "id": "left_board_surface",
+          "shape": "box",
+          "size": [
+            1.08,
+            0.018,
+            1.02
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.73,
+            0.75,
+            0.73
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "left_board_left_frame",
+          "shape": "box",
+          "size": [
+            0.018,
+            0.025,
+            1.056
+          ],
+          "position": [
+            -0.549,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.55,
+            0.6,
+            0.61
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "left_board_right_frame",
+          "shape": "box",
+          "size": [
+            0.018,
+            0.025,
+            1.056
+          ],
+          "position": [
+            0.549,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.55,
+            0.6,
+            0.61
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "left_board_upper_frame",
+          "shape": "box",
+          "size": [
+            1.08,
+            0.025,
+            0.018
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.519
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.55,
+            0.6,
+            0.61
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "left_board_lower_tray",
+          "shape": "box",
+          "size": [
+            1.116,
+            0.065,
+            0.018
+          ],
+          "position": [
+            0.0,
+            -0.02,
+            -0.519
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.55,
+            0.6,
+            0.61
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        }
+      ],
+      "reconstruction_note": "简化可见白板及窄托槽；边界和墙面夹角不确定。"
+    },
+    {
+      "id": "right_whiteboard",
+      "label_zh": "背景右侧白板",
+      "source_object_id": "environment_right_whiteboard",
+      "evidence_frames": [
+        0,
+        2559,
+        5191
+      ],
+      "body_type": "static",
+      "mass_kg": 9.0,
+      "position": [
+        1.28,
+        1.005,
+        1.7
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parts": [
+        {
+          "id": "right_board_surface",
+          "shape": "box",
+          "size": [
+            1.08,
+            0.018,
+            1.02
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.73,
+            0.75,
+            0.73
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "right_board_left_frame",
+          "shape": "box",
+          "size": [
+            0.018,
+            0.025,
+            1.056
+          ],
+          "position": [
+            -0.549,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.55,
+            0.6,
+            0.61
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "right_board_right_frame",
+          "shape": "box",
+          "size": [
+            0.018,
+            0.025,
+            1.056
+          ],
+          "position": [
+            0.549,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.55,
+            0.6,
+            0.61
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "right_board_upper_frame",
+          "shape": "box",
+          "size": [
+            1.08,
+            0.025,
+            0.018
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.519
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.55,
+            0.6,
+            0.61
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "right_board_lower_tray",
+          "shape": "box",
+          "size": [
+            1.116,
+            0.065,
+            0.018
+          ],
+          "position": [
+            0.0,
+            -0.02,
+            -0.519
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.55,
+            0.6,
+            0.61
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        }
+      ],
+      "reconstruction_note": "保留可见白板作为背景障碍与视觉上下文，不增加书写内容或额外物件。"
+    }
+  ],
+  "joints": [],
+  "attachments": [
+    {
+      "id": "panel_leg_1",
+      "parent": "tabletop_panel",
+      "child": "leg_1",
+      "parent_anchor": [
+        -0.335,
+        -0.175,
+        0.0175
+      ],
+      "child_anchor": [
+        0.0,
+        0.0,
+        -0.18
+      ],
+      "collision_enabled": true,
+      "break_force_N": 1000.0,
+      "break_torque_Nm": 100.0,
+      "reference_state_index": 4,
+      "approximation_note": "可拆固定约束近似第一根腿的已紧固连接；仅在对应安装状态启用。参考状态4两侧锚点均为世界坐标[-0.405,-0.175,0.775]，方向框架由该状态推导。没有恢复螺纹、扭矩或标定强度。"
+    },
+    {
+      "id": "panel_leg_2",
+      "parent": "tabletop_panel",
+      "child": "leg_2",
+      "parent_anchor": [
+        -0.335,
+        0.175,
+        0.0175
+      ],
+      "child_anchor": [
+        0.0,
+        0.0,
+        -0.18
+      ],
+      "collision_enabled": true,
+      "break_force_N": 1000.0,
+      "break_torque_Nm": 100.0,
+      "reference_state_index": 4,
+      "approximation_note": "可拆固定约束近似第二根腿的已紧固连接。参考状态4两侧锚点均为[-0.405,0.175,0.775]。初始分离腿的90度朝向不用于定义连接方向；前后身份是示意约定。"
+    },
+    {
+      "id": "panel_leg_3",
+      "parent": "tabletop_panel",
+      "child": "leg_3",
+      "parent_anchor": [
+        0.335,
+        -0.175,
+        0.0175
+      ],
+      "child_anchor": [
+        0.0,
+        0.0,
+        -0.18
+      ],
+      "collision_enabled": true,
+      "break_force_N": 1000.0,
+      "break_torque_Nm": 100.0,
+      "reference_state_index": 4,
+      "approximation_note": "可拆固定约束近似第三根腿的已紧固连接。参考状态4两侧锚点均为[0.265,-0.175,0.775]，方向框架从该已安装姿态推导。拆除此腿只解除本约束。"
+    },
+    {
+      "id": "panel_leg_4",
+      "parent": "tabletop_panel",
+      "child": "leg_4",
+      "parent_anchor": [
+        0.335,
+        0.175,
+        0.0175
+      ],
+      "child_anchor": [
+        0.0,
+        0.0,
+        -0.18
+      ],
+      "collision_enabled": true,
+      "break_force_N": 1000.0,
+      "break_torque_Nm": 100.0,
+      "reference_state_index": 4,
+      "approximation_note": "可拆固定约束近似第四根腿的已紧固连接。参考状态4两侧锚点均为[0.265,0.175,0.775]。保持到最后一根腿拆除；阈值为仿真先验，不能解释为源连接强度。"
+    }
+  ],
+  "diagnostic_states": [
+    {
+      "name_zh": "初始桌板倒置、四腿全部散放在右侧",
+      "kind": "initial",
+      "evidence_frames": [
+        0
+      ],
+      "poses": [],
+      "joint_positions": [],
+      "enabled_attachments": [],
+      "note": "索引0。四腿全部分离，工作台支撑全部任务物体；所有环境资产保持初始位姿。"
+    },
+    {
+      "name_zh": "左端第一根腿安装完成",
+      "kind": "reveal",
+      "evidence_frames": [
+        580
+      ],
+      "poses": [
+        {
+          "asset_id": "tabletop_panel",
+          "position": [
+            -0.07,
+            0.0,
+            0.7575
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "leg_1",
+          "position": [
+            -0.405,
+            -0.175,
+            0.955
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "leg_2",
+          "position": [
+            0.445,
+            0.035,
+            0.76
+          ],
+          "rotation_deg": [
+            90.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "leg_3",
+          "position": [
+            0.5,
+            0.035,
+            0.76
+          ],
+          "rotation_deg": [
+            90.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "leg_4",
+          "position": [
+            0.555,
+            0.035,
+            0.76
+          ],
+          "rotation_deg": [
+            90.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "hand_tool",
+          "position": [
+            -0.435,
+            -0.245,
+            0.7505
+          ],
+          "rotation_deg": [
+            0.0,
+            90.0,
+            -10.0
+          ]
+        }
+      ],
+      "joint_positions": [],
+      "enabled_attachments": [
+        "panel_leg_1"
+      ],
+      "note": "索引1。仅第一根腿的连接启用；前后角位是示意对应，剩余三腿继续独立平放。"
+    },
+    {
+      "name_zh": "左端两腿完成、右侧剩余两腿",
+      "kind": "reveal",
+      "evidence_frames": [
+        1222,
+        1227
+      ],
+      "poses": [
+        {
+          "asset_id": "tabletop_panel",
+          "position": [
+            -0.07,
+            0.0,
+            0.7575
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "leg_1",
+          "position": [
+            -0.405,
+            -0.175,
+            0.955
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "leg_2",
+          "position": [
+            -0.405,
+            0.175,
+            0.955
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "leg_3",
+          "position": [
+            0.5,
+            0.035,
+            0.76
+          ],
+          "rotation_deg": [
+            90.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "leg_4",
+          "position": [
+            0.555,
+            0.035,
+            0.76
+          ],
+          "rotation_deg": [
+            90.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "hand_tool",
+          "position": [
+            -0.435,
+            -0.245,
+            0.7505
+          ],
+          "rotation_deg": [
+            0.0,
+            90.0,
+            -10.0
+          ]
+        }
+      ],
+      "joint_positions": [],
+      "enabled_attachments": [
+        "panel_leg_1",
+        "panel_leg_2"
+      ],
+      "note": "索引2。左端重叠轮廓包含两根独立桌腿，两处连接均启用。"
+    },
+    {
+      "name_zh": "第三根腿已接合、最后一根仍在右侧",
+      "kind": "reveal",
+      "evidence_frames": [
+        1828
+      ],
+      "poses": [
+        {
+          "asset_id": "tabletop_panel",
+          "position": [
+            -0.07,
+            0.0,
+            0.7575
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "leg_1",
+          "position": [
+            -0.405,
+            -0.175,
+            0.955
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "leg_2",
+          "position": [
+            -0.405,
+            0.175,
+            0.955
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "leg_3",
+          "position": [
+            0.265,
+            -0.175,
+            0.955
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "leg_4",
+          "position": [
+            0.555,
+            0.035,
+            0.76
+          ],
+          "rotation_deg": [
+            90.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "hand_tool",
+          "position": [
+            -0.435,
+            -0.245,
+            0.7505
+          ],
+          "rotation_deg": [
+            0.0,
+            90.0,
+            -10.0
+          ]
+        }
+      ],
+      "joint_positions": [],
+      "enabled_attachments": [
+        "panel_leg_1",
+        "panel_leg_2",
+        "panel_leg_3"
+      ],
+      "note": "索引3。1828帧支持三腿接合及一腿散放的部件计数；第三处连接的精确紧固终点未确定，约束表示已接合的简化状态。"
+    },
+    {
+      "name_zh": "四腿装齐并保持倒置",
+      "kind": "reveal",
+      "evidence_frames": [
+        2525
+      ],
+      "poses": [
+        {
+          "asset_id": "tabletop_panel",
+          "position": [
+            -0.07,
+            0.0,
+            0.7575
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "leg_1",
+          "position": [
+            -0.405,
+            -0.175,
+            0.955
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "leg_2",
+          "position": [
+            -0.405,
+            0.175,
+            0.955
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "leg_3",
+          "position": [
+            0.265,
+            -0.175,
+            0.955
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "leg_4",
+          "position": [
+            0.265,
+            0.175,
+            0.955
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "hand_tool",
+          "position": [
+            -0.435,
+            -0.245,
+            0.7505
+          ],
+          "rotation_deg": [
+            0.0,
+            90.0,
+            -10.0
+          ]
+        }
+      ],
+      "joint_positions": [],
+      "enabled_attachments": [
+        "panel_leg_1",
+        "panel_leg_2",
+        "panel_leg_3",
+        "panel_leg_4"
+      ],
+      "note": "索引4，为四个attachment共同参考状态。板底面与四个腿连接端均在z=0.775米；各锚点精确重合，局部方向框架由本状态推导。"
+    },
+    {
+      "name_zh": "抬起翻转中显露完整底面与四腿",
+      "kind": "reveal",
+      "evidence_frames": [
+        2559
+      ],
+      "poses": [
+        {
+          "asset_id": "tabletop_panel",
+          "position": [
+            -0.07,
+            0.0,
+            1.12
+          ],
+          "rotation_deg": [
+            55.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "leg_1",
+          "position": [
+            -0.405,
+            -0.2622,
+            1.0899
+          ],
+          "rotation_deg": [
+            55.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "leg_2",
+          "position": [
+            -0.405,
+            -0.06140665238564282,
+            1.3766329539299051
+          ],
+          "rotation_deg": [
+            55.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "leg_3",
+          "position": [
+            0.265,
+            -0.2622,
+            1.0899
+          ],
+          "rotation_deg": [
+            55.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "leg_4",
+          "position": [
+            0.265,
+            -0.06140665238564282,
+            1.3766329539299051
+          ],
+          "rotation_deg": [
+            55.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "hand_tool",
+          "position": [
+            -0.435,
+            -0.245,
+            0.7505
+          ],
+          "rotation_deg": [
+            0.0,
+            90.0,
+            -10.0
+          ]
+        }
+      ],
+      "joint_positions": [],
+      "enabled_attachments": [
+        "panel_leg_1",
+        "panel_leg_2",
+        "panel_leg_3",
+        "panel_leg_4"
+      ],
+      "note": "索引5。源图支持手持翻转中四腿连接及底面显露；55度为示意姿态。根据提供的几何审计，仅修正leg_2与leg_4的位置，使其符合参考状态4所定义的同一刚性连接框架；两者原约5.967毫米的锚点不一致不再保留。leg_1、leg_3及其余姿态保持既有舍入值，四处连接全部保留。修正属于刚性几何一致性，不是精确人类运动恢复。悬空检查图不是静置证据；动态保持测试只能外部支撑桌板，不能直接保持桌腿。本次精确更新姿态尚无新原生测试结果，v3探测不得改称v4结果。"
+    },
+    {
+      "name_zh": "翻正后四腿支撑于工作台",
+      "kind": "reveal",
+      "evidence_frames": [
+        2683,
+        2705
+      ],
+      "poses": [
+        {
+          "asset_id": "tabletop_panel",
+          "position": [
+            -0.07,
+            0.0,
+            1.1175
+          ],
+          "rotation_deg": [
+            180.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "leg_1",
+          "position": [
+            -0.405,
+            0.175,
+            0.92
+          ],
+          "rotation_deg": [
+            180.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "leg_2",
+          "position": [
+            -0.405,
+            -0.175,
+            0.92
+          ],
+          "rotation_deg": [
+            180.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "leg_3",
+          "position": [
+            0.265,
+            0.175,
+            0.92
+          ],
+          "rotation_deg": [
+            180.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "leg_4",
+          "position": [
+            0.265,
+            -0.175,
+            0.92
+          ],
+          "rotation_deg": [
+            180.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "hand_tool",
+          "position": [
+            -0.435,
+            -0.245,
+            0.7505
+          ],
+          "rotation_deg": [
+            0.0,
+            90.0,
+            -10.0
+          ]
+        }
+      ],
+      "joint_positions": [],
+      "enabled_attachments": [
+        "panel_leg_1",
+        "panel_leg_2",
+        "panel_leg_3",
+        "panel_leg_4"
+      ],
+      "note": "索引6。四腿自由端到达台面z=0.74米，黑色使用面朝上，板下与腿间开放。新的静置验证须保留四处连接并移除外部支撑。"
+    },
+    {
+      "name_zh": "再次翻回底面朝上准备拆解",
+      "kind": "reveal",
+      "evidence_frames": [
+        2851
+      ],
+      "poses": [
+        {
+          "asset_id": "tabletop_panel",
+          "position": [
+            -0.07,
+            0.0,
+            0.7575
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "leg_1",
+          "position": [
+            -0.405,
+            -0.175,
+            0.955
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "leg_2",
+          "position": [
+            -0.405,
+            0.175,
+            0.955
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "leg_3",
+          "position": [
+            0.265,
+            -0.175,
+            0.955
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "leg_4",
+          "position": [
+            0.265,
+            0.175,
+            0.955
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "hand_tool",
+          "position": [
+            -0.495,
+            -0.2,
+            0.7505
+          ],
+          "rotation_deg": [
+            0.0,
+            90.0,
+            15.0
+          ]
+        }
+      ],
+      "joint_positions": [],
+      "enabled_attachments": [
+        "panel_leg_1",
+        "panel_leg_2",
+        "panel_leg_3",
+        "panel_leg_4"
+      ],
+      "note": "索引7。第二次翻转结束、四腿仍连接。工具位于左侧的姿态为近似，不推断其已用于松动连接。"
+    },
+    {
+      "name_zh": "左端第一根腿已拆下、其余三腿仍连接",
+      "kind": "reveal",
+      "evidence_frames": [
+        3363
+      ],
+      "poses": [
+        {
+          "asset_id": "tabletop_panel",
+          "position": [
+            -0.07,
+            0.0,
+            0.7575
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "leg_1",
+          "position": [
+            -0.555,
+            0.025,
+            0.76
+          ],
+          "rotation_deg": [
+            90.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "leg_2",
+          "position": [
+            -0.405,
+            0.175,
+            0.955
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "leg_3",
+          "position": [
+            0.265,
+            -0.175,
+            0.955
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "leg_4",
+          "position": [
+            0.265,
+            0.175,
+            0.955
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "hand_tool",
+          "position": [
+            -0.465,
+            -0.235,
+            0.7505
+          ],
+          "rotation_deg": [
+            0.0,
+            90.0,
+            25.0
+          ]
+        }
+      ],
+      "joint_positions": [],
+      "enabled_attachments": [
+        "panel_leg_2",
+        "panel_leg_3",
+        "panel_leg_4"
+      ],
+      "note": "索引8。3363帧对应左侧仅一根已分离；其平放位置是该落放阶段的近似。只关闭panel_leg_1，其他三个连接保留。leg_1代表左端先拆下者的身份约定，不能据此断言安装与拆卸身份对应。"
+    },
+    {
+      "name_zh": "左端两腿已拆下、右端两腿仍连接",
+      "kind": "reveal",
+      "evidence_frames": [
+        3995,
+        4000
+      ],
+      "poses": [
+        {
+          "asset_id": "tabletop_panel",
+          "position": [
+            -0.07,
+            0.0,
+            0.7575
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "leg_1",
+          "position": [
+            -0.555,
+            0.025,
+            0.76
+          ],
+          "rotation_deg": [
+            90.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "leg_2",
+          "position": [
+            -0.5,
+            0.025,
+            0.76
+          ],
+          "rotation_deg": [
+            90.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "leg_3",
+          "position": [
+            0.265,
+            -0.175,
+            0.955
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "leg_4",
+          "position": [
+            0.265,
+            0.175,
+            0.955
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "hand_tool",
+          "position": [
+            -0.465,
+            -0.235,
+            0.7505
+          ],
+          "rotation_deg": [
+            0.0,
+            90.0,
+            25.0
+          ]
+        }
+      ],
+      "joint_positions": [],
+      "enabled_attachments": [
+        "panel_leg_3",
+        "panel_leg_4"
+      ],
+      "note": "索引9。精确部件计数证据仅为3995及4000帧，3363帧不属于本状态。第二根左腿拆下时只新增关闭panel_leg_2。"
+    },
+    {
+      "name_zh": "右端只剩最后一根连接腿",
+      "kind": "reveal",
+      "evidence_frames": [
+        4606,
+        4679
+      ],
+      "poses": [
+        {
+          "asset_id": "tabletop_panel",
+          "position": [
+            -0.07,
+            0.0,
+            0.7575
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "leg_1",
+          "position": [
+            -0.555,
+            0.025,
+            0.76
+          ],
+          "rotation_deg": [
+            90.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "leg_2",
+          "position": [
+            -0.5,
+            0.025,
+            0.76
+          ],
+          "rotation_deg": [
+            90.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "leg_3",
+          "position": [
+            0.39,
+            0.025,
+            0.76
+          ],
+          "rotation_deg": [
+            90.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "leg_4",
+          "position": [
+            0.265,
+            0.175,
+            0.955
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "hand_tool",
+          "position": [
+            -0.465,
+            -0.235,
+            0.7505
+          ],
+          "rotation_deg": [
+            0.0,
+            90.0,
+            25.0
+          ]
+        }
+      ],
+      "joint_positions": [],
+      "enabled_attachments": [
+        "panel_leg_4"
+      ],
+      "note": "索引10。只剩一处连接；leg_3表示右端先拆下的腿是可视化约定。4533帧属于分离过程，不能作为平放完成的精确姿态证据。"
+    },
+    {
+      "name_zh": "全部拆解完成、四腿分列左右",
+      "kind": "final",
+      "evidence_frames": [
+        5154,
+        5159,
+        5166,
+        5191
+      ],
+      "poses": [
+        {
+          "asset_id": "tabletop_panel",
+          "position": [
+            -0.07,
+            0.0,
+            0.7575
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "leg_1",
+          "position": [
+            -0.555,
+            0.025,
+            0.76
+          ],
+          "rotation_deg": [
+            90.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "leg_2",
+          "position": [
+            -0.5,
+            0.025,
+            0.76
+          ],
+          "rotation_deg": [
+            90.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "leg_3",
+          "position": [
+            0.39,
+            0.025,
+            0.76
+          ],
+          "rotation_deg": [
+            90.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "leg_4",
+          "position": [
+            0.445,
+            0.025,
+            0.76
+          ],
+          "rotation_deg": [
+            90.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "asset_id": "hand_tool",
+          "position": [
+            -0.465,
+            -0.265,
+            0.7505
+          ],
+          "rotation_deg": [
+            0.0,
+            90.0,
+            0.0
+          ]
+        }
+      ],
+      "joint_positions": [],
+      "enabled_attachments": [],
+      "note": "索引11。四处连接全部关闭，桌板及四腿独立接触工作台。工具改为左前侧水平沿X放置，柄部最低点z=0.74米，工具整体Y范围约[-0.2755,-0.2545]，与桌板前边y=-0.20米及左侧散放腿均有几何间隙；此为源支持区域内的替代姿态，精确朝向不确定，尚待新版本原生静置验证。四个短轴随各腿、四个连接座随桌板保留，没有新增散落紧固件。"
+    }
+  ],
+  "action_summary_zh": "从桌板右侧依次取四根黑色方柱腿，先旋装左端两腿，再旋装右端两腿；对应可拆连接逐一启用。整桌抬起翻正并在工作台上短暂站立，再翻回浅棕底面朝上。随后左端第一腿、左端第二腿、右端第一腿及最后一腿依次拆除，每次只解除对应连接。最终四腿分组平放于桌板左右两侧。",
+  "final_state_description": "桌板底面朝上独立平放在工作台中央；四根桌腿全部分离、四处attachment全部关闭。leg_1和leg_2平放于左侧，leg_3和leg_4平放于右侧，同组身份排序仅为约定。工具采用左前侧具有几何间隙的近似位姿，其源末态朝向不确定。所有可移动物体保持动态、重力及实体碰撞；工作台、墙面、投影幕与白板保持原位。本次仅修正翻转诊断状态5中leg_2和leg_4的连接一致性位置，末态及其他v3修复保持不变；更新规格的原生检查、连接保持、独立释放及最终工具静置验证仍待执行，没有新增原生测试或策略结果。"
+}

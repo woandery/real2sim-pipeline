@@ -1,0 +1,341 @@
+{
+  "scene": {
+    "scene_id": "box_demo",
+    "compiler_version": 5,
+    "units": "meters",
+    "up_axis": "Z",
+    "scale_assumptions": [
+      "Synthetic 20cm box; no video-derived scale."
+    ],
+    "geometry_limitations": [
+      "Rigid fold approximation; no paperboard flex or tabs."
+    ],
+    "camera": {
+      "position": [
+        0.6,
+        -0.6,
+        0.5
+      ],
+      "target": [
+        0.0,
+        0.0,
+        0.05
+      ],
+      "vertical_fov_deg": 45.0
+    },
+    "orbit": {
+      "target": [
+        0.0,
+        0.0,
+        0.05
+      ],
+      "radius": 0.7,
+      "height": 0.4
+    },
+    "ground": {
+      "size": [
+        2.0,
+        2.0,
+        0.04
+      ],
+      "position": [
+        0.0,
+        0.0,
+        -0.02
+      ],
+      "color": [
+        0.3,
+        0.3,
+        0.3
+      ]
+    },
+    "assets": [
+      {
+        "id": "box",
+        "label_zh": "box",
+        "source_object_id": "box",
+        "evidence_frames": [
+          0,
+          29
+        ],
+        "body_type": "dynamic",
+        "mass_kg": 0.1,
+        "position": [
+          0.0,
+          0.0,
+          0.001
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "parts": [
+          {
+            "id": "bottom",
+            "shape": "box",
+            "size": [
+              0.2,
+              0.16,
+              0.004
+            ],
+            "position": [
+              0.0,
+              0.0,
+              0.002
+            ],
+            "rotation_deg": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "color": [
+              0.5,
+              0.35,
+              0.2
+            ],
+            "collision": true,
+            "opacity": 1.0
+          },
+          {
+            "id": "front",
+            "shape": "box",
+            "size": [
+              0.2,
+              0.004,
+              0.076
+            ],
+            "position": [
+              0.0,
+              -0.078,
+              0.042
+            ],
+            "rotation_deg": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "color": [
+              0.5,
+              0.35,
+              0.2
+            ],
+            "collision": true,
+            "opacity": 1.0
+          },
+          {
+            "id": "back",
+            "shape": "box",
+            "size": [
+              0.2,
+              0.004,
+              0.076
+            ],
+            "position": [
+              0.0,
+              0.078,
+              0.042
+            ],
+            "rotation_deg": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "color": [
+              0.5,
+              0.35,
+              0.2
+            ],
+            "collision": true,
+            "opacity": 1.0
+          },
+          {
+            "id": "left",
+            "shape": "box",
+            "size": [
+              0.004,
+              0.152,
+              0.076
+            ],
+            "position": [
+              -0.098,
+              0.0,
+              0.042
+            ],
+            "rotation_deg": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "color": [
+              0.5,
+              0.35,
+              0.2
+            ],
+            "collision": true,
+            "opacity": 1.0
+          },
+          {
+            "id": "right",
+            "shape": "box",
+            "size": [
+              0.004,
+              0.152,
+              0.076
+            ],
+            "position": [
+              0.098,
+              0.0,
+              0.042
+            ],
+            "rotation_deg": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "color": [
+              0.5,
+              0.35,
+              0.2
+            ],
+            "collision": true,
+            "opacity": 1.0
+          }
+        ],
+        "reconstruction_note": "Synthetic geometry for contract tests, not a reconstructed measurement."
+      },
+      {
+        "id": "lid",
+        "label_zh": "lid",
+        "source_object_id": "lid",
+        "evidence_frames": [
+          0,
+          29
+        ],
+        "body_type": "dynamic",
+        "mass_kg": 0.04,
+        "position": [
+          0.0,
+          0.08,
+          0.081
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "parts": [
+          {
+            "id": "panel",
+            "shape": "box",
+            "size": [
+              0.2,
+              0.16,
+              0.002
+            ],
+            "position": [
+              0.0,
+              -0.08,
+              0.001
+            ],
+            "rotation_deg": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "color": [
+              0.5,
+              0.35,
+              0.2
+            ],
+            "collision": true,
+            "opacity": 1.0
+          }
+        ],
+        "reconstruction_note": "Synthetic geometry for contract tests, not a reconstructed measurement."
+      }
+    ],
+    "joints": [
+      {
+        "id": "lid_hinge",
+        "type": "revolute",
+        "parent": "box",
+        "child": "lid",
+        "axis": "X",
+        "lower": -110.0,
+        "upper": 0.0,
+        "parent_anchor": [
+          0.0,
+          0.08,
+          0.08
+        ],
+        "child_anchor": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "initial_position": 0.0,
+        "drive": {
+          "stiffness": 10.0,
+          "damping": 2.0,
+          "max_force": 10.0
+        },
+        "collision_enabled": true
+      }
+    ],
+    "attachments": [],
+    "diagnostic_states": [
+      {
+        "name_zh": "闭合",
+        "kind": "initial",
+        "evidence_frames": [
+          0
+        ],
+        "poses": [],
+        "joint_positions": [],
+        "enabled_attachments": [],
+        "note": "Closed resting state."
+      },
+      {
+        "name_zh": "打开",
+        "kind": "final",
+        "evidence_frames": [
+          29
+        ],
+        "poses": [],
+        "joint_positions": [
+          {
+            "joint_id": "lid_hinge",
+            "value": -98.0
+          }
+        ],
+        "enabled_attachments": [],
+        "note": "Open driven-state approximation."
+      }
+    ],
+    "action_summary_zh": "打开盒盖",
+    "final_state_description": "盖子打开，盒体仍在地面。"
+  },
+  "validation": {
+    "rest_checks": [
+      {
+        "state_index": 0,
+        "rationale": "Supported"
+      },
+      {
+        "state_index": 1,
+        "rationale": "Supported with explicit drive"
+      }
+    ],
+    "sweeps": [
+      {
+        "joint_id": "lid_hinge",
+        "state_index": 0,
+        "end_position": -98.0,
+        "rationale": "Opening clearance"
+      }
+    ],
+    "excluded_states": [],
+    "additional_requirements": []
+  }
+}

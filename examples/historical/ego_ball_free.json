@@ -1,0 +1,3288 @@
+{
+  "scene_id": "ego_ball_free",
+  "compiler_version": 5,
+  "units": "meters",
+  "up_axis": "Z",
+  "scale_assumptions": [
+    "网球直径采用0.067 m、质量采用0.057 kg的不确定先验；实际直径可能为0.065–0.070 m，质量及材料参数未经实测。",
+    "水平面按有限静态板表达，上表面z=0.72 m，厚0.04 m，覆盖2.12×1.28 m；真实离地高度、厚度及画外边界未知，不添加推测桌腿。",
+    "两块墙板厚0.04 m、台面以上高1.78 m，内角暂设90度；内表面分别为y=0.38 m和x=0.32 m，尺寸与球墙距离均为估计。",
+    "初始球心z=0.91 m，高出台面0.19 m；代表性腾空位置及各接回位置是尺度先验下的近似快照，不是恢复出的世界轨迹。",
+    "保留原代表相机及50度垂直视场；源相机有轻微运动，单一相机不能精确匹配全部采样帧。",
+    "静态资产的质量字段只是格式占位先验，不代表测得的墙板或台面质量。"
+  ],
+  "geometry_limitations": [
+    "综合timeline-00至timeline-03全部四张拼图及提供的视频理解，覆盖0–299帧、9轮抛接与最终持球区间；第93、187帧的补充判断来自提供的理解。未发现隐藏内容、其他球、散件、容器或可开合机构。",
+    "本次修复限于球的可视表面、非碰撞接缝和印记，以及检查轨道。保留compiler_version=3、ball_body原生sphere、0.067 m等尺寸、全部原有资产变换、dynamic状态、0.057 kg质量、重力、碰撞及环境几何；ball_body仅改为opacity=0。",
+    "新增ball_visual_surface为共心非碰撞lathe，单位缩放，半径0.0335 m；65个轮廓点形成64个纬向区间，128个经向分段，两极以radius=0闭合。它只解决可视轮廓细分问题，不替换原生Sphere碰撞器。",
+    "接缝改为64段细短胶囊，沿球面起伏闭合曲线排列并浅嵌入可视表面，相邻端部重叠；微小表面起伏约为0.0001 m量级，不作为碰撞轮廓。3条短印记同样不碰撞，仅近似深色印字，不恢复文字内容。",
+    "网球使用单一刚体；内部结构、绒毛、弹性变形、摩擦与恢复系数未标定。源视频没有球台反弹证据，不据此调整反弹材料。",
+    "初始、接回及最终位置表示省略人体后的外部支撑快照。全部资产保持原声明的物理类型，不添加手、固定球的关节、隐形支撑或稳定器；直接推进物理时球会下落。",
+    "20个诊断状态仅供控制器摆姿、渲染和检查，不表示执行了抛接、抓握或机器人策略。所有诊断旋转保留为零，表示真实自转尚未恢复。",
+    "提供的revision 3原生证据确认球具有单个半径约0.0335000008 m的原生Sphere碰撞器，刚体与重力开启。初始、高位及最终快照的独立零速下落测试各执行1800个原生步、持续1.5 s，采用明确的1/1200 s步长及hybrid sweep/speculative CCD。",
+    "上述三个测试中，球与实际台面发生正接触冲量，逐步球面至台面间隙审计的最大穿透约为0.000000254065 m，即0.000254065 mm；最终球心约z=0.7535 m。渲染时钟与刚体变换不变性检查支持所提供的物理渲染证据。这些落台状态不是视频中的持球末态。",
+    "历史1/120 s粗步长高位释放曾出现约0.008843783 m穿透；该问题仅在明确的1/1200 s hybrid CCD配置下得到解决，不能把该结论推广到默认粗步长或未来未验证的高速运动。",
+    "本次可视网格不改变已验证碰撞几何与物理设置，因此无需重复不变的自由落体测试。已有物理证据对应提供的revision 3资产，本JSON没有声称重新运行测试或完成新的可视验收。",
+    "控制器仍需生成更新后的球体正视、侧视、顶视轮廓以及一张聚焦原生渲染，检查光滑轮廓、接缝贴合与物理状态同步；完成主要视觉批准后，再进行场景检查录制、完整帧解码与视觉检查。",
+    "检查轨道缩小至墙角内部，避免原检查视角被墙板遮挡；源相机保持不变。ground仅补全z=0基准，画外家具和不可见支撑结构均不推造。"
+  ],
+  "camera": {
+    "position": [
+      -0.34,
+      -0.43,
+      1.35
+    ],
+    "target": [
+      0.12,
+      0.49,
+      0.91
+    ],
+    "vertical_fov_deg": 50.0
+  },
+  "orbit": {
+    "target": [
+      -0.08,
+      0.03,
+      1.02
+    ],
+    "radius": 0.27,
+    "height": 1.28
+  },
+  "ground": {
+    "size": [
+      6.0,
+      6.0,
+      0.1
+    ],
+    "position": [
+      0.0,
+      0.0,
+      -0.05
+    ],
+    "color": [
+      0.48,
+      0.45,
+      0.39
+    ]
+  },
+  "assets": [
+    {
+      "id": "tennis_ball",
+      "label_zh": "带浅色弯曲接缝的黄绿色网球",
+      "source_object_id": "tennis_ball",
+      "evidence_frames": [
+        0,
+        6,
+        13,
+        38,
+        70,
+        93,
+        102,
+        140,
+        178,
+        184,
+        187,
+        210,
+        242,
+        274,
+        280,
+        299
+      ],
+      "body_type": "dynamic",
+      "mass_kg": 0.057,
+      "position": [
+        -0.1,
+        0.03,
+        0.91
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parts": [
+        {
+          "id": "ball_body",
+          "shape": "sphere",
+          "size": [
+            0.067,
+            0.067,
+            0.067
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.78,
+            0.86,
+            0.025
+          ],
+          "collision": true,
+          "opacity": 0.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "ball_visual_surface",
+          "shape": "lathe",
+          "size": [
+            0.067,
+            0.067,
+            0.067
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.78,
+            0.86,
+            0.025
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": [
+            [
+              0.0,
+              -0.0335
+            ],
+            [
+              0.001643768,
+              -0.033459648
+            ],
+            [
+              0.003283574,
+              -0.033338688
+            ],
+            [
+              0.004915969,
+              -0.033137344
+            ],
+            [
+              0.006535526,
+              -0.032856307
+            ],
+            [
+              0.008139836,
+              -0.032496048
+            ],
+            [
+              0.009724539,
+              -0.032057001
+            ],
+            [
+              0.01128581,
+              -0.031541724
+            ],
+            [
+              0.012819895,
+              -0.030949964
+            ],
+            [
+              0.014323091,
+              -0.030283642
+            ],
+            [
+              0.015791789,
+              -0.029544361
+            ],
+            [
+              0.017222443,
+              -0.028733908
+            ],
+            [
+              0.018611603,
+              -0.027854242
+            ],
+            [
+              0.01995593,
+              -0.026907452
+            ],
+            [
+              0.021252171,
+              -0.02589585
+            ],
+            [
+              0.022497215,
+              -0.024821864
+            ],
+            [
+              0.023688077,
+              -0.023688077
+            ],
+            [
+              0.024821864,
+              -0.022497215
+            ],
+            [
+              0.02589585,
+              -0.021252171
+            ],
+            [
+              0.026907452,
+              -0.01995593
+            ],
+            [
+              0.027854242,
+              -0.018611603
+            ],
+            [
+              0.028733908,
+              -0.017222443
+            ],
+            [
+              0.029544361,
+              -0.015791789
+            ],
+            [
+              0.030283642,
+              -0.014323091
+            ],
+            [
+              0.030949964,
+              -0.012819895
+            ],
+            [
+              0.031541724,
+              -0.01128581
+            ],
+            [
+              0.032057001,
+              -0.009724539
+            ],
+            [
+              0.032496048,
+              -0.008139836
+            ],
+            [
+              0.032856307,
+              -0.006535526
+            ],
+            [
+              0.033137344,
+              -0.004915969
+            ],
+            [
+              0.033338688,
+              -0.003283574
+            ],
+            [
+              0.033459648,
+              -0.001643768
+            ],
+            [
+              0.0335,
+              0.0
+            ],
+            [
+              0.033459648,
+              0.001643768
+            ],
+            [
+              0.033338688,
+              0.003283574
+            ],
+            [
+              0.033137344,
+              0.004915969
+            ],
+            [
+              0.032856307,
+              0.006535526
+            ],
+            [
+              0.032496048,
+              0.008139836
+            ],
+            [
+              0.032057001,
+              0.009724539
+            ],
+            [
+              0.031541724,
+              0.01128581
+            ],
+            [
+              0.030949964,
+              0.012819895
+            ],
+            [
+              0.030283642,
+              0.014323091
+            ],
+            [
+              0.029544361,
+              0.015791789
+            ],
+            [
+              0.028733908,
+              0.017222443
+            ],
+            [
+              0.027854242,
+              0.018611603
+            ],
+            [
+              0.026907452,
+              0.01995593
+            ],
+            [
+              0.02589585,
+              0.021252171
+            ],
+            [
+              0.024821864,
+              0.022497215
+            ],
+            [
+              0.023688077,
+              0.023688077
+            ],
+            [
+              0.022497215,
+              0.024821864
+            ],
+            [
+              0.021252171,
+              0.02589585
+            ],
+            [
+              0.01995593,
+              0.026907452
+            ],
+            [
+              0.018611603,
+              0.027854242
+            ],
+            [
+              0.017222443,
+              0.028733908
+            ],
+            [
+              0.015791789,
+              0.029544361
+            ],
+            [
+              0.014323091,
+              0.030283642
+            ],
+            [
+              0.012819895,
+              0.030949964
+            ],
+            [
+              0.01128581,
+              0.031541724
+            ],
+            [
+              0.009724539,
+              0.032057001
+            ],
+            [
+              0.008139836,
+              0.032496048
+            ],
+            [
+              0.006535526,
+              0.032856307
+            ],
+            [
+              0.004915969,
+              0.033137344
+            ],
+            [
+              0.003283574,
+              0.033338688
+            ],
+            [
+              0.001643768,
+              0.033459648
+            ],
+            [
+              0.0,
+              0.0335
+            ]
+          ],
+          "segments": 128,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_01",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00404
+          ],
+          "position": [
+            0.0333554,
+            0.0016387,
+            0.0009802
+          ],
+          "rotation_deg": [
+            0.0,
+            59.2,
+            93.814
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_02",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.004
+          ],
+          "position": [
+            0.0329234,
+            0.0048837,
+            0.0029029
+          ],
+          "rotation_deg": [
+            0.0,
+            60.1,
+            101.309
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_03",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00391
+          ],
+          "position": [
+            0.0320845,
+            0.0080366,
+            0.004714
+          ],
+          "rotation_deg": [
+            0.0,
+            62.0,
+            108.409
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_04",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00379
+          ],
+          "position": [
+            0.0308847,
+            0.0110509,
+            0.0063439
+          ],
+          "rotation_deg": [
+            0.0,
+            64.85,
+            114.897
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_05",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00366
+          ],
+          "position": [
+            0.0293827,
+            0.013897,
+            0.0077301
+          ],
+          "rotation_deg": [
+            0.0,
+            68.76,
+            120.617
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_06",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00353
+          ],
+          "position": [
+            0.0276403,
+            0.0165669,
+            0.0088192
+          ],
+          "rotation_deg": [
+            0.0,
+            73.74,
+            125.516
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_07",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00342
+          ],
+          "position": [
+            0.0257109,
+            0.019069,
+            0.0095694
+          ],
+          "rotation_deg": [
+            0.0,
+            79.73,
+            129.667
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_08",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00336
+          ],
+          "position": [
+            0.0236315,
+            0.0214183,
+            0.0099518
+          ],
+          "rotation_deg": [
+            0.0,
+            86.48,
+            133.286
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_09",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00336
+          ],
+          "position": [
+            0.0214183,
+            0.0236315,
+            0.0099518
+          ],
+          "rotation_deg": [
+            0.0,
+            93.52,
+            136.714
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_10",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00342
+          ],
+          "position": [
+            0.019069,
+            0.0257109,
+            0.0095694
+          ],
+          "rotation_deg": [
+            0.0,
+            100.27,
+            140.333
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_11",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00353
+          ],
+          "position": [
+            0.0165669,
+            0.0276403,
+            0.0088192
+          ],
+          "rotation_deg": [
+            0.0,
+            106.26,
+            144.484
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_12",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00366
+          ],
+          "position": [
+            0.013897,
+            0.0293827,
+            0.0077301
+          ],
+          "rotation_deg": [
+            0.0,
+            111.24,
+            149.383
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_13",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00379
+          ],
+          "position": [
+            0.0110509,
+            0.0308847,
+            0.0063439
+          ],
+          "rotation_deg": [
+            0.0,
+            115.15,
+            155.103
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_14",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00391
+          ],
+          "position": [
+            0.0080366,
+            0.0320845,
+            0.004714
+          ],
+          "rotation_deg": [
+            0.0,
+            118.0,
+            161.591
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_15",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.004
+          ],
+          "position": [
+            0.0048837,
+            0.0329234,
+            0.0029029
+          ],
+          "rotation_deg": [
+            0.0,
+            119.9,
+            168.691
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_16",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00404
+          ],
+          "position": [
+            0.0016387,
+            0.0333554,
+            0.0009802
+          ],
+          "rotation_deg": [
+            0.0,
+            120.8,
+            176.186
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_17",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00404
+          ],
+          "position": [
+            -0.0016387,
+            0.0333554,
+            -0.0009802
+          ],
+          "rotation_deg": [
+            0.0,
+            120.8,
+            -176.186
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_18",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.004
+          ],
+          "position": [
+            -0.0048837,
+            0.0329234,
+            -0.0029029
+          ],
+          "rotation_deg": [
+            0.0,
+            119.9,
+            -168.691
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_19",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00391
+          ],
+          "position": [
+            -0.0080366,
+            0.0320845,
+            -0.004714
+          ],
+          "rotation_deg": [
+            0.0,
+            118.0,
+            -161.591
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_20",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00379
+          ],
+          "position": [
+            -0.0110509,
+            0.0308847,
+            -0.0063439
+          ],
+          "rotation_deg": [
+            0.0,
+            115.15,
+            -155.103
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_21",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00366
+          ],
+          "position": [
+            -0.013897,
+            0.0293827,
+            -0.0077301
+          ],
+          "rotation_deg": [
+            0.0,
+            111.24,
+            -149.383
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_22",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00353
+          ],
+          "position": [
+            -0.0165669,
+            0.0276403,
+            -0.0088192
+          ],
+          "rotation_deg": [
+            0.0,
+            106.26,
+            -144.484
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_23",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00342
+          ],
+          "position": [
+            -0.019069,
+            0.0257109,
+            -0.0095694
+          ],
+          "rotation_deg": [
+            0.0,
+            100.27,
+            -140.333
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_24",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00336
+          ],
+          "position": [
+            -0.0214183,
+            0.0236315,
+            -0.0099518
+          ],
+          "rotation_deg": [
+            0.0,
+            93.52,
+            -136.714
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_25",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00336
+          ],
+          "position": [
+            -0.0236315,
+            0.0214183,
+            -0.0099518
+          ],
+          "rotation_deg": [
+            0.0,
+            86.48,
+            -133.286
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_26",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00342
+          ],
+          "position": [
+            -0.0257109,
+            0.019069,
+            -0.0095694
+          ],
+          "rotation_deg": [
+            0.0,
+            79.73,
+            -129.667
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_27",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00353
+          ],
+          "position": [
+            -0.0276403,
+            0.0165669,
+            -0.0088192
+          ],
+          "rotation_deg": [
+            0.0,
+            73.74,
+            -125.516
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_28",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00366
+          ],
+          "position": [
+            -0.0293827,
+            0.013897,
+            -0.0077301
+          ],
+          "rotation_deg": [
+            0.0,
+            68.76,
+            -120.617
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_29",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00379
+          ],
+          "position": [
+            -0.0308847,
+            0.0110509,
+            -0.0063439
+          ],
+          "rotation_deg": [
+            0.0,
+            64.85,
+            -114.897
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_30",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00391
+          ],
+          "position": [
+            -0.0320845,
+            0.0080366,
+            -0.004714
+          ],
+          "rotation_deg": [
+            0.0,
+            62.0,
+            -108.409
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_31",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.004
+          ],
+          "position": [
+            -0.0329234,
+            0.0048837,
+            -0.0029029
+          ],
+          "rotation_deg": [
+            0.0,
+            60.1,
+            -101.309
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_32",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00404
+          ],
+          "position": [
+            -0.0333554,
+            0.0016387,
+            -0.0009802
+          ],
+          "rotation_deg": [
+            0.0,
+            59.2,
+            -93.814
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_33",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00404
+          ],
+          "position": [
+            -0.0333554,
+            -0.0016387,
+            0.0009802
+          ],
+          "rotation_deg": [
+            0.0,
+            59.2,
+            -86.186
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_34",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.004
+          ],
+          "position": [
+            -0.0329234,
+            -0.0048837,
+            0.0029029
+          ],
+          "rotation_deg": [
+            0.0,
+            60.1,
+            -78.691
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_35",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00391
+          ],
+          "position": [
+            -0.0320845,
+            -0.0080366,
+            0.004714
+          ],
+          "rotation_deg": [
+            0.0,
+            62.0,
+            -71.591
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_36",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00379
+          ],
+          "position": [
+            -0.0308847,
+            -0.0110509,
+            0.0063439
+          ],
+          "rotation_deg": [
+            0.0,
+            64.85,
+            -65.103
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_37",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00366
+          ],
+          "position": [
+            -0.0293827,
+            -0.013897,
+            0.0077301
+          ],
+          "rotation_deg": [
+            0.0,
+            68.76,
+            -59.383
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_38",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00353
+          ],
+          "position": [
+            -0.0276403,
+            -0.0165669,
+            0.0088192
+          ],
+          "rotation_deg": [
+            0.0,
+            73.74,
+            -54.484
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_39",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00342
+          ],
+          "position": [
+            -0.0257109,
+            -0.019069,
+            0.0095694
+          ],
+          "rotation_deg": [
+            0.0,
+            79.73,
+            -50.333
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_40",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00336
+          ],
+          "position": [
+            -0.0236315,
+            -0.0214183,
+            0.0099518
+          ],
+          "rotation_deg": [
+            0.0,
+            86.48,
+            -46.714
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_41",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00336
+          ],
+          "position": [
+            -0.0214183,
+            -0.0236315,
+            0.0099518
+          ],
+          "rotation_deg": [
+            0.0,
+            93.52,
+            -43.286
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_42",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00342
+          ],
+          "position": [
+            -0.019069,
+            -0.0257109,
+            0.0095694
+          ],
+          "rotation_deg": [
+            0.0,
+            100.27,
+            -39.667
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_43",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00353
+          ],
+          "position": [
+            -0.0165669,
+            -0.0276403,
+            0.0088192
+          ],
+          "rotation_deg": [
+            0.0,
+            106.26,
+            -35.516
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_44",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00366
+          ],
+          "position": [
+            -0.013897,
+            -0.0293827,
+            0.0077301
+          ],
+          "rotation_deg": [
+            0.0,
+            111.24,
+            -30.617
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_45",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00379
+          ],
+          "position": [
+            -0.0110509,
+            -0.0308847,
+            0.0063439
+          ],
+          "rotation_deg": [
+            0.0,
+            115.15,
+            -24.897
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_46",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00391
+          ],
+          "position": [
+            -0.0080366,
+            -0.0320845,
+            0.004714
+          ],
+          "rotation_deg": [
+            0.0,
+            118.0,
+            -18.409
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_47",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.004
+          ],
+          "position": [
+            -0.0048837,
+            -0.0329234,
+            0.0029029
+          ],
+          "rotation_deg": [
+            0.0,
+            119.9,
+            -11.309
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_48",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00404
+          ],
+          "position": [
+            -0.0016387,
+            -0.0333554,
+            0.0009802
+          ],
+          "rotation_deg": [
+            0.0,
+            120.8,
+            -3.814
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_49",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00404
+          ],
+          "position": [
+            0.0016387,
+            -0.0333554,
+            -0.0009802
+          ],
+          "rotation_deg": [
+            0.0,
+            120.8,
+            3.814
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_50",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.004
+          ],
+          "position": [
+            0.0048837,
+            -0.0329234,
+            -0.0029029
+          ],
+          "rotation_deg": [
+            0.0,
+            119.9,
+            11.309
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_51",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00391
+          ],
+          "position": [
+            0.0080366,
+            -0.0320845,
+            -0.004714
+          ],
+          "rotation_deg": [
+            0.0,
+            118.0,
+            18.409
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_52",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00379
+          ],
+          "position": [
+            0.0110509,
+            -0.0308847,
+            -0.0063439
+          ],
+          "rotation_deg": [
+            0.0,
+            115.15,
+            24.897
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_53",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00366
+          ],
+          "position": [
+            0.013897,
+            -0.0293827,
+            -0.0077301
+          ],
+          "rotation_deg": [
+            0.0,
+            111.24,
+            30.617
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_54",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00353
+          ],
+          "position": [
+            0.0165669,
+            -0.0276403,
+            -0.0088192
+          ],
+          "rotation_deg": [
+            0.0,
+            106.26,
+            35.516
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_55",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00342
+          ],
+          "position": [
+            0.019069,
+            -0.0257109,
+            -0.0095694
+          ],
+          "rotation_deg": [
+            0.0,
+            100.27,
+            39.667
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_56",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00336
+          ],
+          "position": [
+            0.0214183,
+            -0.0236315,
+            -0.0099518
+          ],
+          "rotation_deg": [
+            0.0,
+            93.52,
+            43.286
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_57",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00336
+          ],
+          "position": [
+            0.0236315,
+            -0.0214183,
+            -0.0099518
+          ],
+          "rotation_deg": [
+            0.0,
+            86.48,
+            46.714
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_58",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00342
+          ],
+          "position": [
+            0.0257109,
+            -0.019069,
+            -0.0095694
+          ],
+          "rotation_deg": [
+            0.0,
+            79.73,
+            50.333
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_59",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00353
+          ],
+          "position": [
+            0.0276403,
+            -0.0165669,
+            -0.0088192
+          ],
+          "rotation_deg": [
+            0.0,
+            73.74,
+            54.484
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_60",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00366
+          ],
+          "position": [
+            0.0293827,
+            -0.013897,
+            -0.0077301
+          ],
+          "rotation_deg": [
+            0.0,
+            68.76,
+            59.383
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_61",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00379
+          ],
+          "position": [
+            0.0308847,
+            -0.0110509,
+            -0.0063439
+          ],
+          "rotation_deg": [
+            0.0,
+            64.85,
+            65.103
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_62",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00391
+          ],
+          "position": [
+            0.0320845,
+            -0.0080366,
+            -0.004714
+          ],
+          "rotation_deg": [
+            0.0,
+            62.0,
+            71.591
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_63",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.004
+          ],
+          "position": [
+            0.0329234,
+            -0.0048837,
+            -0.0029029
+          ],
+          "rotation_deg": [
+            0.0,
+            60.1,
+            78.691
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "seam_64",
+          "shape": "capsule",
+          "size": [
+            0.00022,
+            0.00022,
+            0.00404
+          ],
+          "position": [
+            0.0333554,
+            -0.0016387,
+            -0.0009802
+          ],
+          "rotation_deg": [
+            0.0,
+            59.2,
+            86.186
+          ],
+          "color": [
+            0.84,
+            0.85,
+            0.65
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "print_stroke_01",
+          "shape": "capsule",
+          "size": [
+            0.0003,
+            0.0003,
+            0.002
+          ],
+          "position": [
+            -0.002,
+            -0.032113,
+            -0.009
+          ],
+          "rotation_deg": [
+            16.0,
+            -3.6,
+            0.0
+          ],
+          "color": [
+            0.16,
+            0.19,
+            0.065
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "print_stroke_02",
+          "shape": "capsule",
+          "size": [
+            0.0003,
+            0.0003,
+            0.0022
+          ],
+          "position": [
+            0.0,
+            -0.032175,
+            -0.009
+          ],
+          "rotation_deg": [
+            16.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.16,
+            0.19,
+            0.065
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        },
+        {
+          "id": "print_stroke_03",
+          "shape": "capsule",
+          "size": [
+            0.0003,
+            0.0003,
+            0.0018
+          ],
+          "position": [
+            0.002,
+            -0.032113,
+            -0.009
+          ],
+          "rotation_deg": [
+            16.0,
+            3.6,
+            0.0
+          ],
+          "color": [
+            0.16,
+            0.19,
+            0.065
+          ],
+          "collision": false,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        }
+      ],
+      "reconstruction_note": "资产原点为球心，全部69个部件使用局部坐标，仅ball_body参与碰撞。保留原生USD Sphere及0.0335 m碰撞半径；其透明度为0，刚体、重力及碰撞仍开启。共心lathe仅负责光滑可视球面，scale=[1,1,1]，不得以包围盒重新缩放或替换碰撞器；轮廓绕局部Z旋转并采用平滑表面法线。64段接缝与3条印记浅嵌于表面，作为同一刚体的非碰撞外观件，不赋予独立质量，不触发惯量重算或额外碰撞。哑光绒面为外观意图，未调整未标定材料。初始球底z=0.8765 m，高出台面0.1565 m；这是省略手后的源持球位置，不能作为无支撑静止状态。"
+    },
+    {
+      "id": "horizontal_surface",
+      "label_zh": "浅蜂蜜黄色水平支撑板",
+      "source_object_id": "horizontal_surface",
+      "evidence_frames": [
+        0,
+        25,
+        89,
+        93,
+        153,
+        187,
+        229,
+        280,
+        299
+      ],
+      "body_type": "static",
+      "mass_kg": 25.0,
+      "position": [
+        -0.74,
+        -0.26,
+        0.7
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parts": [
+        {
+          "id": "surface_slab",
+          "shape": "box",
+          "size": [
+            2.12,
+            1.28,
+            0.04
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.69,
+            0.49,
+            0.24
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        }
+      ],
+      "reconstruction_note": "保留原板体全部几何与物理属性。原点为板中心，上表面z=0.72 m，覆盖x=-1.80至0.32、y=-0.90至0.38。前缘、左缘及厚度不可见，采用有限静态板，不添加推测支腿。源序列未见球与台面接触；独立自由落体测试中的接触不改变源动作解释。"
+    },
+    {
+      "id": "back_panel",
+      "label_zh": "后方浅米色竖直墙板",
+      "source_object_id": "back_panel",
+      "evidence_frames": [
+        0,
+        38,
+        93,
+        102,
+        178,
+        187,
+        242,
+        280,
+        299
+      ],
+      "body_type": "static",
+      "mass_kg": 70.0,
+      "position": [
+        -0.74,
+        0.4,
+        1.61
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parts": [
+        {
+          "id": "back_wall_slab",
+          "shape": "box",
+          "size": [
+            2.12,
+            0.04,
+            1.78
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.67,
+            0.54,
+            0.41
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        }
+      ],
+      "reconstruction_note": "保留原板体全部几何与物理属性。原点为板中心，内表面y=0.38，下缘z=0.72，上缘z=2.50。画外扩展只用于覆盖源视野，不代表房间测量；没有开口、活动机构或隐藏内容证据。"
+    },
+    {
+      "id": "right_panel",
+      "label_zh": "右侧米灰色竖直墙板",
+      "source_object_id": "right_panel",
+      "evidence_frames": [
+        0,
+        70,
+        93,
+        140,
+        187,
+        204,
+        274,
+        280,
+        299
+      ],
+      "body_type": "static",
+      "mass_kg": 50.0,
+      "position": [
+        0.34,
+        -0.24,
+        1.61
+      ],
+      "rotation_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parts": [
+        {
+          "id": "right_wall_slab",
+          "shape": "box",
+          "size": [
+            0.04,
+            1.32,
+            1.78
+          ],
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "color": [
+            0.58,
+            0.47,
+            0.36
+          ],
+          "collision": true,
+          "opacity": 1.0,
+          "profile": null,
+          "segments": null,
+          "convex_sectors": null,
+          "convex_hull": null,
+          "contact_offset_m": null,
+          "rest_offset_m": null
+        }
+      ],
+      "reconstruction_note": "保留原板体全部几何与物理属性。原点为板中心，内表面x=0.32，y范围-0.90至0.42，下缘z=0.72；与后墙端面齐接。墙角暗缝由板体交界和照明表达，不推断铰链或添加装饰杆。检查相机轨道位于x=-0.35至0.19、y=-0.24至0.30的墙内空间，避免穿墙导致遮挡。"
+    }
+  ],
+  "joints": [],
+  "attachments": [],
+  "diagnostic_states": [
+    {
+      "name_zh": "初始外部支撑持球快照",
+      "kind": "initial",
+      "evidence_frames": [
+        0
+      ],
+      "poses": [],
+      "joint_positions": [],
+      "enabled_attachments": [],
+      "note": "S00：第0帧保留持球判断，接触边界受模糊影响。人体省略；仅摆姿检查，动态推进时自由下落。已有原生零速释放证据不表示源中主动放球。"
+    },
+    {
+      "name_zh": "第1轮明确腾空",
+      "kind": "reveal",
+      "evidence_frames": [
+        6
+      ],
+      "poses": [
+        {
+          "asset_id": "tennis_ball",
+          "position": [
+            -0.1,
+            0.07,
+            1.15
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "joint_positions": [],
+      "enabled_attachments": [],
+      "note": "S01：第6帧明显离手，保留原高位。已有该位置的1/1200 s hybrid CCD下落与接触证据；零初速度只是测试条件，不代表真实最高点或抛出速度。"
+    },
+    {
+      "name_zh": "第1轮接回",
+      "kind": "reveal",
+      "evidence_frames": [
+        13,
+        19,
+        25
+      ],
+      "poses": [
+        {
+          "asset_id": "tennis_ball",
+          "position": [
+            -0.09,
+            0.04,
+            0.92
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "joint_positions": [],
+      "enabled_attachments": [],
+      "note": "S02：接回后短暂停留与握持调整，为外部手支撑快照，球未放到台面。"
+    },
+    {
+      "name_zh": "第2轮明确腾空",
+      "kind": "reveal",
+      "evidence_frames": [
+        32,
+        38
+      ],
+      "poses": [
+        {
+          "asset_id": "tennis_ball",
+          "position": [
+            -0.1,
+            0.07,
+            1.13
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "joint_positions": [],
+      "enabled_attachments": [],
+      "note": "S03：代表第38帧明确分离；第32帧是否仍有指尖接触不确定。仅示意位置，未恢复速度。"
+    },
+    {
+      "name_zh": "第2轮接回",
+      "kind": "reveal",
+      "evidence_frames": [
+        45,
+        51,
+        57
+      ],
+      "poses": [
+        {
+          "asset_id": "tennis_ball",
+          "position": [
+            -0.1,
+            0.03,
+            0.91
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "joint_positions": [],
+      "enabled_attachments": [],
+      "note": "S04：接回后在台面上方握持，人体支撑不建模。"
+    },
+    {
+      "name_zh": "第3轮明确腾空",
+      "kind": "reveal",
+      "evidence_frames": [
+        64,
+        70
+      ],
+      "poses": [
+        {
+          "asset_id": "tennis_ball",
+          "position": [
+            -0.06,
+            0.08,
+            1.13
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "joint_positions": [],
+      "enabled_attachments": [],
+      "note": "S05：代表第70帧；第64帧完全释放与否仍不确定。"
+    },
+    {
+      "name_zh": "第3轮接回并停留",
+      "kind": "reveal",
+      "evidence_frames": [
+        76,
+        83,
+        89,
+        93,
+        95
+      ],
+      "poses": [
+        {
+          "asset_id": "tennis_ball",
+          "position": [
+            -0.08,
+            0.03,
+            0.91
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "joint_positions": [],
+      "enabled_attachments": [],
+      "note": "S06：第76帧已接回，第93帧补充理解确认轮间持球；没有额外抛接或新物体。"
+    },
+    {
+      "name_zh": "第4轮明确腾空",
+      "kind": "reveal",
+      "evidence_frames": [
+        102,
+        108
+      ],
+      "poses": [
+        {
+          "asset_id": "tennis_ball",
+          "position": [
+            -0.11,
+            0.07,
+            1.13
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "joint_positions": [],
+      "enabled_attachments": [],
+      "note": "S07：代表第102帧；第108帧球更靠近张开的手，精确速度与接触时刻未恢复。"
+    },
+    {
+      "name_zh": "第4轮接回",
+      "kind": "reveal",
+      "evidence_frames": [
+        115,
+        121,
+        127
+      ],
+      "poses": [
+        {
+          "asset_id": "tennis_ball",
+          "position": [
+            -0.11,
+            0.03,
+            0.91
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "joint_positions": [],
+      "enabled_attachments": [],
+      "note": "S08：外部手支撑下接回并停留，球仍高于台面。"
+    },
+    {
+      "name_zh": "第5轮明确腾空",
+      "kind": "reveal",
+      "evidence_frames": [
+        134,
+        140
+      ],
+      "poses": [
+        {
+          "asset_id": "tennis_ball",
+          "position": [
+            -0.1,
+            0.07,
+            1.11
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "joint_positions": [],
+      "enabled_attachments": [],
+      "note": "S09：两个采样帧均显示球手分离；该位姿是代表状态，最高点未知。"
+    },
+    {
+      "name_zh": "第5轮接回并停留",
+      "kind": "reveal",
+      "evidence_frames": [
+        146,
+        153,
+        159,
+        165,
+        172
+      ],
+      "poses": [
+        {
+          "asset_id": "tennis_ball",
+          "position": [
+            -0.1,
+            0.03,
+            0.9
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "joint_positions": [],
+      "enabled_attachments": [],
+      "note": "S10：连续采样支持接回后持续握持，没有台面放置。"
+    },
+    {
+      "name_zh": "第6轮明确腾空",
+      "kind": "reveal",
+      "evidence_frames": [
+        178,
+        184
+      ],
+      "poses": [
+        {
+          "asset_id": "tennis_ball",
+          "position": [
+            -0.07,
+            0.08,
+            1.1
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "joint_positions": [],
+      "enabled_attachments": [],
+      "note": "S11：球在张开的手上方腾空，保留动态类型，快照不拟合真实速度或旋转。"
+    },
+    {
+      "name_zh": "第6轮接近指尖",
+      "kind": "reveal",
+      "evidence_frames": [
+        187
+      ],
+      "poses": [
+        {
+          "asset_id": "tennis_ball",
+          "position": [
+            -0.07,
+            0.06,
+            0.99
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "joint_positions": [],
+      "enabled_attachments": [],
+      "note": "S12：提供的视频理解显示球下缘靠近张开的指尖，首次接触不明确，不能标为已接回。"
+    },
+    {
+      "name_zh": "第6轮接回",
+      "kind": "reveal",
+      "evidence_frames": [
+        191,
+        197,
+        204
+      ],
+      "poses": [
+        {
+          "asset_id": "tennis_ball",
+          "position": [
+            -0.09,
+            0.03,
+            0.91
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "joint_positions": [],
+      "enabled_attachments": [],
+      "note": "S13：第191帧及后续支持完成接回，为省略手后的外部支撑快照。"
+    },
+    {
+      "name_zh": "第7轮明确腾空",
+      "kind": "reveal",
+      "evidence_frames": [
+        210,
+        216
+      ],
+      "poses": [
+        {
+          "asset_id": "tennis_ball",
+          "position": [
+            -0.09,
+            0.06,
+            1.05
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "joint_positions": [],
+      "enabled_attachments": [],
+      "note": "S14：代表第210帧离手状态；第216帧是否已接触指尖不确定。"
+    },
+    {
+      "name_zh": "第7轮接回",
+      "kind": "reveal",
+      "evidence_frames": [
+        223,
+        229,
+        235
+      ],
+      "poses": [
+        {
+          "asset_id": "tennis_ball",
+          "position": [
+            -0.08,
+            0.03,
+            0.9
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "joint_positions": [],
+      "enabled_attachments": [],
+      "note": "S15：外部手支撑下接回并准备下一轮；不添加抓握附件。"
+    },
+    {
+      "name_zh": "第8轮明确腾空",
+      "kind": "reveal",
+      "evidence_frames": [
+        242
+      ],
+      "poses": [
+        {
+          "asset_id": "tennis_ball",
+          "position": [
+            -0.06,
+            0.08,
+            1.13
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "joint_positions": [],
+      "enabled_attachments": [],
+      "note": "S16：该轮仅有一张明确腾空采样，保留代表位姿，不补造轨迹。"
+    },
+    {
+      "name_zh": "第8轮接回",
+      "kind": "reveal",
+      "evidence_frames": [
+        248,
+        254,
+        261,
+        267
+      ],
+      "poses": [
+        {
+          "asset_id": "tennis_ball",
+          "position": [
+            -0.08,
+            0.03,
+            0.91
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "joint_positions": [],
+      "enabled_attachments": [],
+      "note": "S17：第248帧接回，随后握持至下一轮附近。"
+    },
+    {
+      "name_zh": "第9轮明确腾空",
+      "kind": "reveal",
+      "evidence_frames": [
+        274
+      ],
+      "poses": [
+        {
+          "asset_id": "tennis_ball",
+          "position": [
+            -0.03,
+            0.08,
+            1.12
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "joint_positions": [],
+      "enabled_attachments": [],
+      "note": "S18：最后一轮明确离手，未见撞墙或落台；与S01共用保留的源相机进行早晚腾空外观比较。"
+    },
+    {
+      "name_zh": "最后接回并持续外部支撑",
+      "kind": "final",
+      "evidence_frames": [
+        280,
+        286,
+        293,
+        299
+      ],
+      "poses": [
+        {
+          "asset_id": "tennis_ball",
+          "position": [
+            -0.08,
+            0.03,
+            0.91
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "joint_positions": [],
+      "enabled_attachments": [],
+      "note": "S19：第280帧确认最后接回，后续持球至第299帧。源末态球底高出台面0.1565 m，需要被省略的手支撑；保留dynamic，独立释放后的落台结果不能替代此源末态。环境保持初始位置。"
+    }
+  ],
+  "action_summary_zh": "同一个黄绿色网球在浅黄色水平面上方完成9轮可辨识的左手轻抛与接回，区间约为0–13、25–45、57–76、95–115、127–146、172–191、204–223、235–248、267–280帧；轮间有握持停留与调整，最后接回后持续持球至第299帧。右手未见参与接球，未见落台、撞墙、换手或收进容器。保留S00–S19全部20个诊断状态及原位置，只修复球体视觉细分、非碰撞接缝和印记，并调整检查轨道避免墙板遮挡。摆姿与原生自由落体检查均不表示完成抛接策略。",
+  "final_state_description": "第280帧最后接回后，唯一的tennis_ball持续由左手支撑至第299帧，源末态中心保持[-0.08,0.03,0.91]，位于台面上方；水平板与两块墙板保持原位，没有新增或隐藏物件。人体及隐形固定装置不建模，动态球直接推进时可自由下落。已有接触问题仅在明确的1/1200 s hybrid CCD配置下得到解决。本次保留该物理几何，增加高密度非碰撞球面并细化表面标记；更新的轮廓图、聚焦原生渲染及随后录制仍需控制器完成，不声称新的视觉验收、粗步长验证或机器人执行已完成。"
+}

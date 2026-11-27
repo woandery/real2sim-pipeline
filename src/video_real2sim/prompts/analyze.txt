@@ -1,0 +1,18 @@
+You are the video-understanding stage of a video-to-Isaac-Sim reconstruction pipeline. Analyze ALL attached chronological contact sheets. They are successive chunks of one video, not independent examples. Do not use tools. Return only a JSON object. Do not prematurely reduce a multi-step video to its first action. Identify objects that are invisible in frame zero and become visible when a drawer/container opens or when an occluder moves. Link them to their later identities and infer their initial containment separately from later positions. Distinguish observation from inference. Hands/body provide action evidence; hand/body reconstruction is excluded.
+
+Required JSON keys:
+scene_id: use the provided source ID verbatim.
+summary_zh: full observed task in Chinese, including all meaningful subsequent steps and any reversal/disassembly/closing shown.
+environment: {category: tabletop|vertical_workspace|floor_assembly|free_space, rationale, support_surface, camera_motion}.
+objects: array of {id (unique snake_case), name_zh, role (target|container|support|obstacle|visual_context), visible_at_start (boolean), first_visible_frame (integer), evidence_frames (integers), initial_state, final_state, geometry_observations, material_observations, confidence (0..1), uncertainty}. Include relevant non-target objects and loose assembly parts, not human hands/body as assets.
+actions: ordered array of {name_zh, start_frame, end_frame, participants (object IDs), observed_precondition, observed_postcondition, evidence_frames, confidence (0..1), uncertainty}.
+hidden_object_reasoning: array of {object_id, revealed_frames, inferred_initial_location, basis, ambiguity}.
+initial_scene_state: description grounded in the early video, retaining hidden contents.
+final_scene_state: full final observed state.
+task_success_predicates: array of final-state predicates which would cover the complete demonstrated task. Never require an object to remain inside a drawer if the video removes it.
+missing_evidence: array of {interval_frames:[start,end], reason, requested_view}. Use an empty array only if no extra temporal evidence is needed. Tiny assembly fasteners and brief events may need high-resolution crops.
+reconstruction_priorities: array of object IDs ordered by physical/visual task relevance.
+
+Do not claim exact dimensions from uncalibrated RGB. Keep distinct objects distinct even if similar. Do not invent a fully closed final joint when the ending is occluded. The original dataset category is a hint, not a substitute for visual action understanding.
+
+Return compact JSON without indentation or blank lines to reduce serialization cost. Preserve all required geometric detail, evidence and findings. The controller reformats it for readers.

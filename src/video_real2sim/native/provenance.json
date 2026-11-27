@@ -1,0 +1,69 @@
+{
+  "origin_files": [
+    {
+      "file": "isaac_worker.py",
+      "source_file": "isaac_worker_v5.py",
+      "source_sha256": "46b444491bfa52a5ae1d2d961d350fbb3f20ceb911239ad99cd8db617ef212d4",
+      "origin": "isaac_video10 experiment; historical native execution is not validation of this port"
+    },
+    {
+      "file": "physics_probe.py",
+      "source_file": "physics_probe.py",
+      "source_sha256": "d4a4d6cf9ec43e1f7648412bf88b9af70d072d99c437240ac280fb35c8547c0f",
+      "origin": "isaac_video10 experiment; historical native execution is not validation of this port"
+    },
+    {
+      "file": "scene_attachments.py",
+      "source_file": "scene_attachments.py",
+      "source_sha256": "1d883089d6c16d583a640fbc6d05211a7f4944c18b5c7ad002333e22a3ddedf3",
+      "origin": "isaac_video10 experiment; historical native execution is not validation of this port"
+    },
+    {
+      "file": "render_sync.py",
+      "source_file": "render_sync.py",
+      "source_sha256": "a05162d31a9ac7d20bd6c2e7a4b0b68c4dfd147d5d5615c73f6e6eb54325346f",
+      "origin": "isaac_video10 experiment; historical native execution is not validation of this port"
+    },
+    {
+      "file": "surface_geometry.py",
+      "source_file": "surface_geometry.py",
+      "source_sha256": "b995166843ffa688d19ed0657d0a9a912003f290abd1bf512325abcf416db73d",
+      "origin": "Historical experiment; port needs new native verification"
+    },
+    {
+      "file": "surface_worker.py",
+      "source_file": "surface_worker.py",
+      "source_sha256": "747700c736a38df9629b650eded5519df72a8b9c30d1fd0de2d4552d7e59fdc6",
+      "origin": "Historical experiment; port needs new native verification"
+    },
+    {
+      "file": "surface_query_worker.py",
+      "source_file": "surface_query_worker.py",
+      "source_sha256": "ed87dcf24acd59671d7146f059dd8c3a30b03ffdb83e396f43e1bfc710dd5b85",
+      "origin": "Historical experiment; port needs new native verification"
+    },
+    {
+      "file": "box_geometry.py",
+      "source_file": "box_geometry.py",
+      "source_sha256": "43468f5d94c0a217670f71b3cc6d6d21b7378f0941c94e1d571ef6b09166790e",
+      "origin": "Historical experiment; port needs new native verification"
+    },
+    {
+      "file": "interface_worker.py",
+      "source_file": "interface_worker.py",
+      "source_sha256": "f575638bd4a05ce7dbf650840aac1631ba71ac6d34a3706c1e6a037abb691de5",
+      "origin": "Historical experiment; port needs new native verification"
+    }
+  ],
+  "port_changes": [
+    "Explicit EULA acceptance and configurable shared GPU lock",
+    "Exact rendered/physics step distinction",
+    "Preserve supplied initial-state evidence labels",
+    "Restore initial attachment enablement before USD export",
+    "Formatting and Python hygiene",
+    "Surface targets and slope radii are explicit validated plan data; no scene-specific asset names or absolute height split",
+    "Interface body roles, source states, contact-part prefixes and insertion distance are explicit plan data; native offset multisets verified",
+    "Attachment coverage uses declared connection IDs rather than a hardcoded count of four",
+    "Freefall probe binds the explicitly declared native static support Cube"
+  ]
+}

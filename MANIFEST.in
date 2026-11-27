@@ -1,0 +1,12 @@
+include config.example.toml .env.example .gitignore
+recursive-include checks *.xml *.txt *.json *.md *.jpg
+recursive-include docs *.md *.json
+recursive-include examples *.json *.md
+recursive-include scripts *.py
+recursive-include tests *.py
+recursive-include .github *.yml
+recursive-include src/video_real2sim/prompts *.txt
+recursive-include src/video_real2sim/native *.py *.json
+global-exclude __pycache__ *.py[cod]
+
+include checks/native-box-orbit.mp4

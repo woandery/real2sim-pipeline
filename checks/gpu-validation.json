@@ -1,0 +1,130 @@
+{
+  "scope": "Bounded native port checks; no live API, model/human reconstruction approval or policy execution.",
+  "native_source_hashes": {
+    "box_geometry.py": "04edd814d9ec6d963abb671582f03a129e2682214c85ef00b39c2fe2758e9e79",
+    "interface_worker.py": "76a24f33411b56785e2d2c9903a6df71ea08a1790d985aad569223472ccc6e70",
+    "isaac_worker.py": "7a1cdbfb403f78ebed94c60082a3dca978db31ea6f96f75edb03b11dcb74e420",
+    "physics_probe.py": "742da26781497f23cd2a580e6c1318501ce526114e8d0d76260e6add0538c7dc",
+    "render_sync.py": "3a1cbb0d7d8f5501723e2737854311d7dcc8519ff38aedf044446bb47e82ae1a",
+    "scene_attachments.py": "2d41d3e1c4b91e48566249604b77071f1c8a2085170fc6fa1ad77dccd9f1d499",
+    "surface_geometry.py": "7cb1ea341c03a746fda8f6e1625f560d8b5a9f0739e0c13a553afd89b081e83a",
+    "surface_query_worker.py": "b18796bc9ad0a1716db610aafe590dc9cad78e3c777b82540720ba828afccf82",
+    "surface_worker.py": "ea0a3af26b10b47bafee6955089004db3ef5ab1f138a2810ee7198470a67636e"
+  },
+  "cases": [
+    {
+      "case": "box",
+      "passed": true,
+      "failures": [],
+      "verified_jobs": 5,
+      "measurements": {
+        "sweep-00": {
+          "states": 1,
+          "native_steps": [
+            600
+          ]
+        },
+        "rest": {
+          "states": 2,
+          "native_steps": [
+            180,
+            180
+          ]
+        },
+        "passive": {
+          "states": 2,
+          "native_steps": [
+            180,
+            180
+          ]
+        }
+      },
+      "spec_sha256": "afebf5e90c38ff61c4e53de715de646a88a6eda4b192be081da93e2815698984",
+      "usd_sha256": "0a98dfa047576e6b4330edee1164c1dcca05d6ea1bd04ea7e4d1b829c9d66d61",
+      "smoke_sha256": "a3438a255332774e499ffca3e8088217fde526816580db49fee56b0fc1b9f5ac"
+    },
+    {
+      "case": "freefall",
+      "passed": true,
+      "failures": [],
+      "verified_jobs": 2,
+      "measurements": {
+        "freefall-00": {
+          "states": 3,
+          "native_steps": [
+            1800,
+            1800,
+            1800
+          ]
+        }
+      },
+      "spec_sha256": "54551b33f12108c8e39f9fae20f91a1e3c2936baa786d348fd46bb8bdec40d6a",
+      "usd_sha256": "0811151afe0729811d29774fda1f55af1b258d1038a577b16239b8f78193d437",
+      "smoke_sha256": "91f4d3400b65a3fae45461bad2874ba771a650ae3bd4f4799aa6586499dea6e3"
+    },
+    {
+      "case": "surface",
+      "passed": true,
+      "failures": [],
+      "verified_jobs": 4,
+      "measurements": {
+        "surface-00-flat": {
+          "cases": 2
+        },
+        "surface-00-query": {
+          "cases": 8
+        },
+        "surface-00-slopes": {
+          "cases": 6
+        }
+      },
+      "spec_sha256": "d14fb6b2529512e179aa47c4a94c6a24912b89b4e38defd35abc339c165418b4",
+      "usd_sha256": "913407d817062b34e5ebbefbf2c21b74e653cb28e92ec0e125042bfd17258c56",
+      "smoke_sha256": "91f4d3400b65a3fae45461bad2874ba771a650ae3bd4f4799aa6586499dea6e3"
+    },
+    {
+      "case": "assembly",
+      "passed": true,
+      "failures": [],
+      "verified_jobs": 3,
+      "measurements": {
+        "assembly-01": {
+          "states": 1,
+          "native_steps": [
+            10200
+          ]
+        },
+        "assembly-00": {
+          "states": 1,
+          "native_steps": [
+            10200
+          ]
+        }
+      },
+      "spec_sha256": "05fb0c9e99ceffcf46ddac487e39e0261ee659dc9ca61319e7b1b939a4249638",
+      "usd_sha256": "4abfe743f89f30ebd31e390a1af7e4ea80d99eae1b5fc6f6a8d194d7e11d1591",
+      "smoke_sha256": "91f4d3400b65a3fae45461bad2874ba771a650ae3bd4f4799aa6586499dea6e3"
+    },
+    {
+      "case": "interface",
+      "passed": true,
+      "failures": [],
+      "verified_jobs": 2,
+      "measurements": {
+        "interface-00": {
+          "states": 4,
+          "native_steps": [
+            1560,
+            1560,
+            1560,
+            1560
+          ]
+        }
+      },
+      "spec_sha256": "dc87b398cfbcedc67c50f08ff68a980cfaee2e842b1b5a75e4db2c36b8903c9a",
+      "usd_sha256": "352f4ef801e27a1ec48b3f0a15334c67d2f932c1d7daad9f9afc5f5d7c9cf290",
+      "smoke_sha256": "91f4d3400b65a3fae45461bad2874ba771a650ae3bd4f4799aa6586499dea6e3"
+    }
+  ],
+  "passed": true
+}
